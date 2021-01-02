@@ -112,6 +112,7 @@ const productListQuery = gql`
       last: $last
       filter: $filter
       sortBy: $sort
+      vendor: true
     ) {
       edges {
         node {
