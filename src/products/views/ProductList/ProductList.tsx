@@ -56,6 +56,7 @@ import { useWarehouseList } from "@saleor/warehouses/queries";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
+import ProductImportDialog from "../../components/ProductImportDialog";
 import ProductListPage from "../../components/ProductListPage";
 import {
   useProductBulkDeleteMutation,
@@ -454,6 +455,7 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
         onSubmit={handleFilterTabDelete}
         tabName={maybe(() => tabs[currentTab - 1].name, "...")}
       />
+      <ProductImportDialog />
     </>
   );
 };
