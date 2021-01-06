@@ -49,6 +49,7 @@ export interface ProductListPageProps
   totalGridAttributes: number;
   products: ProductList_products_edges_node[];
   onExport: () => void;
+  onImport: () => void;
 }
 
 const useStyles = makeStyles(
@@ -81,6 +82,7 @@ export const ProductListPage: React.FC<ProductListPageProps> = props => {
     onAdd,
     onAll,
     onExport,
+    onImport,
     onFetchMore,
     onFilterChange,
     onSearchChange,
@@ -133,6 +135,14 @@ export const ProductListPage: React.FC<ProductListPageProps> = props => {
               }),
               onSelect: onExport,
               testId: "export"
+            },
+            {
+              label: intl.formatMessage({
+                defaultMessage: "Import Products",
+                description: "import products to csv file, button"
+              }),
+              onSelect: onImport,
+              testId: "import"
             }
           ]}
           data-test="menu"

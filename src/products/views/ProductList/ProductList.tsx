@@ -380,6 +380,7 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
         initialSearch={params.query || ""}
         tabs={getFilterTabs().map(tab => tab.name)}
         onExport={() => openModal("export")}
+        onImport={() => openModal("import")}
         channelsCount={availableChannels?.length}
         selectedChannelId={channel.id}
       />
@@ -457,7 +458,7 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
       />
       <ProductImportDialog
         onClose={closeModal}
-        open={params.action === "export"}
+        open={params.action === "import"}
       />
     </>
   );
