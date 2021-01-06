@@ -1,7 +1,7 @@
 // import createMultiFileUploadHandler from "@saleor/utils/handlers/multiFileUploadHandler";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import { productImportMutation } from "@saleor/products/mutations";
+import { productsImportMutation } from "@saleor/products/mutations";
 import { DialogProps } from "@saleor/types";
 import React from "react";
 import { useMutation } from "react-apollo";
@@ -19,7 +19,7 @@ const ProductImportDialog: React.FC<ProductImagesProps> = ({
   // const intl = useIntl();
   const upload = React.useRef(null);
 
-  const [mutate, result] = useMutation(productImportMutation);
+  const [mutate, result] = useMutation(productsImportMutation);
 
   const onChange: any = ({
     target: {
