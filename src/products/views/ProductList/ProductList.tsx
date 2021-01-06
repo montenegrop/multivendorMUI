@@ -455,7 +455,10 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
         onSubmit={handleFilterTabDelete}
         tabName={maybe(() => tabs[currentTab - 1].name, "...")}
       />
-      <ProductImportDialog />
+      <ProductImportDialog
+        onClose={closeModal}
+        open={params.action === "export"}
+      />
     </>
   );
 };
