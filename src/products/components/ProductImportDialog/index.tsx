@@ -1,6 +1,9 @@
 // import createMultiFileUploadHandler from "@saleor/utils/handlers/multiFileUploadHandler";
+import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { productsImportMutation } from "@saleor/products/mutations";
 import { DialogProps } from "@saleor/types";
 import React from "react";
@@ -34,7 +37,8 @@ const ProductImportDialog: React.FC<ProductImagesProps> = ({
 
   return (
     <Dialog onClose={onClose} open={open} maxWidth="sm" fullWidth>
-      <>
+      <DialogTitle>Importador de productos</DialogTitle>
+      <DialogContent>
         {result.loading && <div>loading</div>}
         <Button
           onClick={() => upload.current.click()}
@@ -46,10 +50,12 @@ const ProductImportDialog: React.FC<ProductImagesProps> = ({
           {" subir csv "}
         </Button>
         <input type="file" required onChange={onChange} />
+      </DialogContent>
+      <DialogActions>
         <Button onClick={onClose} data-test="cancel">
           cerrar
         </Button>
-      </>
+      </DialogActions>
     </Dialog>
   );
 };
