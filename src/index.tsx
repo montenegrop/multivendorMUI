@@ -83,7 +83,7 @@ const batchLink = new BatchHttpLink({
 const link = ApolloLink.split(
   operation => operation.getContext().useBatching,
   batchLink,
-  uploadLink
+  (uploadLink as unknown) as ApolloLink
 );
 
 const apolloClient = new ApolloClient({
