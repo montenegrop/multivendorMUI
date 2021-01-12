@@ -6,6 +6,7 @@ export type CreateMultiFileUploadHandlerCallbacks = Partial<{
   onStart: (files: File[]) => void;
 }>;
 
+// file upload:
 function createMultiFileUploadHandler<T>(
   upload: (file: File, fileIndex: number) => Promise<T>,
   {

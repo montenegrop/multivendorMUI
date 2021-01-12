@@ -93,6 +93,16 @@ export const productImageCreateMutation = gql`
     }
   }
 `;
+
+// import file (csv) mutation:
+export const productsImportMutation = gql`
+  mutation ProductsImport($file: Upload!) {
+    productsImport(file: $file) {
+      success
+    }
+  }
+`;
+
 export const useProductImageCreateMutation = makeMutation<
   ProductImageCreate,
   ProductImageCreateVariables

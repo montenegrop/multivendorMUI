@@ -56,6 +56,7 @@ import { useWarehouseList } from "@saleor/warehouses/queries";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
+import ProductImportDialog from "../../components/ProductImportDialog";
 import ProductListPage from "../../components/ProductListPage";
 import {
   useProductBulkDeleteMutation,
@@ -379,6 +380,7 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
         initialSearch={params.query || ""}
         tabs={getFilterTabs().map(tab => tab.name)}
         onExport={() => openModal("export")}
+        onImport={() => openModal("import")}
         channelsCount={availableChannels?.length}
         selectedChannelId={channel.id}
       />
@@ -453,6 +455,10 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
         onClose={closeModal}
         onSubmit={handleFilterTabDelete}
         tabName={maybe(() => tabs[currentTab - 1].name, "...")}
+      />
+      <ProductImportDialog
+        onClose={closeModal}
+        open={params.action === "import"}
       />
     </>
   );

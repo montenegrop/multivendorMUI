@@ -21,7 +21,11 @@ export const productAddUrl = (params?: ProductCreateUrlQueryParams) =>
   productAddPath + "?" + stringifyQs(params);
 
 export const productListPath = productSection;
-export type ProductListUrlDialog = "delete" | "export" | TabActionDialog;
+export type ProductListUrlDialog =
+  | "delete"
+  | "export"
+  | "import"
+  | TabActionDialog;
 export enum ProductListUrlFiltersEnum {
   priceFrom = "priceFrom",
   priceTo = "priceTo",

@@ -42,6 +42,7 @@ const props: ProductListPageProps = {
   filterOpts: productListFilterOpts,
   gridAttributes: attributes,
   onExport: () => undefined,
+  onImport: () => undefined,
   products,
   selectedChannelId: "123",
   settings: {
