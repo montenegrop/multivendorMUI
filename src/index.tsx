@@ -79,7 +79,7 @@ const batchLink = new BatchHttpLink({
   batchInterval: 100,
   ...linkOptions
 });
-
+// Linea que arregla error de ts, (uploadLink as unknown) as ApolloLink:
 const link = ApolloLink.split(
   operation => operation.getContext().useBatching,
   batchLink,
