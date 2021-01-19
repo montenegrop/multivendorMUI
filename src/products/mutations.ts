@@ -99,6 +99,7 @@ export const productsImportMutation = gql`
   mutation ProductsImport($file: Upload!) {
     productsImport(file: $file) {
       success
+      errors
     }
   }
 `;

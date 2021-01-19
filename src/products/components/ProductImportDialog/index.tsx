@@ -31,15 +31,23 @@ const ProductImportDialog: React.FC<ProductImagesProps> = ({
     }
   }) => {
     if (validity.valid) {
-      mutate({ variables: { file } });
+      const x = mutate({ variables: { file } });
+      x.then(result => {
+        onClose();
+      });
     }
   };
+
+  if (result.data?.productsImport?.success) {
+    // onClose();
+  }
 
   return (
     <Dialog onClose={onClose} open={open} maxWidth="sm" fullWidth>
       <DialogTitle>Importador de productos</DialogTitle>
       <DialogContent>
         {result.loading && <div>loading</div>}
+        <div>{result.loading}</div>
         <Button
           onClick={() => upload.current.click()}
           disabled={loading}
