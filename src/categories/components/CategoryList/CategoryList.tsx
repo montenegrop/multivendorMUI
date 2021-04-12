@@ -3,7 +3,6 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableFooter from "@material-ui/core/TableFooter";
 import TableRow from "@material-ui/core/TableRow";
-import { category } from "@saleor/categories/fixtures";
 import { CategoryListUrlSortField } from "@saleor/categories/urls";
 import Checkbox from "@saleor/components/Checkbox";
 import ResponsiveTable from "@saleor/components/ResponsiveTable";
@@ -42,7 +41,8 @@ const useStyles = makeStyles(
       textAlign: "center"
     },
     tableRow: {
-      cursor: "pointer"
+      cursor: "pointer",
+      width: "80vw"
     }
   }),
   { name: "CategoryList" }
@@ -80,7 +80,7 @@ const CategoryList: React.FC<CategoryListProps> = props => {
   } = props;
   const [items, setItems] = React.useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (categories?.length) {
       setItems(categories.map(category => category.id));
     }
@@ -90,13 +90,18 @@ const CategoryList: React.FC<CategoryListProps> = props => {
 
   const onDragEnd = result => {
     const { destination, source, draggableId } = result;
-
     if (!destination) {
       return;
     }
     if (destination.index === source.index) {
       return;
     }
+    const newItems = items;
+
+    newItems.splice(source.index, 1);
+    newItems.splice(destination.index, 0, draggableId);
+
+    setItems(newItems);
   };
 
   return (
@@ -172,7 +177,7 @@ const CategoryList: React.FC<CategoryListProps> = props => {
           />
         </TableRow>
       </TableFooter>
-      <DragDropContext onDragEnd={onDragEnd()}>
+      <DragDropContext onDragEnd={res => onDragEnd(res)}>
         <Droppable droppableId="droppable">
           {provided => (
             <TableBody ref={provided.innerRef} {...provided.droppableProps}>
@@ -182,7 +187,7 @@ const CategoryList: React.FC<CategoryListProps> = props => {
                   (categories && categories.length === 0)
                 ) {
                   return (
-                    <TableRow>
+                    <TableRow key={catId}>
                       <TableCell colSpan={numberOfColumns}>
                         {isRoot ? (
                           <FormattedMessage defaultMessage="No categories found" />
@@ -196,7 +201,11 @@ const CategoryList: React.FC<CategoryListProps> = props => {
                 const category = categories.find(({ id }) => id === catId);
                 const isSelected = category ? isChecked(category.id) : false;
                 return (
-                  <Draggable draggableId={category.id} index={indx}>
+                  <Draggable
+                    key={category.id}
+                    draggableId={category.id}
+                    index={indx}
+                  >
                     {provided => (
                       <TableRow
                         className={classes.tableRow}

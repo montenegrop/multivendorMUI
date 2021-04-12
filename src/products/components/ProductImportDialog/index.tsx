@@ -32,7 +32,7 @@ const ProductImportDialog: React.FC<ProductImagesProps> = ({
   }) => {
     if (validity.valid) {
       const x = mutate({ variables: { file } });
-      x.then(result => {
+      x.then(() => {
         onClose();
       });
     }
