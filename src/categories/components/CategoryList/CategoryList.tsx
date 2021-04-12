@@ -3,6 +3,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableFooter from "@material-ui/core/TableFooter";
 import TableRow from "@material-ui/core/TableRow";
+import { category } from "@saleor/categories/fixtures";
 import { CategoryListUrlSortField } from "@saleor/categories/urls";
 import Checkbox from "@saleor/components/Checkbox";
 import ResponsiveTable from "@saleor/components/ResponsiveTable";
@@ -14,7 +15,7 @@ import { CategoryFragment } from "@saleor/fragments/types/CategoryFragment";
 import { maybe, renderCollection } from "@saleor/misc";
 import { ListActions, ListProps, SortPage } from "@saleor/types";
 import { getArrowDirection } from "@saleor/utils/sort";
-import React from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FormattedMessage } from "react-intl";
 
@@ -77,11 +78,25 @@ const CategoryList: React.FC<CategoryListProps> = props => {
     onRowClick,
     onSort
   } = props;
+  const [items, setItems] = React.useState([]);
+
+  React.useEffect(() => {
+    if (categories?.length) {
+      setItems(categories.map(category => category.id));
+    }
+  }, [categories, setItems]);
 
   const classes = useStyles(props);
 
-  const onDragEnd = () => {
-    //
+  const onDragEnd = result => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+    if (destination.index === source.index) {
+      return;
+    }
   };
 
   return (
@@ -161,81 +176,78 @@ const CategoryList: React.FC<CategoryListProps> = props => {
         <Droppable droppableId="droppable">
           {provided => (
             <TableBody ref={provided.innerRef} {...provided.droppableProps}>
-              {renderCollection(
-                categories,
-                (category, indx) => {
-                  const isSelected = category ? isChecked(category.id) : false;
-
+              {items.map((catId, indx) => {
+                if (
+                  categories === undefined ||
+                  (categories && categories.length === 0)
+                ) {
                   return (
-                    <Draggable draggableId={category.id} index={indx}>
-                      {provided => (
-                        <TableRow
-                          className={classes.tableRow}
-                          hover={!!category}
-                          onClick={
-                            category ? onRowClick(category.id) : undefined
-                          }
-                          key={category ? category.id : "skeleton"}
-                          selected={isSelected}
-                          data-test="id"
-                          data-test-id={maybe(() => category.id)}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          ref={provided.innerRef}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isSelected}
-                              disabled={disabled}
-                              disableClickPropagation
-                              onChange={() => toggle(category.id)}
-                            />
-                          </TableCell>
-                          <TableCell
-                            className={classes.colName}
-                            data-test="name"
-                          >
-                            {category && category.name ? (
-                              category.name
-                            ) : (
-                              <Skeleton />
-                            )}
-                          </TableCell>
-                          <TableCell className={classes.colSubcategories}>
-                            {category &&
-                            category.children &&
-                            category.children.totalCount !== undefined ? (
-                              category.children.totalCount
-                            ) : (
-                              <Skeleton />
-                            )}
-                          </TableCell>
-                          <TableCell className={classes.colProducts}>
-                            {category &&
-                            category.products &&
-                            category.products.totalCount !== undefined ? (
-                              category.products.totalCount
-                            ) : (
-                              <Skeleton />
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </Draggable>
+                    <TableRow>
+                      <TableCell colSpan={numberOfColumns}>
+                        {isRoot ? (
+                          <FormattedMessage defaultMessage="No categories found" />
+                        ) : (
+                          <FormattedMessage defaultMessage="No subcategories found" />
+                        )}
+                      </TableCell>
+                    </TableRow>
                   );
-                },
-                () => (
-                  <TableRow>
-                    <TableCell colSpan={numberOfColumns}>
-                      {isRoot ? (
-                        <FormattedMessage defaultMessage="No categories found" />
-                      ) : (
-                        <FormattedMessage defaultMessage="No subcategories found" />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
+                }
+                const category = categories.find(({ id }) => id === catId);
+                const isSelected = category ? isChecked(category.id) : false;
+                return (
+                  <Draggable draggableId={category.id} index={indx}>
+                    {provided => (
+                      <TableRow
+                        className={classes.tableRow}
+                        hover={!!category}
+                        onClick={category ? onRowClick(category.id) : undefined}
+                        key={category ? category.id : "skeleton"}
+                        selected={isSelected}
+                        data-test="id"
+                        data-test-id={maybe(() => category.id)}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isSelected}
+                            disabled={disabled}
+                            disableClickPropagation
+                            onChange={() => toggle(category.id)}
+                          />
+                        </TableCell>
+                        <TableCell className={classes.colName} data-test="name">
+                          {category && category.name ? (
+                            category.name
+                          ) : (
+                            <Skeleton />
+                          )}
+                        </TableCell>
+                        <TableCell className={classes.colSubcategories}>
+                          {category &&
+                          category.children &&
+                          category.children.totalCount !== undefined ? (
+                            category.children.totalCount
+                          ) : (
+                            <Skeleton />
+                          )}
+                        </TableCell>
+                        <TableCell className={classes.colProducts}>
+                          {category &&
+                          category.products &&
+                          category.products.totalCount !== undefined ? (
+                            category.products.totalCount
+                          ) : (
+                            <Skeleton />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </Draggable>
+                );
+              })}
               {provided.placeholder}
             </TableBody>
           )}
