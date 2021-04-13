@@ -10,7 +10,6 @@ import ResponsiveTable from "@saleor/components/ResponsiveTable";
 import Skeleton from "@saleor/components/Skeleton";
 import TableCellHeader from "@saleor/components/TableCellHeader";
 import TableHead from "@saleor/components/TableHead";
-import TablePagination from "@saleor/components/TablePagination";
 import { CategoryFragment } from "@saleor/fragments/types/CategoryFragment";
 import { maybe } from "@saleor/misc";
 import { ListActions, ListProps, SortPage } from "@saleor/types";
@@ -49,6 +48,31 @@ const useStyles = makeStyles(
   { name: "CategoryList" }
 );
 
+const handleStyle = makeStyles(
+  {
+    active: {
+      "&:active": {
+        cursor: "grabbing"
+      }
+    },
+    handle: {
+      "&:active": {
+        cursor: "grabbing"
+      },
+      cursor: "pointer"
+    },
+    hover: {
+      "&:hover": {
+        cursor: isDragging => (isDragging ? "grabbing" : "inherit")
+      }
+    },
+    noPointer: {
+      cursor: isDragging => (isDragging ? "grabbing" : "default")
+    }
+  },
+  { name: "CategoryList" }
+);
+
 interface CategoryListProps
   extends ListProps,
     ListActions,
@@ -64,18 +88,13 @@ const CategoryList: React.FC<CategoryListProps> = props => {
   const {
     categories,
     disabled,
-    settings,
     sort,
-    pageInfo,
     isChecked,
     isRoot,
     selected,
     toggle,
     toggleAll,
     toolbar,
-    onNextPage,
-    onPreviousPage,
-    onUpdateListSettings,
     onRowClick,
     onSort
   } = props;
@@ -84,13 +103,13 @@ const CategoryList: React.FC<CategoryListProps> = props => {
   useEffect(() => {
     if (categories?.length) {
       setItems(categories.map(category => category.id));
-    }
-    if (
-      JSON.parse(localStorage.getItem("myOrder")) &&
-      JSON.parse(localStorage.getItem("myOrder")).length > 0
-    ) {
-      setItems(JSON.parse(localStorage.getItem("myOrder")));
-      return;
+      if (
+        JSON.parse(localStorage.getItem("myOrder")) &&
+        JSON.parse(localStorage.getItem("myOrder")).length > 0
+      ) {
+        setItems(JSON.parse(localStorage.getItem("myOrder")));
+        return;
+      }
     }
   }, [categories, setItems]);
 
@@ -173,19 +192,7 @@ const CategoryList: React.FC<CategoryListProps> = props => {
         <TableCellHeader />
       </TableHead>
       <TableFooter>
-        <TableRow>
-          <TablePagination
-            colSpan={numberOfColumns}
-            settings={settings}
-            hasNextPage={pageInfo && !disabled ? pageInfo.hasNextPage : false}
-            onNextPage={onNextPage}
-            onUpdateListSettings={onUpdateListSettings}
-            hasPreviousPage={
-              pageInfo && !disabled ? pageInfo.hasPreviousPage : false
-            }
-            onPreviousPage={onPreviousPage}
-          />
-        </TableRow>
+        <TableRow></TableRow>
       </TableFooter>
       <DragDropContext onDragEnd={res => onDragEnd(res)}>
         <Droppable droppableId="droppable">
@@ -217,124 +224,141 @@ const CategoryList: React.FC<CategoryListProps> = props => {
                     index={indx}
                     id={category.id}
                   >
-                    {(provided, snapshot) => (
-                      <TableRow
-                        className={`${classes.tableRow} `}
-                        hover={!!category}
-                        onClick={category ? onRowClick(category.id) : undefined}
-                        key={category ? category.id : "skeleton"}
-                        selected={isSelected}
-                        data-test="id"
-                        data-test-id={maybe(() => category.id)}
-                        {...provided.draggableProps}
-                        ref={provided.innerRef}
-                        id={category.id}
-                      >
-                        <TableCell
-                          id={`${category.id}1`}
-                          style={
-                            snapshot.isDragging
-                              ? {
-                                  width: getComputedStyle(
-                                    document.getElementById(`${category.id}1`),
-                                    null
-                                  ).width
-                                }
-                              : undefined
+                    {(provided, snapshot) => {
+                      const handleClass = handleStyle(snapshot.isDragging);
+                      return (
+                        <TableRow
+                          className={`${classes.tableRow} ${handleClass.hover}`}
+                          hover={!!category}
+                          onClick={
+                            category ? onRowClick(category.id) : undefined
                           }
-                          padding="checkbox"
+                          key={category ? category.id : "skeleton"}
+                          selected={isSelected}
+                          data-test="id"
+                          data-test-id={maybe(() => category.id)}
+                          {...provided.draggableProps}
+                          ref={provided.innerRef}
+                          id={category.id}
                         >
-                          <Checkbox
-                            checked={isSelected}
-                            disabled={disabled}
-                            disableClickPropagation
-                            onChange={() => toggle(category.id)}
-                          />
-                        </TableCell>
-                        <TableCell
-                          id={`${category.id}2`}
-                          style={
-                            snapshot.isDragging
-                              ? {
-                                  width: getComputedStyle(
-                                    document.getElementById(`${category.id}2`),
-                                    null
-                                  ).width
-                                }
-                              : undefined
-                          }
-                          className={classes.colName}
-                          data-test="name"
-                        >
-                          {category && category.name ? (
-                            category.name
-                          ) : (
-                            <Skeleton />
-                          )}
-                        </TableCell>
-                        <TableCell
-                          id={`${category.id}3`}
-                          style={
-                            snapshot.isDragging
-                              ? {
-                                  width: getComputedStyle(
-                                    document.getElementById(`${category.id}3`),
-                                    null
-                                  ).width
-                                }
-                              : undefined
-                          }
-                          className={classes.colSubcategories}
-                        >
-                          {category &&
-                          category.children &&
-                          category.children.totalCount !== undefined ? (
-                            category.children.totalCount
-                          ) : (
-                            <Skeleton />
-                          )}
-                        </TableCell>
-                        <TableCell
-                          id={`${category.id}4`}
-                          style={
-                            snapshot.isDragging
-                              ? {
-                                  width: getComputedStyle(
-                                    document.getElementById(`${category.id}4`),
-                                    null
-                                  ).width
-                                }
-                              : undefined
-                          }
-                          className={classes.colProducts}
-                        >
-                          {category &&
-                          category.products &&
-                          category.products.totalCount !== undefined ? (
-                            category.products.totalCount
-                          ) : (
-                            <Skeleton />
-                          )}
-                        </TableCell>
-                        <TableCell
-                          id={`${category.id}5`}
-                          style={
-                            snapshot.isDragging
-                              ? {
-                                  width: getComputedStyle(
-                                    document.getElementById(`${category.id}5`),
-                                    null
-                                  ).width
-                                }
-                              : undefined
-                          }
-                        >
-                          <div {...provided.dragHandleProps}>
-                            <Reorder />
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )}
+                          <TableCell
+                            id={`${category.id}1`}
+                            style={
+                              snapshot.isDragging
+                                ? {
+                                    width: getComputedStyle(
+                                      document.getElementById(
+                                        `${category.id}1`
+                                      ),
+                                      null
+                                    ).width
+                                  }
+                                : undefined
+                            }
+                            padding="checkbox"
+                          >
+                            <Checkbox
+                              checked={isSelected}
+                              disabled={disabled}
+                              disableClickPropagation
+                              onChange={() => toggle(category.id)}
+                            />
+                          </TableCell>
+                          <TableCell
+                            id={`${category.id}2`}
+                            style={
+                              snapshot.isDragging
+                                ? {
+                                    width: getComputedStyle(
+                                      document.getElementById(
+                                        `${category.id}2`
+                                      ),
+                                      null
+                                    ).width
+                                  }
+                                : undefined
+                            }
+                            className={classes.colName}
+                            data-test="name"
+                          >
+                            {category && category.name ? (
+                              category.name
+                            ) : (
+                              <Skeleton />
+                            )}
+                          </TableCell>
+                          <TableCell
+                            id={`${category.id}3`}
+                            style={
+                              snapshot.isDragging
+                                ? {
+                                    width: getComputedStyle(
+                                      document.getElementById(
+                                        `${category.id}3`
+                                      ),
+                                      null
+                                    ).width
+                                  }
+                                : undefined
+                            }
+                            className={classes.colSubcategories}
+                          >
+                            {category &&
+                            category.children &&
+                            category.children.totalCount !== undefined ? (
+                              category.children.totalCount
+                            ) : (
+                              <Skeleton />
+                            )}
+                          </TableCell>
+                          <TableCell
+                            id={`${category.id}4`}
+                            style={
+                              snapshot.isDragging
+                                ? {
+                                    width: getComputedStyle(
+                                      document.getElementById(
+                                        `${category.id}4`
+                                      ),
+                                      null
+                                    ).width
+                                  }
+                                : undefined
+                            }
+                            className={classes.colProducts}
+                          >
+                            {category &&
+                            category.products &&
+                            category.products.totalCount !== undefined ? (
+                              category.products.totalCount
+                            ) : (
+                              <Skeleton />
+                            )}
+                          </TableCell>
+                          <TableCell
+                            className={`${handleClass.noPointer} ${handleClass.hover}`}
+                            id={`${category.id}5`}
+                            style={
+                              snapshot.isDragging
+                                ? {
+                                    cursor: "grabbing",
+                                    width: getComputedStyle(
+                                      document.getElementById(
+                                        `${category.id}5`
+                                      ),
+                                      null
+                                    ).width
+                                  }
+                                : undefined
+                            }
+                          >
+                            <div {...provided.dragHandleProps}>
+                              <Reorder className={handleClass.handle} />
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }}
                   </Draggable>
                 );
               })}
