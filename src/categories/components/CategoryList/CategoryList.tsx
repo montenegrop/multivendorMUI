@@ -42,8 +42,8 @@ const useStyles = makeStyles(
       textAlign: "center"
     },
     tableRow: {
-      cursor: "pointer",
-      width: "80vw"
+      backgroundColor: "#2E2F31",
+      cursor: "pointer"
     }
   }),
   { name: "CategoryList" }
@@ -58,7 +58,7 @@ interface CategoryListProps
   onAdd?();
 }
 
-const numberOfColumns = 4;
+const numberOfColumns = 5;
 
 const CategoryList: React.FC<CategoryListProps> = props => {
   const {
@@ -85,6 +85,13 @@ const CategoryList: React.FC<CategoryListProps> = props => {
     if (categories?.length) {
       setItems(categories.map(category => category.id));
     }
+    if (
+      JSON.parse(localStorage.getItem("myOrder")) &&
+      JSON.parse(localStorage.getItem("myOrder")).length > 0
+    ) {
+      setItems(JSON.parse(localStorage.getItem("myOrder")));
+      return;
+    }
   }, [categories, setItems]);
 
   const classes = useStyles(props);
@@ -103,6 +110,7 @@ const CategoryList: React.FC<CategoryListProps> = props => {
     newItems.splice(destination.index, 0, draggableId);
 
     setItems(newItems);
+    localStorage.setItem("myOrder", JSON.stringify(items));
   };
 
   return (

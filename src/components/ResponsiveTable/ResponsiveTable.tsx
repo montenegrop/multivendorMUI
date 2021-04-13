@@ -7,7 +7,7 @@ const useStyles = makeStyles(
     root: {
       [theme.breakpoints.up("md")]: {
         "&& table": {
-          tableLayout: "fixed"
+          tableLayout: "auto"
         }
       },
       "& table": {
