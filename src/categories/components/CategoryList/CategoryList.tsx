@@ -1,3 +1,4 @@
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -63,11 +64,12 @@ const handleStyle = makeStyles(
     },
     hover: {
       "&:hover": {
-        cursor: isDragging => (isDragging ? "grabbing" : "inherit")
+        cursor: isDragging => (isDragging ? "grabbing !important" : "pointer")
       }
     },
     noPointer: {
-      cursor: isDragging => (isDragging ? "grabbing" : "default")
+      cursor: isDragging =>
+        isDragging ? "grabbing !important" : "default !important"
     }
   },
   { name: "CategoryList" }
@@ -95,25 +97,38 @@ const CategoryList: React.FC<CategoryListProps> = props => {
     toggle,
     toggleAll,
     toolbar,
-    onRowClick,
-    onSort
+    onRowClick
   } = props;
   const [items, setItems] = React.useState([]);
+  const [isDisabled, setIsDisabled] = React.useState(false);
+
+  let level;
+  let parent;
 
   useEffect(() => {
     if (categories?.length) {
       setItems(categories.map(category => category.id));
+      level = categories[0].level;
+      parent =
+        categories[0].parent === null ? "parent" : categories[0].parent.name;
       if (
-        JSON.parse(localStorage.getItem("myOrder")) &&
-        JSON.parse(localStorage.getItem("myOrder")).length > 0
+        JSON.parse(localStorage.getItem(`myOrder${level}${parent}`)) &&
+        JSON.parse(localStorage.getItem(`myOrder${level}${parent}`)).length > 0
       ) {
-        setItems(JSON.parse(localStorage.getItem("myOrder")));
-        return;
+        setItems(JSON.parse(localStorage.getItem(`myOrder${level}${parent}`)));
       }
     }
+    checkChanges();
   }, [categories, setItems]);
 
   const classes = useStyles(props);
+
+  const checkChanges = () => {
+    const itemsOnStorage: string = localStorage.getItem(
+      `myOrder${level}${parent}`
+    );
+    return setIsDisabled(itemsOnStorage === JSON.stringify(items));
+  };
 
   const onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -124,12 +139,18 @@ const CategoryList: React.FC<CategoryListProps> = props => {
       return;
     }
     const newItems = items;
-
     newItems.splice(source.index, 1);
     newItems.splice(destination.index, 0, draggableId);
-
     setItems(newItems);
-    localStorage.setItem("myOrder", JSON.stringify(items));
+    checkChanges();
+  };
+
+  const onSaveChanges = () => {
+    level = categories[0].level;
+    parent =
+      categories[0].parent === null ? "parent" : categories[0].parent.name;
+    localStorage.setItem(`myOrder${level}${parent}`, JSON.stringify(items));
+    checkChanges();
   };
 
   return (
@@ -142,17 +163,7 @@ const CategoryList: React.FC<CategoryListProps> = props => {
         toggleAll={toggleAll}
         toolbar={toolbar}
       >
-        <TableCellHeader
-          direction={
-            isRoot && sort.sort === CategoryListUrlSortField.name
-              ? getArrowDirection(sort.asc)
-              : undefined
-          }
-          arrowPosition="right"
-          className={classes.colName}
-          disableClick={!isRoot}
-          onClick={() => isRoot && onSort(CategoryListUrlSortField.name)}
-        >
+        <TableCellHeader className={classes.colName} disableClick={!isRoot}>
           <FormattedMessage defaultMessage="Category Name" />
         </TableCellHeader>
         <TableCellHeader
@@ -163,9 +174,6 @@ const CategoryList: React.FC<CategoryListProps> = props => {
           }
           className={classes.colSubcategories}
           disableClick={!isRoot}
-          onClick={() =>
-            isRoot && onSort(CategoryListUrlSortField.subcategoryCount)
-          }
         >
           <FormattedMessage
             defaultMessage="Subcategories"
@@ -180,9 +188,6 @@ const CategoryList: React.FC<CategoryListProps> = props => {
           }
           className={classes.colProducts}
           disableClick={!isRoot}
-          onClick={() =>
-            isRoot && onSort(CategoryListUrlSortField.productCount)
-          }
         >
           <FormattedMessage
             defaultMessage="No. of Products"
@@ -192,7 +197,19 @@ const CategoryList: React.FC<CategoryListProps> = props => {
         <TableCellHeader />
       </TableHead>
       <TableFooter>
-        <TableRow></TableRow>
+        <TableRow>
+          <TableCell />
+          <TableCell colSpan={numberOfColumns} align="right">
+            <Button
+              onClick={() => onSaveChanges()}
+              variant="contained"
+              color="primary"
+              disabled={isDisabled}
+            >
+              Guardar Cambios
+            </Button>
+          </TableCell>
+        </TableRow>
       </TableFooter>
       <DragDropContext onDragEnd={res => onDragEnd(res)}>
         <Droppable droppableId="droppable">
