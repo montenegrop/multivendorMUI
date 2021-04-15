@@ -106,19 +106,15 @@ const CategoryList: React.FC<CategoryListProps> = props => {
     onRowClick
   } = props;
   const [items, setItems] = React.useState([]);
-  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [isDisabled, setIsDisabled] = React.useState(true);
 
   useEffect(() => {
-    if (categories?.length) {
+    if (categories?.length && items.length === 0) {
       setItems(categories.map(category => category.id));
-      setRelevance(items);
     }
-    checkChanges();
   }, [categories, setItems]);
 
   const classes = useStyles(props);
-
-  const checkChanges = () => setIsDisabled(relevance === items);
 
   const onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -132,14 +128,13 @@ const CategoryList: React.FC<CategoryListProps> = props => {
     newItems.splice(source.index, 1);
     newItems.splice(destination.index, 0, draggableId);
     setItems(newItems);
-
-    checkChanges();
+    setIsDisabled(false);
   };
 
-  const onSaveChanges = async () => {
-    await setRelevance(() => items);
+  const onSaveChanges = () => {
+    setRelevance(() => items);
     sortChange();
-    checkChanges();
+    setIsDisabled(true);
   };
 
   return (

@@ -12,6 +12,7 @@ import useNavigator from "@saleor/hooks/useNavigator";
 import usePaginator, {
   createPaginationState
 } from "@saleor/hooks/usePaginator";
+import useWindowScroll from "@saleor/hooks/useWindowScroll";
 import { maybe } from "@saleor/misc";
 import { ListViews } from "@saleor/types";
 import createDialogActionHandlers from "@saleor/utils/handlers/dialogActionHandlers";
@@ -142,14 +143,14 @@ export const CategoryList: React.FC<CategoryListProps> = ({ params }) => {
     onCompleted: handleCategoryBulkDelete
   });
 
-  const [relevance, setRelevance] = useState<string[]>([""]);
+  const [relevance, setRelevance] = useState<string[]>([]);
   const [updateRelevance, { error }] = useMutation(relevanceUpdate, {
     variables: { relevance }
   });
   const sortChange = () => {
     updateRelevance();
     if (error) {
-      // console.log(error);
+      window.alert(error);
     }
   };
 
