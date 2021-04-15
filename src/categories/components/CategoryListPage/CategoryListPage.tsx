@@ -25,9 +25,9 @@ export interface CategoryTableProps
     SortPage<CategoryListUrlSortField>,
     TabPageProps {
   categories: CategoryFragment[];
-  relevance: string[];
-  setRelevance: Dispatch<SetStateAction<string[]>>;
-  sortChange: () => void;
+  relevance?: string[];
+  setRelevance?: Dispatch<SetStateAction<string[]>>;
+  sortChange?: () => void;
 }
 
 export const CategoryListPage: React.FC<CategoryTableProps> = ({
