@@ -1,6 +1,7 @@
 import DialogContentText from "@material-ui/core/DialogContentText";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { makeStyles } from "@material-ui/styles";
 import ActionDialog from "@saleor/components/ActionDialog";
 import DeleteFilterTabDialog from "@saleor/components/DeleteFilterTabDialog";
 import SaveFilterTabDialog, {
@@ -144,14 +145,21 @@ export const CategoryList: React.FC<CategoryListProps> = ({ params }) => {
   });
 
   const [relevance, setRelevance] = useState<string[]>([]);
-  const [updateRelevance, { error }] = useMutation(relevanceUpdate, {
-    variables: { relevance }
-  });
-  const sortChange = () => {
-    updateRelevance();
-    if (error) {
-      window.alert(error);
+  const [updateRelevance] = useMutation(relevanceUpdate, {
+    onCompleted: data => {
+      const { success, errors } = data.categoryBulkRelevanceSort;
+      if (success) {
+        alert("Exito");
+        return;
+      }
+      alert(errors);
+      return;
     }
+  });
+  const sortChange = async () => {
+    await updateRelevance({
+      variables: { relevance }
+    });
   };
 
   const handleSort = createSortHandler(navigate, categoryListUrl, params);

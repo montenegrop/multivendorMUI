@@ -89,7 +89,7 @@ export const useCategoryBulkDeleteMutation = makeMutation<
 >(categoryBulkDeleteMutation);
 
 export const relevanceUpdate = gql`
-  mutation relevanciaCate($relevance: [String]) {
+  mutation relevanciaCate($relevance: [ID]!) {
     categoryBulkRelevanceSort(ids: $relevance) {
       success
       errors
