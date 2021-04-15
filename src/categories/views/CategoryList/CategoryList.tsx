@@ -1,7 +1,6 @@
 import DialogContentText from "@material-ui/core/DialogContentText";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { makeStyles } from "@material-ui/styles";
 import ActionDialog from "@saleor/components/ActionDialog";
 import DeleteFilterTabDialog from "@saleor/components/DeleteFilterTabDialog";
 import SaveFilterTabDialog, {
@@ -13,7 +12,6 @@ import useNavigator from "@saleor/hooks/useNavigator";
 import usePaginator, {
   createPaginationState
 } from "@saleor/hooks/usePaginator";
-import useWindowScroll from "@saleor/hooks/useWindowScroll";
 import { maybe } from "@saleor/misc";
 import { ListViews } from "@saleor/types";
 import createDialogActionHandlers from "@saleor/utils/handlers/dialogActionHandlers";

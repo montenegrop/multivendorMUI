@@ -81,9 +81,9 @@ interface CategoryListProps
     SortPage<CategoryListUrlSortField> {
   categories?: CategoryFragment[];
   isRoot: boolean;
-  relevance: string[];
-  setRelevance: Dispatch<SetStateAction<string[]>>;
-  sortChange: () => void;
+  relevance?: string[];
+  setRelevance?: Dispatch<SetStateAction<string[]>>;
+  sortChange?: () => void;
   onAdd?();
 }
 
@@ -91,7 +91,6 @@ const numberOfColumns = 5;
 
 const CategoryList: React.FC<CategoryListProps> = props => {
   const {
-    relevance, //
     setRelevance, //
     sortChange, //
     categories,
