@@ -17,11 +17,15 @@ import { ListViews } from "@saleor/types";
 import createDialogActionHandlers from "@saleor/utils/handlers/dialogActionHandlers";
 import createSortHandler from "@saleor/utils/handlers/sortHandler";
 import { getSortParams } from "@saleor/utils/sort";
-import React from "react";
+import React, { useState } from "react";
+import { useMutation } from "react-apollo";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import { CategoryListPage } from "../../components/CategoryListPage/CategoryListPage";
-import { useCategoryBulkDeleteMutation } from "../../mutations";
+import {
+  relevanceUpdate,
+  useCategoryBulkDeleteMutation
+} from "../../mutations";
 import { useRootCategoriesQuery } from "../../queries";
 import { CategoryBulkDelete } from "../../types/CategoryBulkDelete";
 import {
@@ -138,6 +142,17 @@ export const CategoryList: React.FC<CategoryListProps> = ({ params }) => {
     onCompleted: handleCategoryBulkDelete
   });
 
+  const [relevance, setRelevance] = useState<string[]>([""]);
+  const [updateRelevance, { error }] = useMutation(relevanceUpdate, {
+    variables: { relevance }
+  });
+  const sortChange = () => {
+    updateRelevance();
+    if (error) {
+      // console.log(error);
+    }
+  };
+
   const handleSort = createSortHandler(navigate, categoryListUrl, params);
 
   return (
@@ -147,6 +162,9 @@ export const CategoryList: React.FC<CategoryListProps> = ({ params }) => {
           () => data.categories.edges.map(edge => edge.node),
           []
         )}
+        relevance={relevance} // relevance
+        setRelevance={setRelevance} // setRelevance
+        sortChange={sortChange} // sortChange
         currentTab={currentTab}
         initialSearch={params.query || ""}
         onSearchChange={query => changeFilterField({ query })}

@@ -15,7 +15,7 @@ import { CategoryFragment } from "@saleor/fragments/types/CategoryFragment";
 import { maybe } from "@saleor/misc";
 import { ListActions, ListProps, SortPage } from "@saleor/types";
 import { getArrowDirection } from "@saleor/utils/sort";
-import React, { useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FormattedMessage } from "react-intl";
 
@@ -81,6 +81,9 @@ interface CategoryListProps
     SortPage<CategoryListUrlSortField> {
   categories?: CategoryFragment[];
   isRoot: boolean;
+  relevance: string[];
+  setRelevance: Dispatch<SetStateAction<string[]>>;
+  sortChange: () => void;
   onAdd?();
 }
 
@@ -88,6 +91,9 @@ const numberOfColumns = 5;
 
 const CategoryList: React.FC<CategoryListProps> = props => {
   const {
+    relevance, //
+    setRelevance, //
+    sortChange, //
     categories,
     disabled,
     sort,
@@ -102,33 +108,17 @@ const CategoryList: React.FC<CategoryListProps> = props => {
   const [items, setItems] = React.useState([]);
   const [isDisabled, setIsDisabled] = React.useState(false);
 
-  let level;
-  let parent;
-
   useEffect(() => {
     if (categories?.length) {
       setItems(categories.map(category => category.id));
-      level = categories[0].level;
-      parent =
-        categories[0].parent === null ? "parent" : categories[0].parent.name;
-      if (
-        JSON.parse(localStorage.getItem(`myOrder${level}${parent}`)) &&
-        JSON.parse(localStorage.getItem(`myOrder${level}${parent}`)).length > 0
-      ) {
-        setItems(JSON.parse(localStorage.getItem(`myOrder${level}${parent}`)));
-      }
+      setRelevance(items);
     }
     checkChanges();
   }, [categories, setItems]);
 
   const classes = useStyles(props);
 
-  const checkChanges = () => {
-    const itemsOnStorage: string = localStorage.getItem(
-      `myOrder${level}${parent}`
-    );
-    return setIsDisabled(itemsOnStorage === JSON.stringify(items));
-  };
+  const checkChanges = () => setIsDisabled(relevance === items);
 
   const onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -142,14 +132,13 @@ const CategoryList: React.FC<CategoryListProps> = props => {
     newItems.splice(source.index, 1);
     newItems.splice(destination.index, 0, draggableId);
     setItems(newItems);
+
     checkChanges();
   };
 
-  const onSaveChanges = () => {
-    level = categories[0].level;
-    parent =
-      categories[0].parent === null ? "parent" : categories[0].parent.name;
-    localStorage.setItem(`myOrder${level}${parent}`, JSON.stringify(items));
+  const onSaveChanges = async () => {
+    await setRelevance(() => items);
+    sortChange();
     checkChanges();
   };
 

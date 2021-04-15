@@ -13,7 +13,7 @@ import {
   SortPage,
   TabPageProps
 } from "@saleor/types";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import CategoryList from "../CategoryList";
@@ -25,10 +25,16 @@ export interface CategoryTableProps
     SortPage<CategoryListUrlSortField>,
     TabPageProps {
   categories: CategoryFragment[];
+  relevance: string[];
+  setRelevance: Dispatch<SetStateAction<string[]>>;
+  sortChange: () => void;
 }
 
 export const CategoryListPage: React.FC<CategoryTableProps> = ({
   categories,
+  relevance, //
+  setRelevance, //
+  sortChange, //
   currentTab,
   disabled,
   initialSearch,
@@ -84,6 +90,9 @@ export const CategoryListPage: React.FC<CategoryTableProps> = ({
         />
         <CategoryList
           categories={categories}
+          relevance={relevance} //
+          setRelevance={setRelevance} //
+          sortChange={sortChange} //
           disabled={disabled}
           isChecked={isChecked}
           isRoot={true}
