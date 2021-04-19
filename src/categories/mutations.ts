@@ -87,3 +87,12 @@ export const useCategoryBulkDeleteMutation = makeMutation<
   CategoryBulkDelete,
   CategoryBulkDeleteVariables
 >(categoryBulkDeleteMutation);
+
+export const relevanceUpdate = gql`
+  mutation relevanciaCate($relevance: [ID]!) {
+    categoryBulkRelevanceSort(ids: $relevance) {
+      success
+      errors
+    }
+  }
+`;
