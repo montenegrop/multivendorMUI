@@ -38,31 +38,28 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       url: "/"
     },
     {
-      ariaLabel: "catalogue",
-      children: [
-        {
-          ariaLabel: "products",
-          label: intl.formatMessage(sectionNames.products),
-          testingContextId: "products",
-          url: productListUrl()
-        },
-        {
-          ariaLabel: "categories",
-          label: intl.formatMessage(sectionNames.categories),
-          testingContextId: "categories",
-          url: categoryListUrl()
-        },
-        {
-          ariaLabel: "collections",
-          label: intl.formatMessage(sectionNames.collections),
-          testingContextId: "collections",
-          url: collectionListUrl()
-        }
-      ],
+      ariaLabel: "products",
       icon: catalogIcon,
-      label: intl.formatMessage(commonMessages.catalog),
+      label: intl.formatMessage(sectionNames.products),
       permission: PermissionEnum.MANAGE_PRODUCTS,
-      testingContextId: "catalogue"
+      testingContextId: "products",
+      url: productListUrl()
+    },
+    {
+      ariaLabel: "categories",
+      icon: catalogIcon,
+      label: intl.formatMessage(sectionNames.categories),
+      permission: PermissionEnum.MANAGE_PRODUCTS,
+      testingContextId: "categories",
+      url: categoryListUrl()
+    },
+    {
+      ariaLabel: "collections",
+      icon: catalogIcon,
+      label: intl.formatMessage(sectionNames.collections),
+      permission: PermissionEnum.MANAGE_PRODUCTS,
+      testingContextId: "collections",
+      url: collectionListUrl()
     },
     {
       ariaLabel: "orders",
