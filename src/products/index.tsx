@@ -119,6 +119,7 @@ const Component = () => {
       <WindowTitle title={intl.formatMessage(sectionNames.products)} />
       <Switch>
         <Route exact path={productListPath} component={ProductList} />
+        <Route exact path={"/productsManager"} component={ProductList} />
         <Route exact path={productAddPath} component={ProductCreate} />
         <Route
           path={productVariantCreatorPath(":id")}
