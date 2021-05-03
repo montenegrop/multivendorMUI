@@ -25,6 +25,7 @@ import {
 import ProductCreateComponent from "./views/ProductCreate";
 import ProductImageComponent from "./views/ProductImage";
 import ProductListComponent from "./views/ProductList";
+import ProductManager from "./views/ProductManager";
 import ProductUpdateComponent from "./views/ProductUpdate";
 import ProductVariantComponent from "./views/ProductVariant";
 import ProductVariantCreateComponent from "./views/ProductVariantCreate";
@@ -119,7 +120,7 @@ const Component = () => {
       <WindowTitle title={intl.formatMessage(sectionNames.products)} />
       <Switch>
         <Route exact path={productListPath} component={ProductList} />
-        <Route exact path={"/productsManager"} component={ProductList} />
+        <Route exact path={"/productsManager"} component={ProductManager} />
         <Route exact path={productAddPath} component={ProductCreate} />
         <Route
           path={productVariantCreatorPath(":id")}
