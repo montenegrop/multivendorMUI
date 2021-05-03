@@ -240,8 +240,12 @@ export const sectionNames = defineMessages({
     description: "product types section name"
   },
   products: {
-    defaultMessage: "Products",
+    defaultMessage: "Productos",
     description: "products section name"
+  },
+  productsList: {
+    defaultMessage: "Lista de Productos",
+    description: " Product List section"
   },
   sales: {
     defaultMessage: "Sales",

@@ -43,6 +43,14 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       label: intl.formatMessage(sectionNames.products),
       permission: PermissionEnum.MANAGE_PRODUCTS,
       testingContextId: "products",
+      url: "/productsManager/"
+    },
+    {
+      ariaLabel: "productsList",
+      icon: catalogIcon,
+      label: intl.formatMessage(sectionNames.productsList),
+      permission: PermissionEnum.MANAGE_PRODUCTS,
+      testingContextId: "products",
       url: productListUrl()
     },
     {
