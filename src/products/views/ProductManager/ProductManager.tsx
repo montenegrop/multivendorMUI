@@ -9,9 +9,7 @@ const ProductManager: React.FC = props => (
     <Container>
       <PageHeader title={"Agrega tus productos"} />
       <div>mira papu aca soy yo el que crea produtos</div>
-      <ProductCreateForm>
-        {() => <input type="text" placeholder="hello papi" />}
-      </ProductCreateForm>
+      <form>{() => <input type="text" placeholder="hello papi" />}</form>
     </Container>
   </>
 );
