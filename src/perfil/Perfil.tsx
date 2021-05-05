@@ -30,13 +30,13 @@ const Perfil: React.FC = props => {
   const initialForm = {
     email: user.email,
     firstName: user.firstName,
+    foundingYear: null,
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
     phone: user.phone,
     typeOfIdentification: user.typeOfIdentification
   };
-  // console.log(user);
 
   const classes = useStyles(props);
   return (
@@ -45,6 +45,7 @@ const Perfil: React.FC = props => {
         <PageHeader title={"Datos de Perfil"} />
         <Form initial={initialForm}>
           {({ change, data }) => (
+            // console.log(data);
             <>
               <Card id="user-data">
                 <CardTitle title={"Tus datos de Usuario"} />
@@ -92,20 +93,19 @@ const Perfil: React.FC = props => {
                       onChange={change}
                     />
                     <div>
-                      <InputLabel id="demo-simple-select-label">
-                        Tipo
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                      <InputLabel id="typeofIdLabel">Tipo</InputLabel>
+                      <TextField
+                        select
+                        id="typeofIdSelect"
                         value={data.typeOfIdentification}
                         name="typeOfIdentification"
                         onChange={change}
+                        variant="standard"
                         fullWidth
                       >
                         <MenuItem value={"dni"}>DNI</MenuItem>
                         <MenuItem value={"passport"}>PASAPORTE</MenuItem>
-                      </Select>
+                      </TextField>
                     </div>
                   </div>
                 </CardContent>
@@ -115,12 +115,14 @@ const Perfil: React.FC = props => {
                 <CardContent>
                   <div className={classes.root}>
                     <TextField
-                      id="date"
-                      label="Inicio de Actividades"
+                      id="foundingYearInput"
+                      variant="standard"
+                      label="Fecha de Inicio de Actividades"
                       name="foundingYear"
                       type="date"
+                      helperText="¿Cuando empezaste a trabajar?"
                       onChange={change}
-                      defaultValue="2017-05-24"
+                      defaultValue=""
                       InputLabelProps={{
                         shrink: true
                       }}
