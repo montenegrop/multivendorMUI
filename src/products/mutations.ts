@@ -94,7 +94,7 @@ export const productImageCreateMutation = gql`
   }
 `;
 
-// import file (csv) mutation:
+// import file (csv) mutation-comment:
 export const productsImportMutation = gql`
   mutation ProductsImport($file: Upload!) {
     productsImport(file: $file) {
