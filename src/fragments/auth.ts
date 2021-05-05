@@ -6,6 +6,10 @@ export const fragmentUser = gql`
     email
     firstName
     lastName
+    phone
+    typeOfIdentification
+    identification
+    vendorId
     userPermissions {
       code
       name

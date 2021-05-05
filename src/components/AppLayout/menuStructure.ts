@@ -38,6 +38,14 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       url: "/"
     },
     {
+      ariaLabel: "perfil",
+      icon: customerIcon,
+      label: intl.formatMessage(sectionNames.perfil),
+      permission: PermissionEnum.MANAGE_USERS,
+      testingContextId: "perfil",
+      url: "/perfil"
+    },
+    {
       ariaLabel: "products",
       icon: catalogIcon,
       label: intl.formatMessage(sectionNames.products),

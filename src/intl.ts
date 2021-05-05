@@ -227,6 +227,10 @@ export const sectionNames = defineMessages({
     defaultMessage: "Pages",
     description: "pages section name"
   },
+  perfil: {
+    defaultMessage: "Perfil",
+    description: "seccion de vendor y usuario"
+  },
   permissionGroups: {
     defaultMessage: "Permission Groups",
     description: "permission groups section name"
