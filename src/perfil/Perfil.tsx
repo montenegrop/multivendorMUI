@@ -5,9 +5,7 @@ import { InputLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
-import { KeyboardDatePicker } from "@material-ui/pickers";
 import CardTitle from "@saleor/components/CardTitle";
-import Date from "@saleor/components/Date";
 import useUser from "@saleor/hooks/useUser";
 import React from "react";
 
@@ -115,7 +113,19 @@ const Perfil: React.FC = props => {
               <Card id="vendor-data">
                 <CardTitle title={"Lo que va a ver tu Cliente"} />
                 <CardContent>
-                  <div className={classes.root}></div>
+                  <div className={classes.root}>
+                    <TextField
+                      id="date"
+                      label="Inicio de Actividades"
+                      name="foundingYear"
+                      type="date"
+                      onChange={change}
+                      defaultValue="2017-05-24"
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                    />
+                  </div>
                 </CardContent>
               </Card>
               <Card id="services-data">
