@@ -20,9 +20,9 @@ export interface User_avatar {
 }
 
 export interface User {
-  phone: any;
-  identification: number;
-  typeOfIdentification: any;
+  phone?: any;
+  identification?: number;
+  typeOfIdentification?: any;
   __typename: "User";
   id: string;
   email: string;
