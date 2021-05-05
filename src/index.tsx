@@ -50,6 +50,7 @@ import { NotFound } from "./NotFound";
 import OrdersSection from "./orders";
 import PageSection from "./pages";
 import PageTypesSection from "./pageTypes";
+import Perfil from "./perfil/Perfil";
 import PermissionGroupSection from "./permissionGroups";
 import PluginsSection from "./plugins";
 import ProductSection from "./products";
@@ -162,6 +163,7 @@ const Routes: React.FC = () => {
           >
             <Switch>
               <SectionRoute exact path="/" component={HomePage} />
+              <Route path="/perfil" component={Perfil} />
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
                 path="/categories"
@@ -205,6 +207,11 @@ const Routes: React.FC = () => {
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
                 path="/products"
+                component={ProductSection}
+              />
+              <SectionRoute
+                permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+                path="/productsManager"
                 component={ProductSection}
               />
               <SectionRoute
