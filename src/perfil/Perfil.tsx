@@ -57,7 +57,7 @@ const useStylesVendor = makeStyles(
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
       gridTemplateColumns: "1fr 1fr",
-      gridTemplateRows: "2fr 1fr 1fr"
+      gridTemplateRows: "260px 1fr "
     },
     textarea: {
       height: "100%",
