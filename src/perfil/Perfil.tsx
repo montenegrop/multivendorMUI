@@ -1,13 +1,14 @@
 import { TextField } from "@material-ui/core";
-import { Select } from "@material-ui/core";
 import { MenuItem } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
+import { CardSpacer } from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
 import useUser from "@saleor/hooks/useUser";
 import React from "react";
+import Dropzone from "react-dropzone/dist/index";
 
 import Container from "../components/Container";
 import Form from "../components/Form";
@@ -20,6 +21,42 @@ const useStyles = makeStyles(
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
       gridTemplateColumns: "1fr 1fr"
+    }
+  }),
+  { name: "CustomerCreateDetails" }
+);
+const useStylesVendor = makeStyles(
+  theme => ({
+    dragActive: { background: "rgba(200,200,200,0.2)", cursor: "pointer" },
+    dropContainer: {
+      height: "100%",
+      width: "100%",
+      gridColumnStart: "1",
+      gridColumnEnd: "3"
+    },
+    dropzone: {
+      border: "double black 1px",
+      height: "calc(100% - 3rem)",
+      "&:hover": {
+        backgroundColor: "rgba(200,200,200,0.2)",
+        cursor: "pointer"
+      },
+      width: "100%"
+    },
+    label: {
+      marginBottom: "1rem"
+    },
+    root: {
+      display: "grid",
+      gridColumnGap: theme.spacing(2),
+      gridRowGap: theme.spacing(3),
+      gridTemplateColumns: "1fr 1fr",
+      gridTemplateRows: "1fr 3fr 2fr"
+    },
+    textarea: {
+      height: "100%",
+      margin: "1rem auto",
+      width: "100%"
     }
   }),
   { name: "CustomerCreateDetails" }
@@ -39,6 +76,14 @@ const Perfil: React.FC = props => {
   };
 
   const classes = useStyles(props);
+
+  const [selectedBanner, setSelectedBanner] = React.useState<string>("");
+  const classesVendor = useStylesVendor(selectedBanner);
+  const handleOnDrop = file => {
+    const imgurl = URL.createObjectURL(file[0]);
+    setSelectedBanner(imgurl);
+  };
+
   return (
     <>
       <Container>
@@ -103,6 +148,7 @@ const Perfil: React.FC = props => {
                         variant="standard"
                         fullWidth
                       >
+                        <MenuItem value={"EMPTY"} disabled></MenuItem>
                         <MenuItem value={"dni"}>DNI</MenuItem>
                         <MenuItem value={"passport"}>PASAPORTE</MenuItem>
                       </TextField>
@@ -110,10 +156,11 @@ const Perfil: React.FC = props => {
                   </div>
                 </CardContent>
               </Card>
+              <CardSpacer />
               <Card id="vendor-data">
                 <CardTitle title={"Lo que va a ver tu Cliente"} />
                 <CardContent>
-                  <div className={classes.root}>
+                  <div className={classesVendor.root}>
                     <TextField
                       id="foundingYearInput"
                       variant="standard"
@@ -127,9 +174,42 @@ const Perfil: React.FC = props => {
                         shrink: true
                       }}
                     />
+                    <div className={classesVendor.dropContainer}>
+                      <InputLabel className={classesVendor.label}>
+                        Imagen de Portada para tu Tienda
+                      </InputLabel>
+                      <Dropzone onDrop={handleOnDrop}>
+                        {({ isDragActive, getInputProps, getRootProps }) => (
+                          <div
+                            {...getRootProps()}
+                            className={`${classesVendor.dropzone} ${
+                              isDragActive ? classesVendor.dragActive : null
+                            }`}
+                            style={{
+                              background:
+                                selectedBanner !== ""
+                                  ? `url(${selectedBanner}) center center no-repeat`
+                                  : "inherit"
+                            }}
+                          >
+                            <input
+                              label="Imagen de Portada"
+                              {...getInputProps()}
+                              accept="image*/"
+                            />
+                          </div>
+                        )}
+                      </Dropzone>
+                      <TextField
+                        label="Descripcion"
+                        multiline
+                        className={classesVendor.textarea}
+                      />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
+              <CardSpacer />
               <Card id="services-data">
                 <CardTitle title={"Los servicios que ofreces"} />
                 <CardContent>
