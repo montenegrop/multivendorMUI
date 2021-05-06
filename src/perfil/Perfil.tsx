@@ -29,19 +29,25 @@ const useStylesVendor = makeStyles(
   theme => ({
     dragActive: { background: "rgba(200,200,200,0.2)", cursor: "pointer" },
     dropContainer: {
-      height: "100%",
-      width: "100%",
+      gridColumnEnd: "3",
       gridColumnStart: "1",
-      gridColumnEnd: "3"
+      height: "100%",
+      width: "100%"
     },
     dropzone: {
-      border: "double black 1px",
-      height: "calc(100% - 3rem)",
       "&:hover": {
         backgroundColor: "rgba(200,200,200,0.2)",
         cursor: "pointer"
       },
+      border: "double black 1px",
+      height: "200px",
+
       width: "100%"
+    },
+    helper: {
+      color: "rgba(200, 200, 200, 0.5)",
+      fontsize: "0.8rem",
+      margin: "0.2rem"
     },
     label: {
       marginBottom: "1rem"
@@ -51,7 +57,7 @@ const useStylesVendor = makeStyles(
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
       gridTemplateColumns: "1fr 1fr",
-      gridTemplateRows: "1fr 3fr 2fr"
+      gridTemplateRows: "2fr 1fr 1fr"
     },
     textarea: {
       height: "100%",
@@ -161,19 +167,6 @@ const Perfil: React.FC = props => {
                 <CardTitle title={"Lo que va a ver tu Cliente"} />
                 <CardContent>
                   <div className={classesVendor.root}>
-                    <TextField
-                      id="foundingYearInput"
-                      variant="standard"
-                      label="Fecha de Inicio de Actividades"
-                      name="foundingYear"
-                      type="date"
-                      helperText="¿Cuando empezaste a trabajar?"
-                      onChange={change}
-                      defaultValue=""
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-                    />
                     <div className={classesVendor.dropContainer}>
                       <InputLabel className={classesVendor.label}>
                         Imagen de Portada para tu Tienda
@@ -189,7 +182,9 @@ const Perfil: React.FC = props => {
                               background:
                                 selectedBanner !== ""
                                   ? `url(${selectedBanner}) center center no-repeat`
-                                  : "inherit"
+                                  : "inherit",
+                              backgroundSize:
+                                selectedBanner !== "" ? "cover" : null
                             }}
                           >
                             <input
@@ -200,12 +195,29 @@ const Perfil: React.FC = props => {
                           </div>
                         )}
                       </Dropzone>
-                      <TextField
-                        label="Descripcion"
-                        multiline
-                        className={classesVendor.textarea}
-                      />
+                      <div className={classesVendor.helper}>
+                        El tamaño recomendado es de 970px x 250px
+                      </div>
                     </div>
+                    <TextField
+                      id="descripcion"
+                      label="Descripcion"
+                      multiline
+                      className={classesVendor.textarea}
+                    />
+                    <TextField
+                      id="foundingYearInput"
+                      variant="standard"
+                      label="Fecha de Inicio de Actividades"
+                      name="foundingYear"
+                      type="date"
+                      helperText="¿Cuando empezaste a trabajar?"
+                      onChange={change}
+                      defaultValue=""
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                    />
                   </div>
                 </CardContent>
               </Card>
