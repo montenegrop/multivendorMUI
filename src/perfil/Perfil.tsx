@@ -7,12 +7,13 @@ import Card from "@material-ui/core/Card";
 import { CardSpacer } from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
 import useUser from "@saleor/hooks/useUser";
-import React from "react";
+import React, { useEffect } from "react";
 import Dropzone from "react-dropzone/dist/index";
 
 import Container from "../components/Container";
 import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
+import { usePerfilVendorData } from "./queries";
 
 const useStyles = makeStyles(
   theme => ({
@@ -70,10 +71,20 @@ const useStylesVendor = makeStyles(
 
 const Perfil: React.FC = props => {
   const { user } = useUser();
+  const {
+    data: perfilVendorData,
+    loading: perfilVendorLoading
+  } = usePerfilVendorData({
+    variables: {
+      id: user.vendorId
+    }
+  });
+
   const initialForm = {
+    description: perfilVendorData?.description,
     email: user.email,
     firstName: user.firstName,
-    foundingYear: null,
+    foundingYear: perfilVendorData?.foundingYear,
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
@@ -96,7 +107,6 @@ const Perfil: React.FC = props => {
         <PageHeader title={"Datos de Perfil"} />
         <Form initial={initialForm}>
           {({ change, data }) => (
-            // console.log(data);
             <>
               <Card id="user-data">
                 <CardTitle title={"Tus datos de Usuario"} />
@@ -202,6 +212,7 @@ const Perfil: React.FC = props => {
                     <TextField
                       id="descripcion"
                       label="Descripcion"
+                      name="description"
                       multiline
                       className={classesVendor.textarea}
                     />
@@ -210,10 +221,9 @@ const Perfil: React.FC = props => {
                       variant="standard"
                       label="Fecha de Inicio de Actividades"
                       name="foundingYear"
-                      type="date"
+                      type="year"
                       helperText="¿Cuando empezaste a trabajar?"
                       onChange={change}
-                      defaultValue=""
                       InputLabelProps={{
                         shrink: true
                       }}
