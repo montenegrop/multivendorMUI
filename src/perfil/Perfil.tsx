@@ -1,13 +1,15 @@
+import DateFnsUtils from "@date-io/date-fns";
 import { TextField } from "@material-ui/core";
 import { MenuItem } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { CardSpacer } from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
 import useUser from "@saleor/hooks/useUser";
-import React, { useEffect } from "react";
+import React from "react";
 import Dropzone from "react-dropzone/dist/index";
 
 import Container from "../components/Container";
@@ -95,6 +97,8 @@ const Perfil: React.FC = props => {
   const classes = useStyles(props);
 
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
+  const [date, changeDate] = React.useState(new Date());
+
   const classesVendor = useStylesVendor(selectedBanner);
   const handleOnDrop = file => {
     const imgurl = URL.createObjectURL(file[0]);
@@ -213,21 +217,37 @@ const Perfil: React.FC = props => {
                       id="descripcion"
                       label="Descripcion"
                       name="description"
+                      onChange={change}
                       multiline
                       className={classesVendor.textarea}
                     />
-                    <TextField
-                      id="foundingYearInput"
-                      variant="standard"
-                      label="Fecha de Inicio de Actividades"
-                      name="foundingYear"
-                      type="year"
-                      helperText="¿Cuando empezaste a trabajar?"
-                      onChange={change}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DatePicker
+                        id="foundingYearInput"
+                        inputVariant="standard"
+                        label="Fecha de Inicio de Actividades"
+                        name="foundingYear"
+                        autoOk
+                        variant="dialog"
+                        views={["year"]}
+                        value={date}
+                        maxDate={new Date()}
+                        helperText="¿Cuando empezaste a trabajar?"
+                        onChange={date => {
+                          change({
+                            target: {
+                              name: "foundingYear",
+                              value: new Date(date.getFullYear(), 0, 1)
+                            }
+                          });
+
+                          changeDate(new Date(date.getFullYear(), 0, 1));
+                        }}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
+                      />
+                    </MuiPickersUtilsProvider>
                   </div>
                 </CardContent>
               </Card>
