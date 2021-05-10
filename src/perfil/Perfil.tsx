@@ -8,6 +8,7 @@ import Card from "@material-ui/core/Card";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { CardSpacer } from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
+import { SaveButtonBar } from "@saleor/components/SaveButtonBar";
 import useUser from "@saleor/hooks/useUser";
 import React from "react";
 import Dropzone from "react-dropzone/dist/index";
@@ -86,7 +87,7 @@ const Perfil: React.FC = props => {
     description: perfilVendorData?.description,
     email: user.email,
     firstName: user.firstName,
-    foundingYear: perfilVendorData?.foundingYear,
+    foundingYear: perfilVendorData?.foundingYear || new Date(1900, 1, 1),
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
@@ -97,7 +98,6 @@ const Perfil: React.FC = props => {
   const classes = useStyles(props);
 
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
-  const [date, changeDate] = React.useState(new Date());
 
   const classesVendor = useStylesVendor(selectedBanner);
   const handleOnDrop = file => {
@@ -105,12 +105,18 @@ const Perfil: React.FC = props => {
     setSelectedBanner(imgurl);
   };
 
+  const handleSubmit = data => {
+    // console.log(data);
+  };
+
+  const loading = false;
+
   return (
     <>
       <Container>
         <PageHeader title={"Datos de Perfil"} />
-        <Form initial={initialForm}>
-          {({ change, data }) => (
+        <Form initial={initialForm} onSubmit={handleSubmit}>
+          {({ change, data, hasChanged, submit, reset }) => (
             <>
               <Card id="user-data">
                 <CardTitle title={"Tus datos de Usuario"} />
@@ -230,7 +236,7 @@ const Perfil: React.FC = props => {
                         autoOk
                         variant="dialog"
                         views={["year"]}
-                        value={date}
+                        value={data.foundingYear}
                         maxDate={new Date()}
                         helperText="¿Cuando empezaste a trabajar?"
                         onChange={date => {
@@ -240,8 +246,6 @@ const Perfil: React.FC = props => {
                               value: new Date(date.getFullYear(), 0, 1)
                             }
                           });
-
-                          changeDate(new Date(date.getFullYear(), 0, 1));
                         }}
                         InputLabelProps={{
                           shrink: true
@@ -258,6 +262,12 @@ const Perfil: React.FC = props => {
                   <div className={classes.root}></div>
                 </CardContent>
               </Card>
+              <SaveButtonBar
+                onCancel={reset}
+                onSave={submit}
+                state={"default"}
+                disabled={loading || !handleSubmit || !hasChanged}
+              />
             </>
           )}
         </Form>
