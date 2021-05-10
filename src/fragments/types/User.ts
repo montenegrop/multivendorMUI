@@ -20,7 +20,7 @@ export interface User_avatar {
 }
 
 export interface User {
-  vendorId: string;
+  vendorId?: string;
   phone?: any;
   identification?: number;
   typeOfIdentification?: any;
