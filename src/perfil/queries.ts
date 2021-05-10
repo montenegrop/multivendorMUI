@@ -13,7 +13,7 @@ const perfilVendorData = gql`
   }
 `;
 
-export const usePerfilVendorData = makeQuery(perfilVendorData);
+export const usePerfilVendorData = makeQuery<any, any>(perfilVendorData);
 
 const perfilVendorData2 = gql`
   query userVendorData($id: ID!) {
@@ -32,3 +32,5 @@ const perfilVendorData2 = gql`
     }
   }
 `;
+
+export const usePerfilVendorData2 = makeQuery<any, any>(perfilVendorData2);
