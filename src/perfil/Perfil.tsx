@@ -93,16 +93,15 @@ const useStylesVendor = makeStyles(
 
 const Perfil: React.FC = props => {
   const { user } = useUser();
-  const {
-    data: perfilVendorData,
-    loading: perfilVendorLoading
-  } = usePerfilVendorData({
+  const { data: vendor, loading: perfilVendorLoading } = usePerfilVendorData({
     variables: {
       id: user.vendorId
     }
   });
+  const perfilVendorData = vendor?.vendor;
+
   const initialForm = {
-    city: (perfilVendorData && perfilVendorData.location?.city) || "undefined",
+    city: perfilVendorData?.location?.city || "undefined",
     description: perfilVendorData?.description,
     email: user.email,
     firstName: user.firstName,
@@ -283,36 +282,38 @@ const Perfil: React.FC = props => {
                           El tamaño recomendado es de 970px x 250px
                         </div>
                       </div>
-                      <div
-                        id="datePicker"
-                        className={classesVendor.datePickerContainer}
-                      >
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                          <DatePicker
-                            className={classesVendor.datePicker}
-                            id="foundingYearInput"
-                            inputVariant="standard"
-                            label="¿En qué año empezaste a Trabajar?"
-                            name="foundingYear"
-                            autoOk
-                            variant="dialog"
-                            views={["year"]}
-                            value={data.foundingYear}
-                            maxDate={new Date()}
-                            onChange={date => {
-                              change({
-                                target: {
-                                  name: "foundingYear",
-                                  value: new Date(date.getFullYear(), 0, 1)
-                                }
-                              });
-                            }}
-                            InputLabelProps={{
-                              shrink: true
-                            }}
-                          />
-                        </MuiPickersUtilsProvider>
-                      </div>
+                      {user.userPermissions[0] ? null : (
+                        <div
+                          id="datePicker"
+                          className={classesVendor.datePickerContainer}
+                        >
+                          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <DatePicker
+                              className={classesVendor.datePicker}
+                              id="foundingYearInput"
+                              inputVariant="standard"
+                              label="Año de Fundación"
+                              name="foundingYear"
+                              autoOk
+                              variant="dialog"
+                              views={["year"]}
+                              value={data.foundingYear}
+                              maxDate={new Date()}
+                              onChange={date => {
+                                change({
+                                  target: {
+                                    name: "foundingYear",
+                                    value: new Date(date.getFullYear(), 0, 1)
+                                  }
+                                });
+                              }}
+                              InputLabelProps={{
+                                shrink: true
+                              }}
+                            />
+                          </MuiPickersUtilsProvider>
+                        </div>
+                      )}
                       <div id="ubicacion" className={classesVendor.location}>
                         <div>
                           <InputLabel id="provinceLabel">Provincia</InputLabel>
@@ -368,14 +369,16 @@ const Perfil: React.FC = props => {
                           />
                         </div>
                       </div>
-                      <TextField
-                        id="descripcion"
-                        label="Descripcion"
-                        name="description"
-                        onChange={change}
-                        multiline
-                        className={classesVendor.textarea}
-                      />
+                      {user.userPermissions[0] ? null : (
+                        <TextField
+                          id="descripcion"
+                          label="Descripcion"
+                          name="description"
+                          onChange={change}
+                          multiline
+                          className={classesVendor.textarea}
+                        />
+                      )}
                     </div>
                   </CardContent>
                 </Card>
