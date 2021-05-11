@@ -1,5 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
-import { TextField } from "@material-ui/core";
+import { CircularProgress, TextField } from "@material-ui/core";
 import { MenuItem } from "@material-ui/core";
 import { InputLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
@@ -16,7 +16,7 @@ import Dropzone from "react-dropzone/dist/index";
 import Container from "../components/Container";
 import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
-import { usePerfilVendorData } from "./queries";
+import { usePerfilVendorData2 } from "./queries";
 
 const useStyles = makeStyles(
   theme => ({
@@ -96,13 +96,13 @@ const Perfil: React.FC = props => {
   const {
     data: perfilVendorData,
     loading: perfilVendorLoading
-  } = usePerfilVendorData({
+  } = usePerfilVendorData2({
     variables: {
       id: user.vendorId
     }
   });
-
   const initialForm = {
+    city: (perfilVendorData && perfilVendorData.location?.city) || "undefined",
     description: perfilVendorData?.description,
     email: user.email,
     firstName: user.firstName,
@@ -110,13 +110,11 @@ const Perfil: React.FC = props => {
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
-    city: (perfilVendorData && perfilVendorData.location?.city) || "undefined",
+    phone: user.phone,
     postalCode:
-      (perfilVendorData && perfilVendorData.location?.postalCode) ||
-      "undefined",
+      (perfilVendorData && perfilVendorData.location?.postalCode) || "",
     province:
       (perfilVendorData && perfilVendorData.location?.province) || "undefined",
-    phone: user.phone,
     typeOfIdentification: user.typeOfIdentification
   };
 
@@ -176,222 +174,228 @@ const Perfil: React.FC = props => {
     <>
       <Container>
         <PageHeader title={"Datos de Perfil"} />
-        <Form initial={initialForm} onSubmit={handleSubmit}>
-          {({ change, data, hasChanged, submit, reset }) => (
-            <>
-              <Card id="user-data">
-                <CardTitle title={"Tus datos de Usuario"} />
+        {perfilVendorLoading ? (
+          <CircularProgress />
+        ) : (
+          <Form initial={initialForm} onSubmit={handleSubmit}>
+            {({ change, data, hasChanged, submit, reset }) => (
+              <>
+                <Card id="user-data">
+                  <CardTitle title={"Tus datos de Usuario"} />
 
-                <CardContent>
-                  <div className={classes.root}>
-                    <TextField
-                      disabled={false}
-                      error={false}
-                      name="firstName"
-                      label="Nombre"
-                      value={data.firstName}
-                      onChange={change}
-                    />
-                    <TextField
-                      disabled={false}
-                      error={false}
-                      name="lastName"
-                      label="Apellido"
-                      value={data.lastName}
-                      onChange={change}
-                    />
-                    <TextField
-                      disabled={false}
-                      error={false}
-                      name="email"
-                      label="Email"
-                      value={data.email}
-                      onChange={change}
-                    />
-                    <TextField
-                      disabled={false}
-                      error={false}
-                      name="phone"
-                      label="Telefono"
-                      value={data.phone}
-                      onChange={change}
-                    />
-                    <TextField
-                      disabled={false}
-                      error={false}
-                      name="identification"
-                      label="Número de Identificacion"
-                      value={data.identification}
-                      onChange={change}
-                    />
-                    <div>
-                      <InputLabel id="typeofIdLabel">Tipo</InputLabel>
+                  <CardContent>
+                    <div className={classes.root}>
                       <TextField
-                        select
-                        id="typeofIdSelect"
-                        value={data.typeOfIdentification}
-                        name="typeOfIdentification"
+                        disabled={false}
+                        error={false}
+                        name="firstName"
+                        label="Nombre"
+                        value={data.firstName}
                         onChange={change}
-                        variant="standard"
-                        fullWidth
+                      />
+                      <TextField
+                        disabled={false}
+                        error={false}
+                        name="lastName"
+                        label="Apellido"
+                        value={data.lastName}
+                        onChange={change}
+                      />
+                      <TextField
+                        disabled={false}
+                        error={false}
+                        name="email"
+                        label="Email"
+                        value={data.email}
+                        onChange={change}
+                      />
+                      <TextField
+                        disabled={false}
+                        error={false}
+                        name="phone"
+                        label="Telefono"
+                        value={data.phone}
+                        onChange={change}
+                      />
+                      <div>
+                        <InputLabel id="typeofIdLabel">
+                          Tipo de Documento
+                        </InputLabel>
+                        <TextField
+                          select
+                          id="typeofIdSelect"
+                          value={data.typeOfIdentification}
+                          name="typeOfIdentification"
+                          onChange={change}
+                          variant="standard"
+                          fullWidth
+                        >
+                          <MenuItem value={"EMPTY"} disabled></MenuItem>
+                          <MenuItem value={"dni"}>DNI</MenuItem>
+                          <MenuItem value={"passport"}>PASAPORTE</MenuItem>
+                        </TextField>
+                      </div>
+                      <TextField
+                        disabled={false}
+                        error={false}
+                        name="identification"
+                        label="Número de Documento"
+                        value={data.identification}
+                        onChange={change}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+                <CardSpacer />
+                <Card id="vendor-data">
+                  <CardTitle title={"Lo que va a ver tu Cliente"} />
+                  <CardContent>
+                    <div className={classesVendor.root}>
+                      <div className={classesVendor.dropContainer}>
+                        <InputLabel className={classesVendor.label}>
+                          Imagen de Portada para tu Tienda
+                        </InputLabel>
+                        <Dropzone onDrop={handleOnDrop}>
+                          {({ isDragActive, getInputProps, getRootProps }) => (
+                            <div
+                              {...getRootProps()}
+                              className={`${classesVendor.dropzone} ${
+                                isDragActive ? classesVendor.dragActive : null
+                              }`}
+                              style={{
+                                background:
+                                  selectedBanner !== ""
+                                    ? `url(${selectedBanner}) center center no-repeat`
+                                    : "inherit",
+                                backgroundSize:
+                                  selectedBanner !== "" ? "cover" : null
+                              }}
+                            >
+                              <input
+                                label="Imagen de Portada"
+                                {...getInputProps()}
+                                accept="image*/"
+                              />
+                            </div>
+                          )}
+                        </Dropzone>
+                        <div className={classesVendor.helper}>
+                          El tamaño recomendado es de 970px x 250px
+                        </div>
+                      </div>
+                      <div
+                        id="datePicker"
+                        className={classesVendor.datePickerContainer}
                       >
-                        <MenuItem value={"EMPTY"} disabled></MenuItem>
-                        <MenuItem value={"dni"}>DNI</MenuItem>
-                        <MenuItem value={"passport"}>PASAPORTE</MenuItem>
-                      </TextField>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <CardSpacer />
-              <Card id="vendor-data">
-                <CardTitle title={"Lo que va a ver tu Cliente"} />
-                <CardContent>
-                  <div className={classesVendor.root}>
-                    <div className={classesVendor.dropContainer}>
-                      <InputLabel className={classesVendor.label}>
-                        Imagen de Portada para tu Tienda
-                      </InputLabel>
-                      <Dropzone onDrop={handleOnDrop}>
-                        {({ isDragActive, getInputProps, getRootProps }) => (
-                          <div
-                            {...getRootProps()}
-                            className={`${classesVendor.dropzone} ${
-                              isDragActive ? classesVendor.dragActive : null
-                            }`}
-                            style={{
-                              background:
-                                selectedBanner !== ""
-                                  ? `url(${selectedBanner}) center center no-repeat`
-                                  : "inherit",
-                              backgroundSize:
-                                selectedBanner !== "" ? "cover" : null
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <DatePicker
+                            className={classesVendor.datePicker}
+                            id="foundingYearInput"
+                            inputVariant="standard"
+                            label="¿En qué año empezaste a Trabajar?"
+                            name="foundingYear"
+                            autoOk
+                            variant="dialog"
+                            views={["year"]}
+                            value={data.foundingYear}
+                            maxDate={new Date()}
+                            onChange={date => {
+                              change({
+                                target: {
+                                  name: "foundingYear",
+                                  value: new Date(date.getFullYear(), 0, 1)
+                                }
+                              });
                             }}
+                            InputLabelProps={{
+                              shrink: true
+                            }}
+                          />
+                        </MuiPickersUtilsProvider>
+                      </div>
+                      <div id="ubicacion" className={classesVendor.location}>
+                        <div>
+                          <InputLabel id="provinceLabel">Provincia</InputLabel>
+                          <TextField
+                            select
+                            id="provincia"
+                            value={data.province}
+                            name="province"
+                            onChange={e => {
+                              change(e);
+                              getCities(e.target.value);
+                              return;
+                            }}
+                            variant="standard"
+                            fullWidth
                           >
-                            <input
-                              label="Imagen de Portada"
-                              {...getInputProps()}
-                              accept="image*/"
-                            />
-                          </div>
-                        )}
-                      </Dropzone>
-                      <div className={classesVendor.helper}>
-                        El tamaño recomendado es de 970px x 250px
+                            {provincias.map((provincia, indx) => (
+                              <MenuItem key={indx} value={provincia}>
+                                {provincia}
+                              </MenuItem>
+                            ))}
+                            <MenuItem value={"undefined"} disabled></MenuItem>
+                          </TextField>
+                        </div>
+                        <div>
+                          <InputLabel id="cityLabel">Ciudad</InputLabel>
+                          <TextField
+                            select
+                            id="city"
+                            value={data.city}
+                            name="city"
+                            onChange={change}
+                            variant="standard"
+                            fullWidth
+                          >
+                            {ciudades.map((ciudad, indx) => (
+                              <MenuItem key={indx} value={ciudad}>
+                                {ciudad}
+                              </MenuItem>
+                            ))}
+                            <MenuItem value={"undefined"} disabled></MenuItem>
+                          </TextField>
+                        </div>
+                        <div>
+                          <InputLabel id="postalCodeLabel">C.P.:</InputLabel>
+                          <TextField
+                            id="postalCode"
+                            value={data.postalCode}
+                            name="postalCode"
+                            onChange={change}
+                            variant="standard"
+                            fullWidth
+                          />
+                        </div>
                       </div>
+                      <TextField
+                        id="descripcion"
+                        label="Descripcion"
+                        name="description"
+                        onChange={change}
+                        multiline
+                        className={classesVendor.textarea}
+                      />
                     </div>
-                    <div
-                      id="datePicker"
-                      className={classesVendor.datePickerContainer}
-                    >
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <DatePicker
-                          className={classesVendor.datePicker}
-                          id="foundingYearInput"
-                          inputVariant="standard"
-                          label="¿En qué año empezaste a Trabajar?"
-                          name="foundingYear"
-                          autoOk
-                          variant="dialog"
-                          views={["year"]}
-                          value={data.foundingYear}
-                          maxDate={new Date()}
-                          onChange={date => {
-                            change({
-                              target: {
-                                name: "foundingYear",
-                                value: new Date(date.getFullYear(), 0, 1)
-                              }
-                            });
-                          }}
-                          InputLabelProps={{
-                            shrink: true
-                          }}
-                        />
-                      </MuiPickersUtilsProvider>
-                    </div>
-                    <div id="ubicacion" className={classesVendor.location}>
-                      <div>
-                        <InputLabel id="provinceLabel">Provincia</InputLabel>
-                        <TextField
-                          select
-                          id="provincia"
-                          value={data.province}
-                          name="province"
-                          onChange={e => {
-                            change(e);
-                            getCities(e.target.value);
-                            return;
-                          }}
-                          variant="standard"
-                          fullWidth
-                        >
-                          {provincias.map((provincia, indx) => (
-                            <MenuItem key={indx} value={provincia}>
-                              {provincia}
-                            </MenuItem>
-                          ))}
-                          <MenuItem value={"undefined"} disabled></MenuItem>
-                        </TextField>
-                      </div>
-                      <div>
-                        <InputLabel id="cityLabel">Ciudad</InputLabel>
-                        <TextField
-                          select
-                          id="city"
-                          value={data.city}
-                          name="city"
-                          onChange={change}
-                          variant="standard"
-                          fullWidth
-                        >
-                          {ciudades.map((ciudad, indx) => (
-                            <MenuItem key={indx} value={ciudad}>
-                              {ciudad}
-                            </MenuItem>
-                          ))}
-                          <MenuItem value={"undefined"} disabled></MenuItem>
-                        </TextField>
-                      </div>
-                      <div>
-                        <InputLabel id="postalCodeLabel">C.P.:</InputLabel>
-                        <TextField
-                          id="postalCode"
-                          value={data.postalCode}
-                          name="postalCode"
-                          onChange={change}
-                          variant="standard"
-                          fullWidth
-                        />
-                      </div>
-                    </div>
-                    <TextField
-                      id="descripcion"
-                      label="Descripcion"
-                      name="description"
-                      onChange={change}
-                      multiline
-                      className={classesVendor.textarea}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-              <CardSpacer />
-              <Card id="services-data">
-                <CardTitle title={"Los servicios que ofreces"} />
-                <CardContent>
-                  <div className={classes.root}></div>
-                </CardContent>
-              </Card>
-              <SaveButtonBar
-                onCancel={reset}
-                onSave={submit}
-                state={"default"}
-                disabled={loading || !handleSubmit || !hasChanged}
-              />
-            </>
-          )}
-        </Form>
+                  </CardContent>
+                </Card>
+                <CardSpacer />
+                <Card id="services-data">
+                  <CardTitle title={"Los servicios que ofreces"} />
+                  <CardContent>
+                    <div className={classes.root}></div>
+                  </CardContent>
+                </Card>
+                <SaveButtonBar
+                  onCancel={reset}
+                  onSave={submit}
+                  state={"default"}
+                  disabled={loading || !handleSubmit || !hasChanged}
+                />
+              </>
+            )}
+          </Form>
+        )}
       </Container>
     </>
   );
