@@ -9,20 +9,6 @@ const perfilVendorData = gql`
       }
       description
       foundingYear
-    }
-  }
-`;
-
-export const usePerfilVendorData = makeQuery<any, any>(perfilVendorData);
-
-const perfilVendorData2 = gql`
-  query userVendorData($id: ID!) {
-    vendor(id: $id) {
-      images {
-        url
-      }
-      description
-      foundingYear
       location {
         country
         province
@@ -33,4 +19,4 @@ const perfilVendorData2 = gql`
   }
 `;
 
-export const usePerfilVendorData2 = makeQuery<any, any>(perfilVendorData2);
+export const usePerfilVendorData = makeQuery<any, any>(perfilVendorData);

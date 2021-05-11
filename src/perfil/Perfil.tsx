@@ -16,7 +16,7 @@ import Dropzone from "react-dropzone/dist/index";
 import Container from "../components/Container";
 import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
-import { usePerfilVendorData2 } from "./queries";
+import { usePerfilVendorData } from "./queries";
 
 const useStyles = makeStyles(
   theme => ({
@@ -96,7 +96,7 @@ const Perfil: React.FC = props => {
   const {
     data: perfilVendorData,
     loading: perfilVendorLoading
-  } = usePerfilVendorData2({
+  } = usePerfilVendorData({
     variables: {
       id: user.vendorId
     }
