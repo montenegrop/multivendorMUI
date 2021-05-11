@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { AccountErrorCode, PermissionEnum } from "./../../types/globalTypes";
+import { AccountErrorCode, UserTypeOfIdentification, PermissionEnum } from "./../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: SetPassword
@@ -31,6 +31,10 @@ export interface SetPassword_setPassword_user {
   email: string;
   firstName: string;
   lastName: string;
+  phone: string;
+  typeOfIdentification: UserTypeOfIdentification | null;
+  identification: string;
+  vendorId: string | null;
   userPermissions: (SetPassword_setPassword_user_userPermissions | null)[] | null;
   avatar: SetPassword_setPassword_user_avatar | null;
 }

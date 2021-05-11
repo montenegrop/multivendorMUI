@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { PermissionEnum } from "./../../types/globalTypes";
+import { UserTypeOfIdentification, PermissionEnum } from "./../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: TokenAuth
@@ -31,6 +31,10 @@ export interface TokenAuth_tokenCreate_user {
   email: string;
   firstName: string;
   lastName: string;
+  phone: string;
+  typeOfIdentification: UserTypeOfIdentification | null;
+  identification: string;
+  vendorId: string | null;
   userPermissions: (TokenAuth_tokenCreate_user_userPermissions | null)[] | null;
   avatar: TokenAuth_tokenCreate_user_avatar | null;
 }

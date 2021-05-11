@@ -1,6 +1,11 @@
 import makeQuery from "@saleor/hooks/makeQuery";
 import gql from "graphql-tag";
 
+import {
+  userVendorData,
+  userVendorDataVariables
+} from "./types/userVendorData";
+
 const perfilVendorData = gql`
   query userVendorData($id: ID!) {
     vendor(id: $id) {
@@ -19,4 +24,7 @@ const perfilVendorData = gql`
   }
 `;
 
-export const usePerfilVendorData = makeQuery<any, any>(perfilVendorData);
+export const usePerfilVendorData = makeQuery<
+  userVendorData,
+  userVendorDataVariables
+>(perfilVendorData);

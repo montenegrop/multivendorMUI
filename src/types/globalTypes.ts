@@ -105,6 +105,7 @@ export enum AttributeTypeEnum {
 export enum CategorySortField {
   NAME = "NAME",
   PRODUCT_COUNT = "PRODUCT_COUNT",
+  RELEVANCE = "RELEVANCE",
   SUBCATEGORY_COUNT = "SUBCATEGORY_COUNT",
 }
 
@@ -907,6 +908,12 @@ export enum UserSortField {
   ORDER_COUNT = "ORDER_COUNT",
 }
 
+export enum UserTypeOfIdentification {
+  DNI = "DNI",
+  EMPTY = "EMPTY",
+  PASAPORTE = "PASAPORTE",
+}
+
 export enum VoucherDiscountType {
   FIXED = "FIXED",
   PERCENTAGE = "PERCENTAGE",
@@ -1538,6 +1545,7 @@ export interface ProductFilterInput {
   minimalPrice?: PriceRangeInput | null;
   productTypes?: (string | null)[] | null;
   ids?: (string | null)[] | null;
+  vendors?: (string | null)[] | null;
   channel?: string | null;
 }
 
