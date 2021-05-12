@@ -16,6 +16,7 @@ import Dropzone from "react-dropzone/dist/index";
 import Container from "../components/Container";
 import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
+import { useUploadImage } from "./mutations";
 import { usePerfilVendorData } from "./queries";
 
 const useStyles = makeStyles(
@@ -42,10 +43,24 @@ const useStylesVendor = makeStyles(
       gridTemplateColumns: "1fr"
     },
     dragActive: { background: "rgba(200,200,200,0.2)", cursor: "pointer" },
+    dropAvatar: {
+      border: "1px solid black",
+      borderRadius: "50%",
+      bottom: "10px",
+      color: "#a8a8a8",
+      height: "130px",
+      left: "10px",
+      padding: "60px",
+      position: "absolute",
+      textAlign: "center",
+      width: "130px",
+      zIndex: 1000
+    },
     dropContainer: {
       gridColumnEnd: "3",
       gridColumnStart: "1",
       height: "100%",
+      position: "relative",
       width: "100%"
     },
     dropzone: {
@@ -54,8 +69,11 @@ const useStylesVendor = makeStyles(
         cursor: "pointer"
       },
       border: "double black 1px",
+      color: "#a8a8a8",
       height: "200px",
-
+      padding: "90px",
+      position: "relative",
+      textAlign: "center",
       width: "100%"
     },
     helper: {
@@ -72,6 +90,9 @@ const useStylesVendor = makeStyles(
       gridColumnEnd: "3",
       gridColumnStart: "1",
       gridTemplateColumns: "3fr 3fr 2fr"
+    },
+    relative: {
+      position: "relative"
     },
     root: {
       display: "grid",
@@ -109,6 +130,7 @@ const Perfil: React.FC = props => {
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
+    mainImage: perfilVendorData?.mainImage?.url,
     phone: user.phone,
     postalCode:
       (perfilVendorData && perfilVendorData.location?.postalCode) || "",
@@ -120,16 +142,33 @@ const Perfil: React.FC = props => {
   const classes = useStyles(props);
 
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
+  const [bannerFile, setBannerFile] = React.useState<any>("");
+  const [useUploadImageFunc, statesUploads] = useUploadImage({});
+  const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
+  const [avatarFile, setAvatarFile] = React.useState<any>("");
 
   const classesVendor = useStylesVendor(selectedBanner);
-  const handleOnDrop = file => {
+  const handleOnDropBanner = file => {
     const imgurl = URL.createObjectURL(file[0]);
     setSelectedBanner(imgurl);
+    setBannerFile(file[0]);
+  };
+
+  const handleOnDropAvatar = file => {
+    const imgurl = URL.createObjectURL(file[0]);
+    setSelectedAvatar(imgurl);
+    setAvatarFile(file[0]);
   };
 
   const handleSubmit = data => {
-    // console.log(data);
+    useUploadImageFunc({
+      variables: { image: bannerFile, vendorID: user.vendorId }
+    });
   };
+
+  useEffect(() => {
+    // console.log(statesUploads.data);
+  }, [statesUploads]);
 
   const loading = false; // Aca va el estado loading de la mutation cuando esta guardando
 
@@ -232,6 +271,9 @@ const Perfil: React.FC = props => {
                           <MenuItem value={"EMPTY"} disabled></MenuItem>
                           <MenuItem value={"dni"}>DNI</MenuItem>
                           <MenuItem value={"passport"}>PASAPORTE</MenuItem>
+                          <MenuItem value={"CUIT"}>CUIT</MenuItem>
+                          <MenuItem value={"CUIL"}>CUIL</MenuItem>
+                          <MenuItem value={"Cedula"}>Cedula</MenuItem>
                         </TextField>
                       </div>
                       <TextField
@@ -254,30 +296,72 @@ const Perfil: React.FC = props => {
                         <InputLabel className={classesVendor.label}>
                           Imagen de Portada para tu Tienda
                         </InputLabel>
-                        <Dropzone onDrop={handleOnDrop}>
-                          {({ isDragActive, getInputProps, getRootProps }) => (
-                            <div
-                              {...getRootProps()}
-                              className={`${classesVendor.dropzone} ${
-                                isDragActive ? classesVendor.dragActive : null
-                              }`}
-                              style={{
-                                background:
-                                  selectedBanner !== ""
-                                    ? `url(${selectedBanner}) center center no-repeat`
-                                    : "inherit",
-                                backgroundSize:
-                                  selectedBanner !== "" ? "cover" : null
-                              }}
-                            >
-                              <input
-                                label="Imagen de Portada"
-                                {...getInputProps()}
-                                accept="image*/"
-                              />
-                            </div>
-                          )}
-                        </Dropzone>
+                        <div className={classesVendor.relative}>
+                          <Dropzone onDrop={handleOnDropBanner}>
+                            {({
+                              isDragActive,
+                              getInputProps,
+                              getRootProps
+                            }) => (
+                              <div
+                                {...getRootProps()}
+                                className={`${classesVendor.dropzone} ${
+                                  isDragActive ? classesVendor.dragActive : null
+                                }`}
+                                style={{
+                                  background:
+                                    selectedBanner !== ""
+                                      ? `url(${selectedBanner}) center center no-repeat`
+                                      : "inherit",
+                                  backgroundSize:
+                                    selectedBanner !== "" ? "cover" : null
+                                }}
+                              >
+                                <input
+                                  label="Imagen de Portada"
+                                  {...getInputProps()}
+                                  accept="image*/"
+                                />
+                                {selectedBanner ? null : "PORTADA"}
+                              </div>
+                            )}
+                          </Dropzone>
+                          <Dropzone
+                            id="dropzoneavatar"
+                            className={classesVendor.dropAvatar}
+                            onDrop={handleOnDropAvatar}
+                          >
+                            {({
+                              isDragActive,
+                              getInputProps,
+                              getRootProps
+                            }) => (
+                              <div
+                                {...getRootProps()}
+                                className={`${classesVendor.dropAvatar} ${
+                                  isDragActive ? classesVendor.dragActive : null
+                                }`}
+                                style={{
+                                  background:
+                                    selectedAvatar !== ""
+                                      ? `url(${selectedAvatar}) center center no-repeat`
+                                      : "inherit",
+                                  backgroundSize:
+                                    selectedAvatar !== "" ? "cover" : null
+                                }}
+                              >
+                                <input
+                                  label="Imagen de Avatar"
+                                  {...getInputProps()}
+                                  accept="image*/"
+                                />
+
+                                {selectedAvatar ? null : "AVATAR"}
+                              </div>
+                            )}
+                          </Dropzone>
+                        </div>
+
                         <div className={classesVendor.helper}>
                           El tamaño recomendado es de 970px x 250px
                         </div>
