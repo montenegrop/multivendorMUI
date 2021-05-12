@@ -16,7 +16,8 @@ import Dropzone from "react-dropzone/dist/index";
 import Container from "../components/Container";
 import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
-import { useUploadImage } from "./mutations";
+import { UserTypeOfIdentification } from "../types/globalTypes";
+import { useUploadImage, useUserUpdate } from "./mutations";
 import { usePerfilVendorData } from "./queries";
 
 const useStyles = makeStyles(
@@ -50,11 +51,11 @@ const useStylesVendor = makeStyles(
       color: "#a8a8a8",
       height: "130px",
       left: "10px",
-      padding: "60px",
+      padding: "55px 0",
       position: "absolute",
       textAlign: "center",
       width: "130px",
-      zIndex: 1000
+      zIndex: 10
     },
     dropContainer: {
       gridColumnEnd: "3",
@@ -113,12 +114,20 @@ const useStylesVendor = makeStyles(
 );
 
 const Perfil: React.FC = props => {
+  const UserTypeOfIdentificationArray: string[] = Object.values(
+    UserTypeOfIdentification
+  );
+
   const { user } = useUser();
   const { data: vendor, loading: perfilVendorLoading } = usePerfilVendorData({
     variables: {
       id: user.vendorId
     }
   });
+
+  const [useUploadImageFunc, statesImageUpload] = useUploadImage({});
+  const [useUserUpdateFunc, stateUserUpdate] = useUserUpdate({});
+
   const perfilVendorData = vendor?.vendor;
 
   const initialForm = {
@@ -143,7 +152,7 @@ const Perfil: React.FC = props => {
 
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
   const [bannerFile, setBannerFile] = React.useState<any>("");
-  const [useUploadImageFunc, statesUploads] = useUploadImage({});
+
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
   const [avatarFile, setAvatarFile] = React.useState<any>("");
 
@@ -164,11 +173,23 @@ const Perfil: React.FC = props => {
     useUploadImageFunc({
       variables: { image: bannerFile, vendorID: user.vendorId }
     });
+
+    useUserUpdateFunc({
+      variables: {
+        email: data.email,
+        firstName: data.firstName,
+        id: user.vendorId,
+        identification: data.identification,
+        lastName: data.lastName,
+        phone: data.phone,
+        typeOfIdentification: data.typeOfIdentification
+      }
+    });
   };
 
-  useEffect(() => {
-    // console.log(statesUploads.data);
-  }, [statesUploads]);
+  // useEffect(() => {
+  //   console.log(stateUserUpdate);
+  // }, [stateUserUpdate]);
 
   const loading = false; // Aca va el estado loading de la mutation cuando esta guardando
 
@@ -268,12 +289,19 @@ const Perfil: React.FC = props => {
                           variant="standard"
                           fullWidth
                         >
-                          <MenuItem value={"EMPTY"} disabled></MenuItem>
-                          <MenuItem value={"dni"}>DNI</MenuItem>
-                          <MenuItem value={"passport"}>PASAPORTE</MenuItem>
-                          <MenuItem value={"CUIT"}>CUIT</MenuItem>
-                          <MenuItem value={"CUIL"}>CUIL</MenuItem>
-                          <MenuItem value={"Cedula"}>Cedula</MenuItem>
+                          {UserTypeOfIdentificationArray.length > 0
+                            ? UserTypeOfIdentificationArray.map(
+                                (type, indx) => (
+                                  <MenuItem
+                                    value={type}
+                                    key={indx}
+                                    disabled={type === "EMPTY"}
+                                  >
+                                    {type}
+                                  </MenuItem>
+                                )
+                              )
+                            : null}
                         </TextField>
                       </div>
                       <TextField

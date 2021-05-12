@@ -26,7 +26,7 @@ export interface User {
   firstName: string;
   lastName: string;
   phone?: string;
-  typeOfIdentification?: UserTypeOfIdentification | null;
+  typeOfIdentification?: UserTypeOfIdentification ;
   identification?: string;
   vendorId?: string | null;
   userPermissions: (User_userPermissions | null)[] | null;
