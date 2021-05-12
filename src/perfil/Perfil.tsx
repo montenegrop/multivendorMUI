@@ -17,6 +17,7 @@ import Container from "../components/Container";
 import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
 import { UserTypeOfIdentification } from "../types/globalTypes";
+import { DropCertificates } from "./components/DropCertificates";
 import { useUploadImage, useUserUpdate } from "./mutations";
 import { usePerfilVendorData } from "./queries";
 
@@ -102,6 +103,12 @@ const useStylesVendor = makeStyles(
       gridTemplateColumns: "1fr 1fr",
       gridTemplateRows: "260px 1fr "
     },
+    rootServices: {
+      display: "grid",
+      gridColumnGap: theme.spacing(2),
+      gridRowGap: theme.spacing(3),
+      gridTemplateColumns: "repeat(5, 1fr)"
+    },
     textarea: {
       gridColumnEnd: "3",
       gridColumnStart: "1",
@@ -148,15 +155,15 @@ const Perfil: React.FC = props => {
     typeOfIdentification: user.typeOfIdentification
   };
 
-  const classes = useStyles(props);
-
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
   const [avatarFile, setAvatarFile] = React.useState<any>("");
 
+  const classes = useStyles(props);
   const classesVendor = useStylesVendor(selectedBanner);
+
   const handleOnDropBanner = file => {
     const imgurl = URL.createObjectURL(file[0]);
     setSelectedBanner(imgurl);
@@ -498,7 +505,9 @@ const Perfil: React.FC = props => {
                 <Card id="services-data">
                   <CardTitle title={"Los servicios que ofreces"} />
                   <CardContent>
-                    <div className={classes.root}></div>
+                    <div className={classesVendor.rootServices}>
+                      <DropCertificates />
+                    </div>
                   </CardContent>
                 </Card>
                 <SaveButtonBar
