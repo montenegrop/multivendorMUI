@@ -25,10 +25,10 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  phone: string;
-  typeOfIdentification: UserTypeOfIdentification | null;
-  identification: string;
-  vendorId: string | null;
+  phone?: string;
+  typeOfIdentification?: UserTypeOfIdentification | null;
+  identification?: string;
+  vendorId?: string | null;
   userPermissions: (User_userPermissions | null)[] | null;
   avatar: User_avatar | null;
 }
