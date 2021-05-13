@@ -132,24 +132,6 @@ const Perfil: React.FC = props => {
 
   const perfilVendorData = vendor?.vendor;
 
-  const initialForm = {
-    city: perfilVendorData?.location?.city || "undefined",
-    description: perfilVendorData?.description,
-    email: user.email,
-    firstName: user.firstName,
-    foundingYear: perfilVendorData?.foundingYear || new Date(1900, 1, 1),
-    id: user.id,
-    identification: user.identification,
-    lastName: user.lastName,
-    mainImage: perfilVendorData?.mainImage?.url,
-    phone: user.phone,
-    postalCode:
-      (perfilVendorData && perfilVendorData.location?.postalCode) || "",
-    province:
-      (perfilVendorData && perfilVendorData.location?.province) || "undefined",
-    typeOfIdentification: user.typeOfIdentification
-  };
-
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
@@ -188,10 +170,25 @@ const Perfil: React.FC = props => {
       }
     });
   };
-
-  // useEffect(() => {
-  //   console.log(stateUserUpdate);
-  // }, [stateUserUpdate]);
+  let initialForm = {};
+  useEffect(() => {
+    initialForm = {
+      city: perfilVendorData?.location?.city || "undefined",
+      description: perfilVendorData?.description,
+      email: user.email,
+      firstName: user.firstName,
+      foundingYear: perfilVendorData?.foundingYear || new Date(1900, 1, 1),
+      id: user.id,
+      identification: user.identification,
+      lastName: user.lastName,
+      mainImage: perfilVendorData && perfilVendorData.mainImage.url,
+      phone: user.phone,
+      postalCode: perfilVendorData && perfilVendorData.location?.postalCode,
+      province: perfilVendorData && perfilVendorData.location?.province,
+      typeOfIdentification: user.typeOfIdentification
+    };
+    setSelectedBanner(perfilVendorData?.mainImage.url);
+  }, [perfilVendorData]);
 
   const loading = stateUserUpdate.loading; // Aca va el estado loading de la mutation cuando esta guardando
 
