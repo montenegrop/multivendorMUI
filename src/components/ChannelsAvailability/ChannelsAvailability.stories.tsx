@@ -18,6 +18,10 @@ const user: User = {
   firstName: "User",
   id: "123",
   lastName: "User",
+  phone: "+5493416966099",
+  identification: "34121333",
+  typeOfIdentification: null,
+  vendorId: "AvsdsaD=",
   userPermissions: [
     {
       __typename: "UserPermission",
