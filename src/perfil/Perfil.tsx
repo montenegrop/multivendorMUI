@@ -103,12 +103,6 @@ const useStylesVendor = makeStyles(
       gridTemplateColumns: "1fr 1fr",
       gridTemplateRows: "260px 1fr "
     },
-    rootServices: {
-      display: "grid",
-      gridColumnGap: theme.spacing(2),
-      gridRowGap: theme.spacing(3),
-      gridTemplateColumns: "repeat(5, 1fr)"
-    },
     textarea: {
       gridColumnEnd: "3",
       gridColumnStart: "1",
@@ -503,11 +497,9 @@ const Perfil: React.FC = props => {
                 </Card>
                 <CardSpacer />
                 <Card id="services-data">
-                  <CardTitle title={"Los servicios que ofreces"} />
+                  <CardTitle title={"Titulos/Certificados/Matriculas"} />
                   <CardContent>
-                    <div className={classesVendor.rootServices}>
-                      <DropCertificates />
-                    </div>
+                    <DropCertificates />
                   </CardContent>
                 </Card>
                 <SaveButtonBar
