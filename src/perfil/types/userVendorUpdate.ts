@@ -19,7 +19,7 @@ export interface userVendorUpdate_vendorCreate_vendor {
 }
 
 export interface userVendorUpdate_vendorCreate {
-  __typename: "VendorRegister";
+  __typename: "VendorRegisterOrUpdate";
   vendor: userVendorUpdate_vendorCreate_vendor | null;
 }
 
