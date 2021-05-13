@@ -46,6 +46,7 @@ const useStylesVendor = makeStyles(
     },
     dragActive: { background: "rgba(200,200,200,0.2)", cursor: "pointer" },
     dropAvatar: {
+      background: theme.palette.grey[900],
       border: "1px solid black",
       borderRadius: "50%",
       bottom: "10px",
@@ -192,7 +193,7 @@ const Perfil: React.FC = props => {
   //   console.log(stateUserUpdate);
   // }, [stateUserUpdate]);
 
-  const loading = false; // Aca va el estado loading de la mutation cuando esta guardando
+  const loading = stateUserUpdate.loading; // Aca va el estado loading de la mutation cuando esta guardando
 
   // lista de ciudades provincias
 
@@ -374,9 +375,13 @@ const Perfil: React.FC = props => {
                                   background:
                                     selectedAvatar !== ""
                                       ? `url(${selectedAvatar}) center center no-repeat`
-                                      : "inherit",
+                                      : undefined,
                                   backgroundSize:
-                                    selectedAvatar !== "" ? "cover" : null
+                                    selectedAvatar !== "" ? "cover" : null,
+                                  filter:
+                                    selectedAvatar !== ""
+                                      ? "opacity(1)"
+                                      : "opacity(0.8)"
                                 }}
                               >
                                 <input
