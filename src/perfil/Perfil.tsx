@@ -114,6 +114,17 @@ const useStylesVendor = makeStyles(
   }),
   { name: "CustomerCreateDetails" }
 );
+interface Certificate {
+  file?: any;
+  url?: string;
+  title: string;
+}
+
+const initCert = {
+  file: "",
+  title: "",
+  url: ""
+};
 
 const Perfil: React.FC = props => {
   const UserTypeOfIdentificationArray: string[] = Object.values(
@@ -135,6 +146,14 @@ const Perfil: React.FC = props => {
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
+  const [certificates, setCertificates] = React.useState<Certificate[]>([
+    initCert,
+    initCert,
+    initCert,
+    initCert,
+    initCert
+  ]);
+
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
   const [avatarFile, setAvatarFile] = React.useState<any>("");
 
@@ -151,46 +170,69 @@ const Perfil: React.FC = props => {
     const imgurl = URL.createObjectURL(file[0]);
     setSelectedAvatar(imgurl);
     setAvatarFile(file[0]);
+    return;
   };
 
   const handleSubmit = data => {
-    useUploadImageFunc({
-      variables: { image: bannerFile, vendorID: user.vendorId }
-    });
+    if (bannerFile !== "") {
+      useUploadImageFunc({
+        variables: { image: bannerFile, vendorID: user.vendorId }
+      });
+    }
 
-    useUserUpdateFunc({
-      variables: {
-        email: data.email,
-        firstName: data.firstName,
-        id: user.vendorId,
-        identification: data.identification,
-        lastName: data.lastName,
-        phone: data.phone,
-        typeOfIdentification: data.typeOfIdentification
+    // check mandatory data
+    const mandatoryDataIsFilled = () => {
+      const unfilledData = Object.keys(user).filter(key => {
+        const element = document.querySelector(
+          `[name=${key}]`
+        ) as HTMLInputElement;
+        return element?.value === "";
+      });
+
+      if (unfilledData.length) {
+        // change styles or add prop error to component
+        return false;
       }
-    });
-  };
-  let initialForm = {};
-  useEffect(() => {
-    initialForm = {
-      city: perfilVendorData?.location?.city || "undefined",
-      description: perfilVendorData?.description,
-      email: user.email,
-      firstName: user.firstName,
-      foundingYear: perfilVendorData?.foundingYear || new Date(1900, 1, 1),
-      id: user.id,
-      identification: user.identification,
-      lastName: user.lastName,
-      mainImage: perfilVendorData && perfilVendorData.mainImage.url,
-      phone: user.phone,
-      postalCode: perfilVendorData && perfilVendorData.location?.postalCode,
-      province: perfilVendorData && perfilVendorData.location?.province,
-      typeOfIdentification: user.typeOfIdentification
+      return true;
     };
-    setSelectedBanner(perfilVendorData?.mainImage.url);
-  }, [perfilVendorData]);
 
-  const loading = stateUserUpdate.loading; // Aca va el estado loading de la mutation cuando esta guardando
+    if (mandatoryDataIsFilled()) {
+      useUserUpdateFunc({
+        variables: {
+          email: data.email.trim(),
+          firstName: data.firstName.trim(),
+          id: user.id,
+          identification: data.identification.trim(),
+          lastName: data.lastName.trim(),
+          phone: data.phone.trim(),
+          typeOfIdentification: data.typeOfIdentification
+        }
+      });
+    }
+  };
+  const initialForm = {
+    city: perfilVendorData?.location?.city,
+    description: perfilVendorData?.description,
+    email: user.email,
+    firstName: user.firstName,
+    foundingYear: perfilVendorData?.foundingYear,
+    id: user.id,
+    identification: user.identification,
+    lastName: user.lastName,
+    mainImage: perfilVendorData && perfilVendorData.mainImage?.url,
+    phone: user.phone,
+    postalCode: perfilVendorData && perfilVendorData.location?.postalCode,
+    province: perfilVendorData && perfilVendorData.location?.province,
+    typeOfIdentification: user.typeOfIdentification
+  };
+
+  useEffect(() => {
+    if (perfilVendorData?.mainImage?.url !== undefined || "") {
+      setSelectedBanner(perfilVendorData.mainImage.url);
+    }
+  }, [perfilVendorLoading, stateUserUpdate]);
+
+  const loading = stateUserUpdate.loading || statesImageUpload.loading; // Aca va el estado loading de la mutation cuando esta guardando
 
   // lista de ciudades provincias
 
@@ -201,7 +243,7 @@ const Perfil: React.FC = props => {
     fetch("https://apis.datos.gob.ar/georef/api/provincias?")
       .then(response => response.json())
       .then(data =>
-        setProvincias(data.provincias.map(provincia => provincia.nombre))
+        setProvincias(data.provincias.map(provincia => provincia.nombre).sort())
       );
   }, []);
 
@@ -236,7 +278,7 @@ const Perfil: React.FC = props => {
           <CircularProgress />
         ) : (
           <Form initial={initialForm} onSubmit={handleSubmit}>
-            {({ change, data, hasChanged, submit, reset }) => (
+            {({ change, data, hasChanged, submit, reset, triggerChange }) => (
               <>
                 <Card id="user-data">
                   <CardTitle title={"Tus datos de Usuario"} />
@@ -324,7 +366,13 @@ const Perfil: React.FC = props => {
                           Imagen de Portada para tu Tienda
                         </InputLabel>
                         <div className={classesVendor.relative}>
-                          <Dropzone onDrop={handleOnDropBanner}>
+                          <Dropzone
+                            onDrop={e => {
+                              handleOnDropBanner(e);
+                              triggerChange();
+                              return;
+                            }}
+                          >
                             {({
                               isDragActive,
                               getInputProps,
@@ -348,6 +396,7 @@ const Perfil: React.FC = props => {
                                   label="Imagen de Portada"
                                   {...getInputProps()}
                                   accept="image*/"
+                                  name="mainImage"
                                 />
                                 {selectedBanner ? null : "PORTADA"}
                               </div>
@@ -356,7 +405,10 @@ const Perfil: React.FC = props => {
                           <Dropzone
                             id="dropzoneavatar"
                             className={classesVendor.dropAvatar}
-                            onDrop={handleOnDropAvatar}
+                            onDrop={e => {
+                              handleOnDropAvatar(e);
+                              triggerChange();
+                            }}
                           >
                             {({
                               isDragActive,
@@ -501,7 +553,10 @@ const Perfil: React.FC = props => {
                 <Card id="services-data">
                   <CardTitle title={"Titulos/Certificados/Matriculas"} />
                   <CardContent>
-                    <DropCertificates />
+                    <DropCertificates
+                      certificates={certificates}
+                      setCertificates={setCertificates}
+                    />
                   </CardContent>
                 </Card>
                 <SaveButtonBar

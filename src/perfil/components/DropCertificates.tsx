@@ -7,12 +7,18 @@ import { default as Icon } from "../../icons/Plus";
 const useStyles = makeStyles(
   theme => ({
     plus: {
+      [theme.breakpoints.down("sm")]: {
+        height: "60px",
+        width: "60px"
+      },
       backgroundColor: theme.palette.grey[600],
       border: "solid #aaaaaa 1px",
       borderRadius: "50%",
       height: "100px",
-      padding: "38% 0",
-      width: "100px"
+      width: "100px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
     },
     root: {
       display: "grid",
@@ -24,24 +30,17 @@ const useStyles = makeStyles(
       background: "url()",
       backgroundSize: "contain",
       border: "solid black 1px",
-      borderRadius: "16px",
       height: "200px",
-      padding: "24%",
+
       textAlign: "center",
-      width: "100%"
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
     }
   }),
   { name: "CustomerCreateDetails" }
 );
-interface Certificate {
-  file: any;
-  title: string;
-}
-
-const initCert = {
-  file: "",
-  title: ""
-};
 
 export const SingleCertificate = props => {
   const {
@@ -75,6 +74,7 @@ export const SingleCertificate = props => {
           label="Titulo"
           name="title"
           onChange={handleChange}
+          variant="standard"
         />
         <div
           {...getRootProps}
@@ -103,14 +103,9 @@ export const SingleCertificate = props => {
 };
 
 export const DropCertificates = props => {
+  const { certificates, setCertificates } = props;
   const classes = useStyles(props);
-  const [certificates, setCertificates] = React.useState<Certificate[]>([
-    initCert,
-    initCert,
-    initCert,
-    initCert,
-    initCert
-  ]);
+
   const handleTitleChange = (id, value, name) => {
     const newCerts = [...certificates];
     const newCert = { ...newCerts[id] };
