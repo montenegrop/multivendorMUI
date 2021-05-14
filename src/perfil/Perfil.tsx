@@ -119,6 +119,15 @@ interface Certificate {
   url?: string;
   title: string;
 }
+interface MandatoryData {
+  email: boolean;
+  firstName: boolean;
+  identification: boolean;
+  lastName: boolean;
+  phone: boolean;
+  typeOfIdentification: boolean;
+}
+const errorMessage = "Este campo es obligatorio";
 
 const initCert = {
   file: "",
@@ -160,6 +169,15 @@ const Perfil: React.FC = props => {
   const classes = useStyles(props);
   const classesVendor = useStylesVendor(selectedBanner);
 
+  const [error, setError] = React.useState<MandatoryData>({
+    email: false,
+    firstName: false,
+    identification: false,
+    lastName: false,
+    phone: false,
+    typeOfIdentification: false
+  });
+
   const handleOnDropBanner = file => {
     const imgurl = URL.createObjectURL(file[0]);
     setSelectedBanner(imgurl);
@@ -180,23 +198,15 @@ const Perfil: React.FC = props => {
       });
     }
 
+    // error fields
+    Object.keys(data).forEach(key =>
+      setError(prev => ({ ...prev, [key]: data[key] === "" }))
+    );
+
     // check mandatory data
-    const mandatoryDataIsFilled = () => {
-      const unfilledData = Object.keys(user).filter(key => {
-        const element = document.querySelector(
-          `[name=${key}]`
-        ) as HTMLInputElement;
-        return element?.value === "";
-      });
+    const mandatoryDataIsFilled = !Object.values(error).includes(true);
 
-      if (unfilledData.length) {
-        // change styles or add prop error to component
-        return false;
-      }
-      return true;
-    };
-
-    if (mandatoryDataIsFilled()) {
+    if (mandatoryDataIsFilled) {
       useUserUpdateFunc({
         variables: {
           email: data.email.trim(),
@@ -209,7 +219,9 @@ const Perfil: React.FC = props => {
         }
       });
     }
+    return;
   };
+
   const initialForm = {
     city: perfilVendorData?.location?.city,
     description: perfilVendorData?.description,
@@ -287,7 +299,8 @@ const Perfil: React.FC = props => {
                     <div className={classes.root}>
                       <TextField
                         disabled={false}
-                        error={false}
+                        error={error?.firstName}
+                        helperText={error.firstName ? errorMessage : ""}
                         name="firstName"
                         label="Nombre"
                         value={data.firstName}
@@ -295,7 +308,8 @@ const Perfil: React.FC = props => {
                       />
                       <TextField
                         disabled={false}
-                        error={false}
+                        error={error?.lastName}
+                        helperText={error.lastName ? errorMessage : ""}
                         name="lastName"
                         label="Apellido"
                         value={data.lastName}
@@ -303,7 +317,8 @@ const Perfil: React.FC = props => {
                       />
                       <TextField
                         disabled={false}
-                        error={false}
+                        error={error?.email}
+                        helperText={error.email ? errorMessage : ""}
                         name="email"
                         label="Email"
                         value={data.email}
@@ -311,7 +326,8 @@ const Perfil: React.FC = props => {
                       />
                       <TextField
                         disabled={false}
-                        error={false}
+                        error={error?.phone}
+                        helperText={error.phone ? errorMessage : ""}
                         name="phone"
                         label="Telefono"
                         value={data.phone}
@@ -329,6 +345,10 @@ const Perfil: React.FC = props => {
                           onChange={change}
                           variant="standard"
                           fullWidth
+                          error={error.typeOfIdentification}
+                          helperText={
+                            error.typeOfIdentification ? errorMessage : ""
+                          }
                         >
                           {UserTypeOfIdentificationArray.length > 0
                             ? UserTypeOfIdentificationArray.map(
@@ -347,7 +367,8 @@ const Perfil: React.FC = props => {
                       </div>
                       <TextField
                         disabled={false}
-                        error={false}
+                        error={error.identification}
+                        helperText={error.identification ? errorMessage : ""}
                         name="identification"
                         label="Número de Documento"
                         value={data.identification}
