@@ -14,6 +14,7 @@ const perfilVendorData = gql`
       }
       images {
         url
+        title
       }
       description
       foundingYear

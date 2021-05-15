@@ -44,6 +44,7 @@ const useStyles = makeStyles(
 
 export const SingleCertificate = props => {
   const {
+    certificate,
     isDragActive,
     setFile,
     getInputProps,
@@ -53,7 +54,7 @@ export const SingleCertificate = props => {
     id
   } = props;
   const classes = useStyles(props);
-  const [background, setBackground] = React.useState<string>("");
+  const [background, setBackground] = React.useState<string>(certificate);
 
   const handleFileChange = e => {
     const file = e.target.files[0];
@@ -130,7 +131,8 @@ export const DropCertificates = props => {
             {({ isDragActive, getInputProps, getRootProps }) => (
               <SingleCertificate
                 id={indx}
-                title={certificates[indx].title}
+                title={certificates.title}
+                certificate={certificate.url}
                 setFile={handleFileChange}
                 setTitle={handleTitleChange}
                 isDragActive={isDragActive}
