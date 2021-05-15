@@ -16,7 +16,7 @@ import PageHeader from "../components/PageHeader";
 import { UserTypeOfIdentification } from "../types/globalTypes";
 import { DropCertificates } from "./components/DropCertificates";
 import { VendorData } from "./components/VendorData";
-import { useUploadImage, useUserUpdate } from "./mutations";
+import { useUserUpdate, useVendorUpdate } from "./mutations";
 import { usePerfilVendorData } from "./queries";
 
 const useStyles = makeStyles(
@@ -64,7 +64,7 @@ const Perfil: React.FC = props => {
     }
   });
 
-  const [useUploadImageFunc, statesImageUpload] = useUploadImage({});
+  const [useVendorUpdateFunc, statesVendorUpdate] = useVendorUpdate({});
   const [useUserUpdateFunc, stateUserUpdate] = useUserUpdate({});
 
   const perfilVendorData = vendor?.vendor;
@@ -73,6 +73,7 @@ const Perfil: React.FC = props => {
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
   const [certificates, setCertificates] = React.useState<Certificate[]>([]);
+  const [coordinates, setCoordinates] = React.useState({ lon: "", lat: "" });
 
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
   const [avatarFile, setAvatarFile] = React.useState<any>("");
@@ -89,12 +90,6 @@ const Perfil: React.FC = props => {
   });
 
   const handleSubmit = data => {
-    if (bannerFile !== "") {
-      useUploadImageFunc({
-        variables: { image: bannerFile, vendorID: user.vendorId }
-      });
-    }
-
     // error fields
     Object.keys(data).forEach(key =>
       setError(prev => ({ ...prev, [key]: data[key] === "" }))
@@ -113,6 +108,17 @@ const Perfil: React.FC = props => {
           lastName: data.lastName.trim(),
           phone: data.phone.trim(),
           typeOfIdentification: data.typeOfIdentification
+        }
+      });
+      if (bannerFile !== "") {
+        useVendorUpdateFunc({
+          variables: { mainImage: bannerFile, vendorID: user.vendorId }
+        });
+      }
+      useVendorUpdateFunc({
+        variables: {
+          lon: coordinates.lon,
+          lat: coordinates.lat
         }
       });
     }
@@ -137,16 +143,12 @@ const Perfil: React.FC = props => {
 
   useEffect(() => {
     if (vendor) {
-      // setSelectedBanner(perfilVendorData.mainImage?.url);
+      setSelectedBanner(perfilVendorData.mainImage?.url || "");
       setCertificates(perfilVendorData.images);
-      // console.log(perfilVendorData.mainImage?.url, "main");
-      // console.log(perfilVendorData.images, "image");
     }
   }, [vendor, stateUserUpdate]);
 
-  const loading = stateUserUpdate.loading || statesImageUpload.loading; // Aca va el estado loading de la mutation cuando esta guardando
-
-  // lista de ciudades provincias
+  const loading = stateUserUpdate.loading || statesVendorUpdate.loading; // Aca va el estado loading de la mutation cuando esta guardando
 
   return (
     <>
@@ -252,6 +254,7 @@ const Perfil: React.FC = props => {
                       setSelectedAvatar={setSelectedAvatar}
                       setAvatarFile={setAvatarFile}
                       setBannerFile={setBannerFile}
+                      setCoordinates={setCoordinates}
                       selectedBanner={selectedBanner}
                       selectedAvatar={selectedAvatar}
                       triggerChange={triggerChange}

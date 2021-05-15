@@ -6,9 +6,51 @@ import {
   userDataMutationVariables
 } from "./types/userDataMutation";
 
-const uploadImage = gql`
-  mutation userVendorUpdate($vendorID: ID!, $image: Upload!) {
-    vendorCreate(id: $vendorID, input: { mainImage: $image }) {
+const userVendorUpdate = gql`
+  mutation userVendorUpdate(
+    $vendorID: ID!
+    $mainImage: Upload!
+    $lat: String
+    $lon: String
+  ) {
+    vendorCreate(
+      id: $vendorID
+      input: {
+        province: $province
+        city: $city
+        postalCode: $postalCode
+        lat: $lat
+        lon: $lon
+        mainImage: $mainImage
+      }
+    ) {
+      vendor {
+        id
+        name
+        mainImage {
+          url
+        }
+        images {
+          url
+          title
+          position
+        }
+        location {
+          country
+          province
+          city
+          postalCode
+        }
+      }
+    }
+  }
+`;
+
+export const useVendorUpdate = makeMutation(userVendorUpdate);
+
+const userVendorMainImage = gql`
+  mutation userVendorUpdate($vendorID: ID!, $mainImage: Upload!) {
+    vendorCreate(id: $vendorID, input: { mainImage: $mainImage }) {
       vendor {
         id
         name
@@ -20,7 +62,7 @@ const uploadImage = gql`
   }
 `;
 
-export const useUploadImage = makeMutation(uploadImage);
+export const useVendorMainImage = makeMutation(userVendorMainImage);
 
 const updateUserData = gql`
   mutation userDataMutation(

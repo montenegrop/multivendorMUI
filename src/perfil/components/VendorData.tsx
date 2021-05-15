@@ -94,6 +94,7 @@ export const VendorData = props => {
     setSelectedAvatar,
     setAvatarFile,
     setBannerFile,
+    setCoordinates,
     selectedBanner,
     selectedAvatar,
     triggerChange,
@@ -151,6 +152,27 @@ export const VendorData = props => {
         )
       );
   };
+
+  const getCoordinates = ciudad => {
+    ciudad = ciudad
+      .split(" ")
+      .join("-")
+      .toLowerCase();
+
+    fetch(
+      `http://apis.datos.gob.ar/georef/api/localidades-censales?nombre=${ciudad}&campos=nombre,centroide`
+    )
+      .then(response => response.json())
+      .then(data => {
+        setCoordinates({
+          lat: data.localidades_censales[0].centroide.lat,
+          lon: data.localidades_censales[0].centroide.lon
+        });
+        // console.log(data, ciudad);
+        return;
+      });
+  };
+
   return (
     <div className={classesVendor.root}>
       <div className={classesVendor.dropContainer}>
@@ -277,9 +299,13 @@ export const VendorData = props => {
             id="city"
             value={data.city}
             name="city"
-            onChange={change}
             variant="standard"
             fullWidth
+            onChange={e => {
+              getCoordinates(e.target.value);
+              change(e);
+              return;
+            }}
           >
             {ciudades.map((ciudad, indx) => (
               <MenuItem key={indx} value={ciudad}>
