@@ -117,8 +117,11 @@ const Perfil: React.FC = props => {
       }
       useVendorUpdateFunc({
         variables: {
+          city: data.city,
+          lat: coordinates.lat,
           lon: coordinates.lon,
-          lat: coordinates.lat
+          postalCode: data.postalCode,
+          province: data.province
         }
       });
     }

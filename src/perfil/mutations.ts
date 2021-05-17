@@ -9,7 +9,9 @@ import {
 const userVendorUpdate = gql`
   mutation userVendorUpdate(
     $vendorID: ID!
-    $mainImage: Upload!
+    $province: String
+    $city: String
+    $postalCode: String
     $lat: String
     $lon: String
   ) {
@@ -21,20 +23,11 @@ const userVendorUpdate = gql`
         postalCode: $postalCode
         lat: $lat
         lon: $lon
-        mainImage: $mainImage
       }
     ) {
       vendor {
         id
         name
-        mainImage {
-          url
-        }
-        images {
-          url
-          title
-          position
-        }
         location {
           country
           province
