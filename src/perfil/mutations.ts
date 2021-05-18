@@ -55,13 +55,13 @@ export const useVendorMainImage = makeMutation(userVendorMainImage);
 const userVendorServiceImage = gql`
   mutation userVendorUpdate(
     $vendorID: ID!
-    $mainImage: Upload!
+    $serviceImage: Upload!
     $title: String
     $position: String
   ) {
     vendorCreate(
       id: $vendorID
-      input: { mainImage: $mainImage, title: $title, position: $position }
+      input: { serviceImage: $serviceImage, title: $title, position: $position }
     ) {
       vendor {
         id
