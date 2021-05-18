@@ -16,7 +16,11 @@ import PageHeader from "../components/PageHeader";
 import { UserTypeOfIdentification } from "../types/globalTypes";
 import { DropCertificates } from "./components/DropCertificates";
 import { VendorData } from "./components/VendorData";
-import { useUserUpdate, useVendorUpdate } from "./mutations";
+import {
+  useUserUpdate,
+  useVendorMainImage,
+  useVendorUpdate
+} from "./mutations";
 import { usePerfilVendorData } from "./queries";
 
 const useStyles = makeStyles(
@@ -46,11 +50,12 @@ interface MandatoryData {
 }
 const errorMessage = "Este campo es obligatorio";
 
-const initCert = {
+const initCert = ["1", "2", "3", "4", "5"].map(pos => ({
   file: "",
+  position: pos,
   title: "",
   url: ""
-};
+}));
 
 const Perfil: React.FC = props => {
   const UserTypeOfIdentificationArray: string[] = Object.values(
@@ -66,13 +71,16 @@ const Perfil: React.FC = props => {
 
   const [useVendorUpdateFunc, statesVendorUpdate] = useVendorUpdate({});
   const [useUserUpdateFunc, stateUserUpdate] = useUserUpdate({});
+  const [useMainImageUpdateFunc, stateMainImageUpadte] = useVendorMainImage({});
 
   const perfilVendorData = vendor?.vendor;
 
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
-  const [certificates, setCertificates] = React.useState<Certificate[]>([]);
+  const [certificates, setCertificates] = React.useState<Certificate[]>(
+    initCert
+  );
   const [coordinates, setCoordinates] = React.useState({ lat: "", lon: "" });
 
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
@@ -97,6 +105,17 @@ const Perfil: React.FC = props => {
 
     // check mandatory data
     const mandatoryDataIsFilled = !Object.values(error).includes(true);
+
+    if (bannerFile !== "") {
+      useMainImageUpdateFunc({
+        variables: {
+          vendorId: user.vendorId,
+          mainImage: bannerFile
+        }
+      });
+      // console.log(user.vendorId, "id");
+      // console.log(bannerFile, "bannerFile");
+    }
 
     if (mandatoryDataIsFilled) {
       useUserUpdateFunc({
@@ -142,10 +161,9 @@ const Perfil: React.FC = props => {
 
   useEffect(() => {
     if (vendor) {
-      setSelectedBanner(perfilVendorData.mainImage?.url || "");
-      // setCertificates(perfilVendorData.images);
+      // setSelectedBanner(perfilVendorData.mainImage?.url || "");
     }
-  }, [vendor, stateUserUpdate]);
+  }, [vendor, stateUserUpdate, stateMainImageUpadte]);
 
   const loading = stateUserUpdate.loading || statesVendorUpdate.loading; // Aca va el estado loading de la mutation cuando esta guardando
 

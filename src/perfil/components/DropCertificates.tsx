@@ -2,7 +2,8 @@ import { Card, makeStyles, TextField } from "@material-ui/core";
 import React from "react";
 import Dropzone from "react-dropzone/dist/index";
 
-import { default as Icon } from "../../icons/Plus";
+import { default as Plus } from "../../icons/Plus";
+import { default as Trash } from "../../icons/Trash";
 
 const useStyles = makeStyles(
   theme => ({
@@ -11,14 +12,14 @@ const useStyles = makeStyles(
         height: "60px",
         width: "60px"
       },
+      alignItems: "center",
       backgroundColor: theme.palette.grey[600],
       border: "solid #aaaaaa 1px",
       borderRadius: "50%",
-      height: "100px",
-      width: "100px",
       display: "flex",
+      height: "100px",
       justifyContent: "center",
-      alignItems: "center"
+      width: "100px"
     },
     root: {
       display: "grid",
@@ -27,16 +28,37 @@ const useStyles = makeStyles(
       gridTemplateColumns: "repeat(5, 1fr)"
     },
     singleDrop: {
+      alignItems: "center",
       background: "url()",
       backgroundSize: "contain",
       border: "solid black 1px",
-      height: "200px",
-
-      textAlign: "center",
-      width: "100%",
       display: "flex",
+      height: "200px",
       justifyContent: "center",
-      alignItems: "center"
+      textAlign: "center",
+      width: "100%"
+    },
+    trash: {
+      "&:hover": {
+        [theme.breakpoints.down("sm")]: {
+          height: "60px",
+          width: "60px"
+        },
+        alignItems: "center",
+        backgroundColor: theme.palette.primary.main,
+        border: "solid #aaaaaa 1px",
+        borderRadius: "50%",
+        display: "flex",
+        height: "100px",
+        justifyContent: "center",
+        opacity: "1",
+        width: "100px"
+      },
+      opacity: "0"
+    },
+    trashSize: {
+      height: "50%",
+      width: "50%"
     }
   }),
   { name: "CustomerCreateDetails" }
@@ -77,6 +99,7 @@ export const SingleCertificate = props => {
           onChange={handleChange}
           variant="standard"
         />
+
         <div
           {...getRootProps}
           className={classes.singleDrop}
@@ -85,9 +108,13 @@ export const SingleCertificate = props => {
             backgroundSize: background !== "" ? null : "contain"
           }}
         >
-          {background !== "" ? null : (
+          {background !== "" ? (
+            <div className={classes.trash}>
+              <Trash className={classes.trashSize} />
+            </div>
+          ) : (
             <div className={classes.plus}>
-              <Icon />
+              <Plus />
             </div>
           )}
           <input
