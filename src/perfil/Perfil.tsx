@@ -110,14 +110,11 @@ const Perfil: React.FC = props => {
           typeOfIdentification: data.typeOfIdentification
         }
       });
-      if (bannerFile !== "") {
-        useVendorUpdateFunc({
-          variables: { mainImage: bannerFile, vendorID: user.vendorId }
-        });
-      }
+
       useVendorUpdateFunc({
         variables: {
           city: data.city,
+
           lat: coordinates.lat,
           lon: coordinates.lon,
           postalCode: data.postalCode,
@@ -129,7 +126,7 @@ const Perfil: React.FC = props => {
   };
 
   const initialForm = {
-    city: perfilVendorData?.location?.city,
+    city: perfilVendorData && perfilVendorData.location?.city,
     description: perfilVendorData?.description,
     email: user.email,
     firstName: user.firstName,

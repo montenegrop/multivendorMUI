@@ -128,6 +128,10 @@ export const VendorData = props => {
       .then(data =>
         setProvincias(data.provincias.map(provincia => provincia.nombre).sort())
       );
+
+    if (data.province !== "") {
+      getCities(data.province);
+    }
   }, []);
 
   const getCities = provincia => {

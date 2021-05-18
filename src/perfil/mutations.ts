@@ -7,16 +7,14 @@ import {
 } from "./types/userDataMutation";
 
 const userVendorUpdate = gql`
-  mutation userVendorUpdate(
-    $vendorID: ID!
+  mutation vendorLocationCreateOrUpdate(
     $province: String
     $city: String
     $postalCode: String
     $lat: String
     $lon: String
   ) {
-    vendorCreate(
-      id: $vendorID
+    vendorLocationCreateOrUpdate(
       input: {
         province: $province
         city: $city
@@ -25,15 +23,12 @@ const userVendorUpdate = gql`
         lon: $lon
       }
     ) {
-      vendor {
-        id
-        name
-        location {
-          country
-          province
-          city
-          postalCode
-        }
+      vendorLocation {
+        province
+        city
+        postalCode
+        lat
+        lon
       }
     }
   }

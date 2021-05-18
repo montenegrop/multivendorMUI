@@ -9,16 +9,6 @@ import {
 const perfilVendorData = gql`
   query userVendorData($id: ID!) {
     vendor(id: $id) {
-      mainImage {
-        url
-      }
-      images {
-        url
-        title
-        position
-      }
-      description
-      foundingYear
       location {
         country
         province

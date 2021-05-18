@@ -126,7 +126,7 @@ export const DropCertificates = props => {
   return (
     <>
       <div className={classes.root}>
-        {certificates.map((certificate, indx) => (
+        {certificates?.map((certificate, indx) => (
           <Dropzone key={indx}>
             {({ isDragActive, getInputProps, getRootProps }) => (
               <SingleCertificate
