@@ -73,7 +73,7 @@ const Perfil: React.FC = props => {
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
   const [certificates, setCertificates] = React.useState<Certificate[]>([]);
-  const [coordinates, setCoordinates] = React.useState({ lon: "", lat: "" });
+  const [coordinates, setCoordinates] = React.useState({ lat: "", lon: "" });
 
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
   const [avatarFile, setAvatarFile] = React.useState<any>("");
@@ -114,7 +114,6 @@ const Perfil: React.FC = props => {
       useVendorUpdateFunc({
         variables: {
           city: data.city,
-
           lat: coordinates.lat,
           lon: coordinates.lon,
           postalCode: data.postalCode,
@@ -144,7 +143,7 @@ const Perfil: React.FC = props => {
   useEffect(() => {
     if (vendor) {
       setSelectedBanner(perfilVendorData.mainImage?.url || "");
-      setCertificates(perfilVendorData.images);
+      // setCertificates(perfilVendorData.images);
     }
   }, [vendor, stateUserUpdate]);
 
