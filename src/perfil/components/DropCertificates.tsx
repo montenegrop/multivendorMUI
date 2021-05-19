@@ -129,7 +129,7 @@ export const SingleCertificate = props => {
     const id = getParentId(e.target);
     if (id === "trashIcon") {
       e.stopPropagation();
-      setFile(position, "");
+      setFile(position, "delete");
       setBackground("");
     }
     if (id === "editIcon") {

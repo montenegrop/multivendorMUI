@@ -149,7 +149,8 @@ const Perfil: React.FC = props => {
           useServiceImageUpdateFunc({
             variables: {
               position: certificate.position,
-              serviceImage: certificate.file,
+              serviceImage:
+                certificate.file === "delete" ? "" : certificate.file,
               title: certificate.title,
               vendorId: user.vendorId
             }
