@@ -19,6 +19,7 @@ import { VendorData } from "./components/VendorData";
 import {
   useUserUpdate,
   useVendorMainImage,
+  useVendorServiceImage,
   useVendorUpdate
 } from "./mutations";
 import { usePerfilVendorData } from "./queries";
@@ -39,6 +40,7 @@ interface Certificate {
   file?: any;
   url?: string;
   title?: string;
+  position: string;
 }
 interface MandatoryData {
   email: boolean;
@@ -50,7 +52,7 @@ interface MandatoryData {
 }
 const errorMessage = "Este campo es obligatorio";
 
-const initCert = ["1", "2", "3", "4", "5"].map(pos => ({
+const initCert: Certificate[] = ["1", "2", "3", "4", "5"].map(pos => ({
   file: "",
   position: pos,
   title: "",
@@ -72,6 +74,10 @@ const Perfil: React.FC = props => {
   const [useVendorUpdateFunc, statesVendorUpdate] = useVendorUpdate({});
   const [useUserUpdateFunc, stateUserUpdate] = useUserUpdate({});
   const [useMainImageUpdateFunc, stateMainImageUpadte] = useVendorMainImage({});
+  const [
+    useServiceImageUpdateFunc,
+    stateServiceImageUpdate
+  ] = useVendorServiceImage({});
 
   const perfilVendorData = vendor?.vendor;
 
@@ -106,17 +112,6 @@ const Perfil: React.FC = props => {
     // check mandatory data
     const mandatoryDataIsFilled = !Object.values(error).includes(true);
 
-    if (bannerFile !== "") {
-      useMainImageUpdateFunc({
-        variables: {
-          vendorId: user.vendorId,
-          mainImage: bannerFile
-        }
-      });
-      // console.log(user.vendorId, "id");
-      // console.log(bannerFile, "bannerFile");
-    }
-
     if (mandatoryDataIsFilled) {
       useUserUpdateFunc({
         variables: {
@@ -130,6 +125,15 @@ const Perfil: React.FC = props => {
         }
       });
 
+      if (bannerFile !== "") {
+        useMainImageUpdateFunc({
+          variables: {
+            mainImage: bannerFile,
+            vendorId: user.vendorId
+          }
+        });
+      }
+
       useVendorUpdateFunc({
         variables: {
           city: data.city,
@@ -137,6 +141,19 @@ const Perfil: React.FC = props => {
           lon: coordinates.lon,
           postalCode: data.postalCode,
           province: data.province
+        }
+      });
+
+      certificates.forEach(certificate => {
+        if (certificate.file !== "") {
+          useServiceImageUpdateFunc({
+            variables: {
+              position: certificate.position,
+              serviceImage: certificate.file,
+              title: certificate.title,
+              vendorId: user.vendorId
+            }
+          });
         }
       });
     }
@@ -161,9 +178,10 @@ const Perfil: React.FC = props => {
 
   useEffect(() => {
     if (vendor) {
+      // console.log(stateServiceImageUpdate);
       // setSelectedBanner(perfilVendorData.mainImage?.url || "");
     }
-  }, [vendor, stateUserUpdate, stateMainImageUpadte]);
+  }, [vendor, stateUserUpdate, stateMainImageUpadte, stateServiceImageUpdate]);
 
   const loading = stateUserUpdate.loading || statesVendorUpdate.loading; // Aca va el estado loading de la mutation cuando esta guardando
 
@@ -288,6 +306,7 @@ const Perfil: React.FC = props => {
                     <DropCertificates
                       certificates={certificates}
                       setCertificates={setCertificates}
+                      triggerChange={triggerChange}
                     />
                   </CardContent>
                 </Card>

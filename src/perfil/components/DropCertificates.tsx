@@ -2,11 +2,41 @@ import { Card, makeStyles, TextField } from "@material-ui/core";
 import React from "react";
 import Dropzone from "react-dropzone/dist/index";
 
+import { default as Edit } from "../../icons/Edit";
 import { default as Plus } from "../../icons/Plus";
 import { default as Trash } from "../../icons/Trash";
 
 const useStyles = makeStyles(
   theme => ({
+    edit: {
+      alignItems: "center",
+      backgroundColor: theme.palette.primary.main,
+      border: "solid #aaaaaa 1px",
+      borderRadius: "50%",
+      cursor: "pointer",
+      display: "flex",
+      height: "36px",
+      justifyContent: "center",
+      margin: "0 1rem",
+      opacity: "0",
+      width: "36px"
+    },
+    iconsContainer: {
+      "&:hover": {
+        "& $edit": {
+          opacity: "1"
+        },
+        "& $trash": {
+          opacity: "1"
+        }
+      },
+      alignItems: "normal",
+      display: "flex",
+      height: "100%",
+      justifyContent: "flex-end",
+      padding: "0.5rem",
+      width: "100%"
+    },
     plus: {
       [theme.breakpoints.down("sm")]: {
         height: "60px",
@@ -16,6 +46,7 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.grey[600],
       border: "solid #aaaaaa 1px",
       borderRadius: "50%",
+      cursor: "pointer",
       display: "flex",
       height: "100px",
       justifyContent: "center",
@@ -39,22 +70,21 @@ const useStyles = makeStyles(
       width: "100%"
     },
     trash: {
-      "&:hover": {
-        [theme.breakpoints.down("sm")]: {
-          height: "60px",
-          width: "60px"
-        },
-        alignItems: "center",
-        backgroundColor: theme.palette.primary.main,
-        border: "solid #aaaaaa 1px",
-        borderRadius: "50%",
-        display: "flex",
-        height: "100px",
-        justifyContent: "center",
-        opacity: "1",
-        width: "100px"
+      [theme.breakpoints.down("sm")]: {
+        height: "60px",
+        width: "60px"
       },
-      opacity: "0"
+      alignItems: "center",
+      backgroundColor: theme.palette.primary.main,
+      border: "solid #aaaaaa 1px",
+      borderRadius: "50%",
+      cursor: "pointer",
+      display: "flex",
+      height: "36px",
+      justifyContent: "center",
+      margin: "0 1rem",
+      opacity: "0",
+      width: "36px"
     },
     trashSize: {
       height: "50%",
@@ -66,26 +96,48 @@ const useStyles = makeStyles(
 
 export const SingleCertificate = props => {
   const {
-    certificate,
+    url,
     isDragActive,
     setFile,
+    setTitle,
     getInputProps,
     getRootProps,
     title,
-    setTitle,
+    position,
     id
   } = props;
   const classes = useStyles(props);
-  const [background, setBackground] = React.useState<string>(certificate);
+  const [background, setBackground] = React.useState<string>(url);
 
   const handleFileChange = e => {
     const file = e.target.files[0];
     setBackground(URL.createObjectURL(file));
-    setFile(id, file);
+    setFile(position, file);
   };
 
   const handleChange = e => {
-    setTitle(id, e.target.value, e.target.name);
+    setTitle(position, e.target.value, e.target.name);
+  };
+
+  const handleIconClick = e => {
+    const getParentId = elem => {
+      if (elem.id === "") {
+        return getParentId(elem.parentNode);
+      }
+      return elem.id;
+    };
+    const id = getParentId(e.target);
+    if (id === "trashIcon") {
+      e.stopPropagation();
+      setFile(position, "");
+      setBackground("");
+    }
+    if (id === "editIcon") {
+      return;
+    }
+    if (id === "iconsContainer") {
+      e.stopPropagation();
+    }
   };
 
   return (
@@ -109,8 +161,17 @@ export const SingleCertificate = props => {
           }}
         >
           {background !== "" ? (
-            <div className={classes.trash}>
-              <Trash className={classes.trashSize} />
+            <div
+              id="iconContainer"
+              className={classes.iconsContainer}
+              onClick={handleIconClick}
+            >
+              <div id="trashIcon" className={`${classes.trash} trashIcon`}>
+                <Trash />
+              </div>
+              <div id="editIcon" className={`${classes.edit} editIcon`}>
+                <Edit />
+              </div>
             </div>
           ) : (
             <div className={classes.plus}>
@@ -131,22 +192,24 @@ export const SingleCertificate = props => {
 };
 
 export const DropCertificates = props => {
-  const { certificates, setCertificates } = props;
+  const { certificates, setCertificates, triggerChange } = props;
   const classes = useStyles(props);
 
-  const handleTitleChange = (id, value, name) => {
+  const handleTitleChange = (position, value, name) => {
+    triggerChange();
     const newCerts = [...certificates];
-    const newCert = { ...newCerts[id] };
+    const newCert = { ...newCerts.find(cert => cert.position === position) };
     newCert[name] = value;
-    newCerts[id] = newCert;
+    newCerts[newCerts.findIndex(cert => cert.position === position)] = newCert;
     setCertificates(newCerts);
   };
 
-  const handleFileChange = (id, file) => {
+  const handleFileChange = (position, file) => {
+    triggerChange();
     const newCerts = [...certificates];
-    const newCert = { ...newCerts[id] };
+    const newCert = { ...newCerts.find(cert => cert.position === position) };
     newCert.file = file;
-    newCerts[id] = newCert;
+    newCerts[newCerts.findIndex(cert => cert.position === position)] = newCert;
     setCertificates(newCerts);
   };
 
@@ -158,8 +221,9 @@ export const DropCertificates = props => {
             {({ isDragActive, getInputProps, getRootProps }) => (
               <SingleCertificate
                 id={indx}
+                position={certificate.position}
                 title={certificates.title}
-                certificate={certificate.url}
+                url={certificate.url}
                 setFile={handleFileChange}
                 setTitle={handleTitleChange}
                 isDragActive={isDragActive}
