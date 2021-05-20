@@ -64,8 +64,6 @@ const useStyles = makeStyles(
     },
     singleDrop: {
       alignItems: "center",
-      background: "url()",
-      backgroundSize: "contain",
       border: "solid black 1px",
       display: "flex",
       height: "200px",
@@ -119,6 +117,7 @@ export const SingleCertificate = props => {
 
   const handleFileChange = e => {
     const file = e.target.files[0];
+    setBackground("");
     setBackground(URL.createObjectURL(file));
     setFile(position, file);
     setType(file.type);
@@ -166,9 +165,7 @@ export const SingleCertificate = props => {
           {...getRootProps}
           className={classes.singleDrop}
           style={{
-            background: `url(${background}) no-repeat center center`,
-            backgroundSize:
-              background !== "" && type !== "application/pdf" ? "contain" : null
+            background: `url(${background}) center center / contain no-repeat`
           }}
         >
           {background !== "" ? (
