@@ -6,14 +6,16 @@
 // GraphQL query operation: userVendorData
 // ====================================================
 
-export interface userVendorData_vendor_mainImage {
-  __typename: "Image";
-  url: string;
+export interface userVendorData_vendor_serviceImages {
+  __typename: "VendorServiceImage";
+  title: string;
+  position: number;
+  url: string | null;
 }
 
-export interface userVendorData_vendor_images {
-  __typename: "VendorImage";
-  url: string;
+export interface userVendorData_vendor_mainImage {
+  __typename: "VendorMainImage";
+  url: string | null;
 }
 
 export interface userVendorData_vendor_location {
@@ -26,10 +28,8 @@ export interface userVendorData_vendor_location {
 
 export interface userVendorData_vendor {
   __typename: "Vendor";
+  serviceImages: (userVendorData_vendor_serviceImages | null)[] | null;
   mainImage: userVendorData_vendor_mainImage | null;
-  images: (userVendorData_vendor_images | null)[] | null;
-  description: string;
-  foundingYear: number | null;
   location: userVendorData_vendor_location | null;
 }
 
