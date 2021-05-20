@@ -19,7 +19,11 @@ const useStyles = makeStyles(
       justifyContent: "center",
       margin: "0 0rem",
       opacity: "0",
-      width: "36px"
+      width: "36px",
+      zIndex: 10
+    },
+    embedPdf: {
+      position: "absolute"
     },
     iconsContainer: {
       "&:hover": {
@@ -66,6 +70,7 @@ const useStyles = makeStyles(
       display: "flex",
       height: "200px",
       justifyContent: "center",
+      position: "relative",
       textAlign: "center",
       width: "100%"
     },
@@ -84,7 +89,8 @@ const useStyles = makeStyles(
       justifyContent: "center",
       margin: "0 1rem",
       opacity: "0",
-      width: "36px"
+      width: "36px",
+      zIndex: 10
     },
     trashSize: {
       height: "50%",
@@ -109,10 +115,13 @@ export const SingleCertificate = props => {
   const classes = useStyles(props);
   const [background, setBackground] = React.useState<string>(url);
 
+  const [type, setType] = React.useState<string>("");
+
   const handleFileChange = e => {
     const file = e.target.files[0];
     setBackground(URL.createObjectURL(file));
     setFile(position, file);
+    setType(file.type);
   };
 
   const handleChange = e => {
@@ -131,11 +140,12 @@ export const SingleCertificate = props => {
       e.stopPropagation();
       setFile(position, "delete");
       setBackground("");
+      return;
     }
     if (id === "editIcon") {
       return;
     }
-    if (id === "iconsContainer") {
+    if (id === "iconContainer") {
       e.stopPropagation();
     }
   };
@@ -157,22 +167,32 @@ export const SingleCertificate = props => {
           className={classes.singleDrop}
           style={{
             background: `url(${background}) no-repeat center center`,
-            backgroundSize: background !== "" ? null : "contain"
+            backgroundSize:
+              background !== "" && type !== "application/pdf" ? "contain" : null
           }}
         >
           {background !== "" ? (
-            <div
-              id="iconContainer"
-              className={classes.iconsContainer}
-              onClick={handleIconClick}
-            >
-              <div id="trashIcon" className={`${classes.trash} trashIcon`}>
-                <Trash />
+            <>
+              <div
+                id="iconContainer"
+                className={classes.iconsContainer}
+                onClick={handleIconClick}
+              >
+                <div id="trashIcon" className={`${classes.trash} trashIcon`}>
+                  <Trash />
+                </div>
+                <div id="editIcon" className={`${classes.edit} editIcon`}>
+                  <Edit />
+                </div>
               </div>
-              <div id="editIcon" className={`${classes.edit} editIcon`}>
-                <Edit />
-              </div>
-            </div>
+              {type === "application/pdf" ? (
+                <iframe
+                  className={classes.embedPdf}
+                  src={background}
+                  width="100%"
+                />
+              ) : null}
+            </>
           ) : (
             <div className={classes.plus}>
               <Plus />
@@ -181,7 +201,7 @@ export const SingleCertificate = props => {
           <input
             {...getInputProps}
             onChange={handleFileChange}
-            accept="image*/"
+            accept="image/*, application/pdf"
             name="file"
             type="file"
           />

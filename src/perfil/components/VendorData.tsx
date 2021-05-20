@@ -1,5 +1,10 @@
 import DateFnsUtils from "@date-io/date-fns";
-import { InputLabel, MenuItem, TextField } from "@material-ui/core";
+import {
+  CircularProgress,
+  InputLabel,
+  MenuItem,
+  TextField
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
@@ -121,13 +126,20 @@ export const VendorData = props => {
 
   const [provincias, setProvincias] = React.useState([]);
   const [ciudades, setCiudades] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
+    setLoading(true);
     fetch("https://apis.datos.gob.ar/georef/api/provincias?")
       .then(response => response.json())
-      .then(data =>
-        setProvincias(data.provincias.map(provincia => provincia.nombre).sort())
-      );
+      .then(data => {
+        setProvincias(
+          data.provincias.map(provincia => provincia.nombre).sort()
+        );
+        if (data.province === "") {
+          setLoading(false);
+        }
+      });
 
     if (data.province !== "") {
       getCities(data.province);
@@ -144,7 +156,7 @@ export const VendorData = props => {
       `https://apis.datos.gob.ar/georef/api/localidades?provincia=${provincia}&max=1500`
     )
       .then(response => response.json())
-      .then(data =>
+      .then(data => {
         setCiudades(
           Array.from(
             new Set(
@@ -153,8 +165,9 @@ export const VendorData = props => {
                 .sort()
             )
           )
-        )
-      );
+        );
+        setLoading(false);
+      });
   };
 
   const getCoordinates = ciudad => {
@@ -178,169 +191,180 @@ export const VendorData = props => {
   };
 
   return (
-    <div className={classesVendor.root}>
-      <div className={classesVendor.dropContainer}>
-        <InputLabel className={classesVendor.label}>
-          Imagen de Portada para tu Tienda
-        </InputLabel>
-        <div className={classesVendor.relative}>
-          <Dropzone
-            onDrop={e => {
-              handleOnDropBanner(e);
-              triggerChange();
-              return;
-            }}
-          >
-            {({ isDragActive, getInputProps, getRootProps }) => (
-              <div
-                {...getRootProps()}
-                className={`${classesVendor.dropzone} ${
-                  isDragActive ? classesVendor.dragActive : null
-                }`}
-                style={{
-                  background:
-                    selectedBanner !== ""
-                      ? `url(${selectedBanner}) center center no-repeat`
-                      : "inherit",
-                  backgroundSize: selectedBanner !== "" ? "cover" : null
+    <>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <div className={classesVendor.root}>
+          <div className={classesVendor.dropContainer}>
+            <InputLabel className={classesVendor.label}>
+              Imagen de Portada para tu Tienda
+            </InputLabel>
+            <div className={classesVendor.relative}>
+              <Dropzone
+                onDrop={e => {
+                  handleOnDropBanner(e);
+                  triggerChange();
+                  return;
                 }}
               >
-                <input {...getInputProps()} accept="image*/" name="mainImage" />
-                {selectedBanner ? null : "PORTADA"}
-              </div>
-            )}
-          </Dropzone>
-          <Dropzone
-            onDrop={e => {
-              handleOnDropAvatar(e);
-              triggerChange();
-            }}
-          >
-            {({ isDragActive, getInputProps, getRootProps }) => (
-              <div
-                {...getRootProps()}
-                className={`${classesVendor.dropAvatar} ${
-                  isDragActive ? classesVendor.dragActive : null
-                }`}
-                style={{
-                  background:
-                    selectedAvatar !== ""
-                      ? `url(${selectedAvatar}) center center no-repeat`
-                      : undefined,
-                  backgroundSize: selectedAvatar !== "" ? "cover" : null,
-                  filter: selectedAvatar !== "" ? "opacity(1)" : "opacity(0.8)"
+                {({ isDragActive, getInputProps, getRootProps }) => (
+                  <div
+                    {...getRootProps()}
+                    className={`${classesVendor.dropzone} ${
+                      isDragActive ? classesVendor.dragActive : null
+                    }`}
+                    style={{
+                      background:
+                        selectedBanner !== ""
+                          ? `url(${selectedBanner}) center center no-repeat`
+                          : "inherit",
+                      backgroundSize: selectedBanner !== "" ? "cover" : null
+                    }}
+                  >
+                    <input
+                      {...getInputProps()}
+                      accept="image*/"
+                      name="mainImage"
+                    />
+                    {selectedBanner ? null : "PORTADA"}
+                  </div>
+                )}
+              </Dropzone>
+              <Dropzone
+                onDrop={e => {
+                  handleOnDropAvatar(e);
+                  triggerChange();
                 }}
               >
-                <input {...getInputProps()} accept="image*/" />
+                {({ isDragActive, getInputProps, getRootProps }) => (
+                  <div
+                    {...getRootProps()}
+                    className={`${classesVendor.dropAvatar} ${
+                      isDragActive ? classesVendor.dragActive : null
+                    }`}
+                    style={{
+                      background:
+                        selectedAvatar !== ""
+                          ? `url(${selectedAvatar}) center center no-repeat`
+                          : undefined,
+                      backgroundSize: selectedAvatar !== "" ? "cover" : null,
+                      filter:
+                        selectedAvatar !== "" ? "opacity(1)" : "opacity(0.8)"
+                    }}
+                  >
+                    <input {...getInputProps()} accept="image*/" />
 
-                {selectedAvatar ? null : "AVATAR"}
-              </div>
-            )}
-          </Dropzone>
-        </div>
+                    {selectedAvatar ? null : "AVATAR"}
+                  </div>
+                )}
+              </Dropzone>
+            </div>
 
-        <div className={classesVendor.helper}>
-          El tamaño recomendado es de 970px x 250px
-        </div>
-      </div>
-      {user.userPermissions[0] ? null : (
-        <div id="datePicker" className={classesVendor.datePickerContainer}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DatePicker
-              className={classesVendor.datePicker}
-              id="foundingYearInput"
-              inputVariant="standard"
-              label="Año de Fundación"
-              name="foundingYear"
-              autoOk
-              variant="dialog"
-              views={["year"]}
-              value={data.foundingYear}
-              maxDate={new Date()}
-              onChange={date => {
-                change({
-                  target: {
-                    name: "foundingYear",
-                    value: new Date(date.getFullYear(), 0, 1)
-                  }
-                });
-              }}
-              InputLabelProps={{
-                shrink: true
-              }}
+            <div className={classesVendor.helper}>
+              El tamaño recomendado es de 970px x 250px
+            </div>
+          </div>
+          {user.userPermissions[0] ? null : (
+            <div id="datePicker" className={classesVendor.datePickerContainer}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  className={classesVendor.datePicker}
+                  id="foundingYearInput"
+                  inputVariant="standard"
+                  label="Año de Fundación"
+                  name="foundingYear"
+                  autoOk
+                  variant="dialog"
+                  views={["year"]}
+                  value={data.foundingYear}
+                  maxDate={new Date()}
+                  onChange={date => {
+                    change({
+                      target: {
+                        name: "foundingYear",
+                        value: new Date(date.getFullYear(), 0, 1)
+                      }
+                    });
+                  }}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </div>
+          )}
+          <div id="ubicacion" className={classesVendor.location}>
+            <div>
+              <InputLabel id="provinceLabel">Provincia</InputLabel>
+              <TextField
+                select
+                id="provincia"
+                value={provincias ? data.province : undefined}
+                name="province"
+                onChange={e => {
+                  change(e);
+                  getCities(e.target.value);
+                  return;
+                }}
+                variant="standard"
+                fullWidth
+              >
+                {provincias.map((provincia, indx) => (
+                  <MenuItem key={indx} value={provincia}>
+                    {provincia}
+                  </MenuItem>
+                ))}
+                <MenuItem value={"undefined"} disabled></MenuItem>
+              </TextField>
+            </div>
+            <div>
+              <InputLabel id="cityLabel">Ciudad</InputLabel>
+              <TextField
+                select
+                id="city"
+                value={ciudades ? data.city : undefined}
+                name="city"
+                variant="standard"
+                fullWidth
+                onChange={e => {
+                  getCoordinates(e.target.value);
+                  change(e);
+                  return;
+                }}
+              >
+                {ciudades.map((ciudad, indx) => (
+                  <MenuItem key={indx} value={ciudad}>
+                    {ciudad}
+                  </MenuItem>
+                ))}
+                <MenuItem value={"undefined"} disabled></MenuItem>
+              </TextField>
+            </div>
+            <div>
+              <InputLabel id="postalCodeLabel">C.P.:</InputLabel>
+              <TextField
+                id="postalCode"
+                value={data.postalCode}
+                name="postalCode"
+                onChange={change}
+                variant="standard"
+                fullWidth
+              />
+            </div>
+          </div>
+          {user.userPermissions[0] ? null : (
+            <TextField
+              id="descripcion"
+              label="Descripcion"
+              name="description"
+              onChange={change}
+              multiline
+              className={classesVendor.textarea}
             />
-          </MuiPickersUtilsProvider>
+          )}
         </div>
       )}
-      <div id="ubicacion" className={classesVendor.location}>
-        <div>
-          <InputLabel id="provinceLabel">Provincia</InputLabel>
-          <TextField
-            select
-            id="provincia"
-            value={provincias ? data.province : undefined}
-            name="province"
-            onChange={e => {
-              change(e);
-              getCities(e.target.value);
-              return;
-            }}
-            variant="standard"
-            fullWidth
-          >
-            {provincias.map((provincia, indx) => (
-              <MenuItem key={indx} value={provincia}>
-                {provincia}
-              </MenuItem>
-            ))}
-            <MenuItem value={"undefined"} disabled></MenuItem>
-          </TextField>
-        </div>
-        <div>
-          <InputLabel id="cityLabel">Ciudad</InputLabel>
-          <TextField
-            select
-            id="city"
-            value={ciudades ? data.city : undefined}
-            name="city"
-            variant="standard"
-            fullWidth
-            onChange={e => {
-              getCoordinates(e.target.value);
-              change(e);
-              return;
-            }}
-          >
-            {ciudades.map((ciudad, indx) => (
-              <MenuItem key={indx} value={ciudad}>
-                {ciudad}
-              </MenuItem>
-            ))}
-            <MenuItem value={"undefined"} disabled></MenuItem>
-          </TextField>
-        </div>
-        <div>
-          <InputLabel id="postalCodeLabel">C.P.:</InputLabel>
-          <TextField
-            id="postalCode"
-            value={data.postalCode}
-            name="postalCode"
-            onChange={change}
-            variant="standard"
-            fullWidth
-          />
-        </div>
-      </div>
-      {user.userPermissions[0] ? null : (
-        <TextField
-          id="descripcion"
-          label="Descripcion"
-          name="description"
-          onChange={change}
-          multiline
-          className={classesVendor.textarea}
-        />
-      )}
-    </div>
+    </>
   );
 };
