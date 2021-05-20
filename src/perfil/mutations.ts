@@ -44,9 +44,6 @@ const userVendorMainImage = gql`
       vendor {
         id
         name
-        mainImage {
-          url
-        }
       }
     }
   }

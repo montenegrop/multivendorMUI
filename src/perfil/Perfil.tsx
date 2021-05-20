@@ -145,7 +145,7 @@ const Perfil: React.FC = props => {
       });
 
       certificates.forEach(certificate => {
-        if (certificate.file !== "") {
+        if (certificate.file && certificate.file !== "") {
           useServiceImageUpdateFunc({
             variables: {
               position: certificate.position,
@@ -179,12 +179,25 @@ const Perfil: React.FC = props => {
 
   useEffect(() => {
     if (vendor) {
-      // console.log(stateServiceImageUpdate);
-      // setSelectedBanner(perfilVendorData.mainImage?.url || "");
+      setSelectedBanner(perfilVendorData.mainImage.url);
+      const newCerts = [...certificates];
+      perfilVendorData.serviceImages.forEach(cert => {
+        newCerts[
+          newCerts.findIndex(
+            certi => cert.position.toString() === certi.position
+          )
+        ] = cert;
+      });
+      setCertificates(newCerts);
     }
-  }, [vendor, stateUserUpdate, stateMainImageUpadte, stateServiceImageUpdate]);
+    // console.log(perfilVendorData);
+  }, [vendor]);
 
-  const loading = stateUserUpdate.loading || statesVendorUpdate.loading; // Aca va el estado loading de la mutation cuando esta guardando
+  useEffect(() => {
+    // console.log(stateServiceImageUpdate);
+  }, [stateServiceImageUpdate]);
+
+  const loading = stateUserUpdate.loading || statesVendorUpdate.loading;
 
   return (
     <>

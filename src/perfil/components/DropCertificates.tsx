@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       display: "flex",
       height: "36px",
       justifyContent: "center",
-      margin: "0 1rem",
+      margin: "0 0rem",
       opacity: "0",
       width: "36px"
     },
@@ -209,6 +209,7 @@ export const DropCertificates = props => {
     const newCerts = [...certificates];
     const newCert = { ...newCerts.find(cert => cert.position === position) };
     newCert.file = file;
+    newCert.url = "";
     newCerts[newCerts.findIndex(cert => cert.position === position)] = newCert;
     setCertificates(newCerts);
   };

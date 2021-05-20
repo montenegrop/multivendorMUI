@@ -278,7 +278,7 @@ export const VendorData = props => {
           <TextField
             select
             id="provincia"
-            value={data.province}
+            value={provincias ? data.province : undefined}
             name="province"
             onChange={e => {
               change(e);
@@ -301,7 +301,7 @@ export const VendorData = props => {
           <TextField
             select
             id="city"
-            value={data.city}
+            value={ciudades ? data.city : undefined}
             name="city"
             variant="standard"
             fullWidth
