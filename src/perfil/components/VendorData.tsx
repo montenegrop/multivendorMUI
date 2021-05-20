@@ -224,7 +224,7 @@ export const VendorData = props => {
                   >
                     <input
                       {...getInputProps()}
-                      accept="image*/"
+                      accept="image/png, image/gif, image/jpeg, image/jpg"
                       name="mainImage"
                     />
                     {selectedBanner ? null : "PORTADA"}
@@ -253,7 +253,10 @@ export const VendorData = props => {
                         selectedAvatar !== "" ? "opacity(1)" : "opacity(0.8)"
                     }}
                   >
-                    <input {...getInputProps()} accept="image*/" />
+                    <input
+                      {...getInputProps()}
+                      accept="image/png, image/gif, image/jpeg, image/jpg"
+                    />
 
                     {selectedAvatar ? null : "AVATAR"}
                   </div>
