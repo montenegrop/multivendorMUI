@@ -40,7 +40,7 @@ interface Certificate {
   file?: any;
   url?: string;
   title?: string;
-  position: string;
+  position: string | number;
 }
 interface MandatoryData {
   email: boolean;

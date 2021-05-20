@@ -27,6 +27,8 @@ export interface userVendorData_vendor_location {
 }
 
 export interface userVendorData_vendor {
+  foundingYear: any;
+  description: any;
   __typename: "Vendor";
   serviceImages: (userVendorData_vendor_serviceImages | null)[] | null;
   mainImage: userVendorData_vendor_mainImage | null;
