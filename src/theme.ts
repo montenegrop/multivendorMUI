@@ -568,25 +568,25 @@ const createTheme = (colors: IThemeColors): Theme =>
     }
   });
 
-TextField.defaultProps = {
-  ...TextField.defaultProps,
-  variant: "outlined"
-};
+// TextField.defaultProps = {
+//   ...TextField.defaultProps,
+//   variant: "outlined"
+// };
 
-Card.defaultProps = {
-  ...Card.defaultProps,
-  elevation: 0
-};
+// Card.defaultProps = {
+//   ...Card.defaultProps,
+//   elevation: 0
+// };
 
-Typography.defaultProps = {
-  component: "div"
-};
+// Typography.defaultProps = {
+//   component: "div"
+// };
 
-Checkbox.defaultProps = {
-  checkedIcon: createElement(CheckboxCheckedIcon),
-  color: "primary",
-  icon: createElement(CheckboxIcon),
-  indeterminateIcon: createElement(CheckboxIndeterminateIcon)
-};
+// Checkbox.defaultProps = {
+//   checkedIcon: createElement(CheckboxCheckedIcon),
+//   color: "primary",
+//   icon: createElement(CheckboxIcon),
+//   indeterminateIcon: createElement(CheckboxIndeterminateIcon)
+// };
 
 export default createTheme;

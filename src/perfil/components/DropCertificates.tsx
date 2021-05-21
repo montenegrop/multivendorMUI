@@ -1,4 +1,5 @@
 import { Card, makeStyles, TextField } from "@material-ui/core";
+import { ThemeContext } from "@saleor/components/Theme";
 import React from "react";
 import Dropzone from "react-dropzone/dist/index";
 
@@ -41,14 +42,15 @@ const useStyles = makeStyles(
       padding: "0.5rem",
       width: "100%"
     },
+    inputLabel: {
+      color: theme.palette.primary.main
+    },
     plus: {
       [theme.breakpoints.down("sm")]: {
         height: "60px",
         width: "60px"
       },
       alignItems: "center",
-      backgroundColor: theme.palette.grey[600],
-      border: "solid #aaaaaa 1px",
       borderRadius: "50%",
       cursor: "pointer",
       display: "flex",
@@ -57,6 +59,10 @@ const useStyles = makeStyles(
       width: "100px"
     },
     root: {
+      [theme.breakpoints.down("sm")]: {
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gridTemplateRows: "repeat(2, 1fr)"
+      },
       display: "grid",
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
@@ -64,7 +70,6 @@ const useStyles = makeStyles(
     },
     singleDrop: {
       alignItems: "center",
-      border: "solid black 1px",
       display: "flex",
       height: "200px",
       justifyContent: "center",
@@ -159,6 +164,9 @@ export const SingleCertificate = props => {
           name="title"
           onChange={handleChange}
           variant="standard"
+          InputLabelProps={{
+            classes: { root: classes.inputLabel }
+          }}
         />
 
         <div
