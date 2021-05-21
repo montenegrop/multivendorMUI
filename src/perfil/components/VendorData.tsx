@@ -217,7 +217,7 @@ export const VendorData = props => {
                     style={{
                       background:
                         selectedBanner !== ""
-                          ? `url(${selectedBanner}) center center no-repeat`
+                          ? `url(${selectedBanner}) center center / cover no-repeat`
                           : "inherit",
                       backgroundSize: selectedBanner !== "" ? "cover" : null
                     }}
