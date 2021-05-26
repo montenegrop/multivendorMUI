@@ -190,7 +190,6 @@ const Perfil: React.FC = props => {
       });
       setCertificates(newCerts);
     }
-    // console.log(perfilVendorData);
   }, [vendor]);
 
   useEffect(() => {
@@ -310,6 +309,7 @@ const Perfil: React.FC = props => {
                       change={change}
                       data={data}
                       user={user}
+                      vendor={vendor}
                     />
                   </CardContent>
                 </Card>

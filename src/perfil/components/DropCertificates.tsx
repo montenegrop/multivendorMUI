@@ -52,6 +52,7 @@ const useStyles = makeStyles(
       },
       alignItems: "center",
       borderRadius: "50%",
+      color: theme.palette.primary.main,
       cursor: "pointer",
       display: "flex",
       height: "100px",

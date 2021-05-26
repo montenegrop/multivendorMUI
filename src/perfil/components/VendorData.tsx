@@ -6,6 +6,8 @@ import {
   TextField
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
 import Dropzone from "react-dropzone";
@@ -100,12 +102,15 @@ export const VendorData = props => {
     setAvatarFile,
     setBannerFile,
     setCoordinates,
+
     selectedBanner,
     selectedAvatar,
     triggerChange,
+
     change,
     data,
-    user
+    user,
+    vendor
   } = props;
 
   const classesVendor = useStylesVendor(selectedBanner);
@@ -132,21 +137,23 @@ export const VendorData = props => {
     setLoading(true);
     fetch("https://apis.datos.gob.ar/georef/api/provincias?")
       .then(response => response.json())
-      .then(data => {
+      .then(result => {
         setProvincias(
-          data.provincias.map(provincia => provincia.nombre).sort()
+          result.provincias.map(provincia => provincia.nombre).sort()
         );
         if (data.province === "") {
           setLoading(false);
         }
+        if (data.province !== "") {
+          getCities(data.province);
+        }
       });
-
-    if (data.province !== "") {
-      getCities(data.province);
-    }
   }, []);
 
   const getCities = provincia => {
+    if (!provincia) {
+      return;
+    }
     provincia = provincia
       .split(" ")
       .join("-")
@@ -171,6 +178,9 @@ export const VendorData = props => {
   };
 
   const getCoordinates = ciudad => {
+    if (!ciudad) {
+      return;
+    }
     ciudad = ciudad
       .split(" ")
       .join("-")
@@ -189,6 +199,11 @@ export const VendorData = props => {
         return;
       });
   };
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    stringify: option => option.toString()
+  });
 
   return (
     <>
@@ -300,49 +315,45 @@ export const VendorData = props => {
           <div id="ubicacion" className={classesVendor.location}>
             <div>
               <InputLabel id="provinceLabel">Provincia</InputLabel>
-              <TextField
-                select
-                id="provincia"
-                value={provincias ? data.province : undefined}
-                name="province"
-                onChange={e => {
-                  change(e);
-                  getCities(e.target.value);
-                  return;
+
+              <Autocomplete
+                value={data.province}
+                onChange={(event: any, newValue: string | null) => {
+                  change({ target: { name: "province", value: newValue } });
+                  getCities(newValue);
+                  // console.log(data);
                 }}
-                variant="standard"
-                fullWidth
-              >
-                {provincias.map((provincia, indx) => (
-                  <MenuItem key={indx} value={provincia}>
-                    {provincia}
-                  </MenuItem>
-                ))}
-                <MenuItem value={"undefined"} disabled></MenuItem>
-              </TextField>
+                filterOptions={filterOptions}
+                options={provincias}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    name="province"
+                    variant="standard"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password" // disable autocomplete and autofill
+                    }}
+                  />
+                )}
+              />
             </div>
             <div>
               <InputLabel id="cityLabel">Ciudad</InputLabel>
-              <TextField
-                select
-                id="city"
-                value={ciudades ? data.city : undefined}
-                name="city"
-                variant="standard"
+
+              <Autocomplete
+                noOptionsText="Seleccione una Provincia"
+                options={ciudades && ciudades}
+                value={data.city}
                 fullWidth
-                onChange={e => {
-                  getCoordinates(e.target.value);
-                  change(e);
-                  return;
+                onChange={(event: any, newValue: string | null) => {
+                  getCoordinates(newValue);
+                  change({ target: { name: "city", value: newValue } });
                 }}
-              >
-                {ciudades.map((ciudad, indx) => (
-                  <MenuItem key={indx} value={ciudad}>
-                    {ciudad}
-                  </MenuItem>
-                ))}
-                <MenuItem value={"undefined"} disabled></MenuItem>
-              </TextField>
+                renderInput={params => (
+                  <TextField {...params} name="city" variant="standard" />
+                )}
+              />
             </div>
             <div>
               <InputLabel id="postalCodeLabel">C.P.:</InputLabel>
@@ -356,6 +367,7 @@ export const VendorData = props => {
               />
             </div>
           </div>
+
           {user.userPermissions[0] ? null : (
             <TextField
               id="descripcion"
