@@ -43,7 +43,8 @@ const useStyles = makeStyles(
       width: "100%"
     },
     inputLabel: {
-      color: theme.palette.primary.main
+      color: theme.palette.primary.main,
+      padding: "0.5rem"
     },
     plus: {
       [theme.breakpoints.down("sm")]: {
@@ -60,14 +61,22 @@ const useStyles = makeStyles(
       width: "100px"
     },
     root: {
-      [theme.breakpoints.down("sm")]: {
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gridTemplateRows: "repeat(2, 1fr)"
+      [theme.breakpoints.down("md")]: {
+        alignItems: "center",
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center"
       },
       display: "grid",
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
       gridTemplateColumns: "repeat(5, 1fr)"
+    },
+    singleCert: {
+      [theme.breakpoints.down("md")]: {
+        maxWidth: "25%",
+        minWidth: "200px"
+      }
     },
     singleDrop: {
       alignItems: "center",
@@ -77,6 +86,10 @@ const useStyles = makeStyles(
       position: "relative",
       textAlign: "center",
       width: "100%"
+    },
+    titleField: {
+      margin: "1rem 0",
+      padding: "0 0.5rem"
     },
     trash: {
       [theme.breakpoints.down("sm")]: {
@@ -107,6 +120,7 @@ const useStyles = makeStyles(
 export const SingleCertificate = props => {
   const {
     url,
+    className,
     isDragActive,
     setFile,
     setTitle,
@@ -157,19 +171,7 @@ export const SingleCertificate = props => {
 
   return (
     <>
-      <Card key={id}>
-        <TextField
-          fullWidth
-          value={title}
-          label="Titulo"
-          name="title"
-          onChange={handleChange}
-          variant="standard"
-          InputLabelProps={{
-            classes: { root: classes.inputLabel }
-          }}
-        />
-
+      <Card className={className} key={id}>
         <div
           {...getRootProps}
           className={classes.singleDrop}
@@ -212,6 +214,19 @@ export const SingleCertificate = props => {
             type="file"
           />
         </div>
+        <TextField
+          multiline
+          fullWidth
+          value={title}
+          label="Titulo"
+          name="title"
+          onChange={handleChange}
+          variant="standard"
+          className={classes.titleField}
+          InputLabelProps={{
+            classes: { root: classes.inputLabel }
+          }}
+        />
       </Card>
     </>
   );
@@ -256,6 +271,7 @@ export const DropCertificates = props => {
                 isDragActive={isDragActive}
                 getInputProps={getInputProps()}
                 getRootProps={getRootProps()}
+                className={classes.singleCert}
               />
             )}
           </Dropzone>
