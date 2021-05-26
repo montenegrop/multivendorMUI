@@ -132,6 +132,7 @@ export const VendorData = props => {
   const [provincias, setProvincias] = React.useState([]);
   const [ciudades, setCiudades] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const mountedRef = React.useRef(true);
 
   React.useEffect(() => {
     setLoading(true);
@@ -149,6 +150,12 @@ export const VendorData = props => {
         }
       });
   }, []);
+  React.useEffect(
+    () => () => {
+      mountedRef.current = false;
+    },
+    []
+  );
 
   const getCities = provincia => {
     if (!provincia) {

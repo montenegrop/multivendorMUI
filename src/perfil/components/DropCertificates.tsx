@@ -1,5 +1,4 @@
 import { Card, makeStyles, TextField } from "@material-ui/core";
-import { ThemeContext } from "@saleor/components/Theme";
 import React from "react";
 import Dropzone from "react-dropzone/dist/index";
 
