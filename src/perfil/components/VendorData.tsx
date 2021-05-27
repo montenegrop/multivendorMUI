@@ -150,6 +150,7 @@ export const VendorData = props => {
         }
       });
   }, []);
+
   React.useEffect(
     () => () => {
       mountedRef.current = false;

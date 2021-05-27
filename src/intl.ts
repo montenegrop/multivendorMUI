@@ -207,6 +207,14 @@ export const sectionNames = defineMessages({
     defaultMessage: "Exchange Rates",
     description: "Manage and Update your warehouse information"
   },
+  experienceList: {
+    defaultMessage: "Lista de Experiencias",
+    description: "Manage and Order your experiences"
+  },
+  experiences: {
+    defaultMessage: "Experiencias",
+    description: "Manage and Update your experiences"
+  },
   home: {
     defaultMessage: "Home",
     description: "home section name"

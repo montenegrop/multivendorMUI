@@ -55,7 +55,9 @@ const useStyles = makeStyles(
       color: theme.palette.primary.main,
       cursor: "pointer",
       display: "flex",
+      flexWrap: "wrap",
       height: "100px",
+
       justifyContent: "center",
       width: "100px"
     },
@@ -83,8 +85,7 @@ const useStyles = makeStyles(
       height: "200px",
       justifyContent: "center",
       position: "relative",
-      textAlign: "center",
-      width: "100%"
+      textAlign: "center"
     },
     titleField: {
       margin: "1rem 0",
@@ -203,6 +204,7 @@ export const SingleCertificate = props => {
           ) : (
             <div className={classes.plus}>
               <Plus />
+              <p>Subir Archivo</p>
             </div>
           )}
           <input

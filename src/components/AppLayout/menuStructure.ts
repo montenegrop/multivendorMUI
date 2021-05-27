@@ -46,6 +46,22 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       url: "/perfil"
     },
     {
+      ariaLabel: "experiencies",
+      icon: customerIcon,
+      label: intl.formatMessage(sectionNames.experiences),
+      permission: PermissionEnum.MANAGE_USERS,
+      testingContextId: "experiencies",
+      url: "/experiences"
+    },
+    {
+      ariaLabel: "experienceList",
+      icon: customerIcon,
+      label: intl.formatMessage(sectionNames.experienceList),
+      permission: PermissionEnum.MANAGE_USERS,
+      testingContextId: "experienceList",
+      url: "/experienceList"
+    },
+    {
       ariaLabel: "products",
       icon: catalogIcon,
       label: intl.formatMessage(sectionNames.products),
