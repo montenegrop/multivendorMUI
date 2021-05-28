@@ -130,7 +130,7 @@ export const useUserUpdate = makeMutation<
 >(updateUserData);
 
 export const updateServices = gql`
-  mutation VendorServicesUpdate($services: [String]) {
+  mutation VendorServicesUpdate($services: [ID]!) {
     vendorServicesUpdate(services: $services) {
       vendorErrors {
         message

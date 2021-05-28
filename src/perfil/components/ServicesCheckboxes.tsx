@@ -83,9 +83,9 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
     <div className={classes.container}>
       {localBaseServices?.map((service, indx) => (
         <FormControlLabel
+          key={indx}
           control={
             <Checkbox
-              key={indx}
               checked={service.checked}
               onChange={handleChange}
               id={service.id}
@@ -96,7 +96,6 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
           classes={{ label: classes.label, root: classes.root }}
         />
       ))}
-      <Button onClick={triggerChange} />
     </div>
   );
 };

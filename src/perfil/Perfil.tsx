@@ -152,6 +152,11 @@ const Perfil: React.FC = props => {
           }
         });
       }
+      useUpdateServicesFunc({
+        variables: {
+          services
+        }
+      });
 
       useVendorUpdateFunc({
         variables: {
@@ -180,12 +185,18 @@ const Perfil: React.FC = props => {
     return;
   };
 
+  const handleReset = (reset, data) => {
+    reset();
+    setServices(data.services);
+    return;
+  };
+
   const initialForm = {
     city: perfilVendorData && perfilVendorData.location?.city,
-    description: perfilVendorData?.description,
+    // description: perfilVendorData?.description,
     email: user.email,
     firstName: user.firstName,
-    foundingYear: perfilVendorData?.foundingYear,
+    // foundingYear: perfilVendorData?.foundingYear,
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
@@ -218,9 +229,9 @@ const Perfil: React.FC = props => {
     }
   }, [vendor]);
 
-  useEffect(() => {
-    // console.log(baseServices?.baseProducts.edges);
-  }, [baseServicesLoading]);
+  // useEffect(() => {
+  //   console.log(stateUpdateServices);
+  // }, [stateUpdateServices]);
 
   const loading = stateUserUpdate.loading || statesVendorUpdate.loading;
 
@@ -329,7 +340,10 @@ const Perfil: React.FC = props => {
                       data={data}
                       vendorServices={services}
                       setVendorServices={setServices}
-                      baseServices={baseServices.baseProducts.edges}
+                      baseServices={
+                        // baseServicesMockup ||
+                        baseServices.baseProducts.edges
+                      }
                     />
                   </CardContent>
                 </Card>
@@ -365,7 +379,7 @@ const Perfil: React.FC = props => {
                   </CardContent>
                 </Card>
                 <SaveButtonBar
-                  onCancel={reset}
+                  onCancel={() => handleReset(reset, data)}
                   onSave={submit}
                   state={"default"}
                   disabled={loading || !handleSubmit || !hasChanged}
