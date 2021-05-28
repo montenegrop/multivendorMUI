@@ -26,13 +26,28 @@ export interface userVendorData_vendor_location {
   postalCode: string;
 }
 
+export interface userVendorData_vendor_services_edges_node {
+  __typename: "BaseProduct";
+  name: string;
+  id: string;
+}
+
+export interface userVendorData_vendor_services_edges {
+  __typename: "BaseProductCountableEdge";
+  node: userVendorData_vendor_services_edges_node;
+}
+
+export interface userVendorData_vendor_services {
+  __typename: "BaseProductCountableConnection";
+  edges: userVendorData_vendor_services_edges[];
+}
+
 export interface userVendorData_vendor {
-  foundingYear: any;
-  description: any;
   __typename: "Vendor";
   serviceImages: (userVendorData_vendor_serviceImages | null)[] | null;
   mainImage: userVendorData_vendor_mainImage | null;
   location: userVendorData_vendor_location | null;
+  services: userVendorData_vendor_services;
 }
 
 export interface userVendorData {

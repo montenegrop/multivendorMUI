@@ -15,14 +15,16 @@ import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
 import { UserTypeOfIdentification } from "../types/globalTypes";
 import { DropCertificates } from "./components/DropCertificates";
+import { ServicesCheckboxes } from "./components/ServicesCheckboxes";
 import { VendorData } from "./components/VendorData";
 import {
+  useUpdateServices,
   useUserUpdate,
   useVendorMainImage,
   useVendorServiceImage,
   useVendorUpdate
 } from "./mutations";
-import { usePerfilVendorData } from "./queries";
+import { useBaseServices, usePerfilVendorData } from "./queries";
 
 const useStyles = makeStyles(
   theme => ({
@@ -59,18 +61,32 @@ const initCert: Certificate[] = ["1", "2", "3", "4", "5"].map(pos => ({
   url: ""
 }));
 
+interface Service {
+  node: { id: string; name: string; checked?: boolean };
+}
+const baseServicesMockup: Service[] = [
+  { node: { id: "1", name: "plomero" } },
+  { node: { id: "2", name: "electricista" } },
+  { node: { id: "3", name: "gasista" } }
+];
+
 const Perfil: React.FC = props => {
   const UserTypeOfIdentificationArray: string[] = Object.values(
     UserTypeOfIdentification
   );
 
+  // queries
   const { user } = useUser();
   const { data: vendor, loading: perfilVendorLoading } = usePerfilVendorData({
     variables: {
       id: user.vendorId
     }
   });
+  const { data: baseServices, loading: baseServicesLoading } = useBaseServices(
+    {}
+  );
 
+  // mutations
   const [useVendorUpdateFunc, statesVendorUpdate] = useVendorUpdate({});
   const [useUserUpdateFunc, stateUserUpdate] = useUserUpdate({});
   const [useMainImageUpdateFunc, stateMainImageUpadte] = useVendorMainImage({});
@@ -78,6 +94,7 @@ const Perfil: React.FC = props => {
     useServiceImageUpdateFunc,
     stateServiceImageUpdate
   ] = useVendorServiceImage({});
+  const [useUpdateServicesFunc, stateUpdateServices] = useUpdateServices({});
 
   const perfilVendorData = vendor?.vendor;
 
@@ -91,6 +108,8 @@ const Perfil: React.FC = props => {
 
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
   const [avatarFile, setAvatarFile] = React.useState<any>("");
+
+  const [services, setServices] = React.useState<string[]>(["3"]);
 
   const classes = useStyles(props);
 
@@ -174,6 +193,9 @@ const Perfil: React.FC = props => {
     phone: user.phone,
     postalCode: perfilVendorData && perfilVendorData.location?.postalCode,
     province: perfilVendorData && perfilVendorData.location?.province,
+    services:
+      perfilVendorData &&
+      perfilVendorData.services.edges.map(service => service.node.id),
     typeOfIdentification: user.typeOfIdentification
   };
 
@@ -189,12 +211,16 @@ const Perfil: React.FC = props => {
         ] = cert;
       });
       setCertificates(newCerts);
+      const servicesIdArray = perfilVendorData.services.edges.map(
+        service => service.node.id
+      );
+      setServices(servicesIdArray);
     }
   }, [vendor]);
 
   useEffect(() => {
-    // console.log(stateServiceImageUpdate);
-  }, [stateServiceImageUpdate]);
+    // console.log(baseServices?.baseProducts.edges);
+  }, [baseServicesLoading]);
 
   const loading = stateUserUpdate.loading || statesVendorUpdate.loading;
 
@@ -202,7 +228,7 @@ const Perfil: React.FC = props => {
     <>
       <Container>
         <PageHeader title={"Datos de Perfil"} />
-        {perfilVendorLoading ? (
+        {perfilVendorLoading || baseServicesLoading ? (
           <CircularProgress />
         ) : (
           <Form initial={initialForm} onSubmit={handleSubmit}>
@@ -291,6 +317,20 @@ const Perfil: React.FC = props => {
                         onChange={change}
                       />
                     </div>
+                  </CardContent>
+                </Card>
+                <CardSpacer />
+                <Card id="baseServices">
+                  <CardTitle title={"Servicios a Prestar"} />
+                  <CardContent>
+                    <ServicesCheckboxes
+                      triggerChange={triggerChange}
+                      change={change}
+                      data={data}
+                      vendorServices={services}
+                      setVendorServices={setServices}
+                      baseServices={baseServices.baseProducts.edges}
+                    />
                   </CardContent>
                 </Card>
                 <CardSpacer />

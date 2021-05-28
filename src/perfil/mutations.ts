@@ -5,6 +5,10 @@ import {
   userDataMutation,
   userDataMutationVariables
 } from "./types/userDataMutation";
+import {
+  VendorServicesUpdate,
+  VendorServicesUpdateVariables
+} from "./types/VendorServicesUpdate";
 
 const userVendorUpdate = gql`
   mutation vendorLocationCreateOrUpdate(
@@ -124,3 +128,18 @@ export const useUserUpdate = makeMutation<
   userDataMutation,
   userDataMutationVariables
 >(updateUserData);
+
+export const updateServices = gql`
+  mutation VendorServicesUpdate($services: [String]) {
+    vendorServicesUpdate(services: $services) {
+      vendorErrors {
+        message
+      }
+      services
+    }
+  }
+`;
+export const useUpdateServices = makeMutation<
+  VendorServicesUpdate,
+  VendorServicesUpdateVariables
+>(updateServices);

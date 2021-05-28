@@ -1,6 +1,7 @@
 import makeQuery from "@saleor/hooks/makeQuery";
 import gql from "graphql-tag";
 
+import { BaseServices } from "./types/BaseServices";
 import {
   userVendorData,
   userVendorDataVariables
@@ -23,6 +24,14 @@ const perfilVendorData = gql`
         city
         postalCode
       }
+      services(first: 20) {
+        edges {
+          node {
+            name
+            id
+          }
+        }
+      }
     }
   }
 `;
@@ -31,3 +40,18 @@ export const usePerfilVendorData = makeQuery<
   userVendorData,
   userVendorDataVariables
 >(perfilVendorData);
+
+const baseServices = gql`
+  query BaseServices {
+    baseProducts(first: 25) {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const useBaseServices = makeQuery<BaseServices, null>(baseServices);
