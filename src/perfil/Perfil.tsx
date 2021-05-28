@@ -185,9 +185,9 @@ const Perfil: React.FC = props => {
     return;
   };
 
-  const handleReset = (reset, data) => {
+  const handleReset = (reset, data, initialForm) => {
     reset();
-    setServices(data.services);
+    setServices(initialForm.services);
     return;
   };
 
@@ -379,7 +379,7 @@ const Perfil: React.FC = props => {
                   </CardContent>
                 </Card>
                 <SaveButtonBar
-                  onCancel={() => handleReset(reset, data)}
+                  onCancel={() => handleReset(reset, data, initialForm)}
                   onSave={submit}
                   state={"default"}
                   disabled={loading || !handleSubmit || !hasChanged}
