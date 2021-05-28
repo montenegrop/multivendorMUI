@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { PermissionEnum } from "./../../types/globalTypes";
+import { UserTypeOfIdentification, PermissionEnum } from "./../../types/globalTypes";
 
 // ====================================================
 // GraphQL fragment: User
@@ -20,14 +20,15 @@ export interface User_avatar {
 }
 
 export interface User {
-  phone?: any;
-  identification?: number;
-  typeOfIdentification?: any;
   __typename: "User";
   id: string;
   email: string;
   firstName: string;
   lastName: string;
+  phone: string;
+  typeOfIdentification: UserTypeOfIdentification | null;
+  identification: string;
+  vendorId: string | null;
   userPermissions: (User_userPermissions | null)[] | null;
   avatar: User_avatar | null;
 }

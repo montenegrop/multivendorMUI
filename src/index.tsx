@@ -211,6 +211,16 @@ const Routes: React.FC = () => {
               />
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+                path="/experiences"
+                component={ProductSection}
+              />
+              <SectionRoute
+                permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+                path="/experienceList"
+                component={ProductSection}
+              />
+              <SectionRoute
+                permissions={[PermissionEnum.MANAGE_PRODUCTS]}
                 path="/productsManager"
                 component={ProductSection}
               />

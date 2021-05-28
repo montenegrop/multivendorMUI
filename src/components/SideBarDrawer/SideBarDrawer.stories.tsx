@@ -21,6 +21,10 @@ const user = {
   isStaff: true,
   lastName: "Newton",
   note: null,
+  phone: "+5493416966099",
+  identification: "34121333",
+  typeOfIdentification: null,
+  vendorId: "AvsdsaD=",
   userPermissions: staffMember.userPermissions
 };
 
