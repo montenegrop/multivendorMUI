@@ -57,7 +57,6 @@ const useStyles = makeStyles(
       display: "flex",
       flexWrap: "wrap",
       height: "100px",
-
       justifyContent: "center",
       width: "100px"
     },
@@ -71,7 +70,8 @@ const useStyles = makeStyles(
       display: "grid",
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
-      gridTemplateColumns: "repeat(5, 1fr)"
+      gridTemplateColumns: "repeat(4, 1fr)",
+      gridTemplateRows: "1fr 1fr"
     },
     singleCert: {
       [theme.breakpoints.down("md")]: {
@@ -86,6 +86,9 @@ const useStyles = makeStyles(
       justifyContent: "center",
       position: "relative",
       textAlign: "center"
+    },
+    spanMe: {
+      gridColumnStart: "span 4"
     },
     titleField: {
       margin: "1rem 0",
@@ -117,10 +120,53 @@ const useStyles = makeStyles(
   { name: "CustomerCreateDetails" }
 );
 
-const DataImages: React.FC = props => {
-  const [background, setBackground] = React.useState("");
-  const [type, setType] = React.useState<string>("");
+const position = ["0", "1", "2", "3", "4"];
+
+interface IProps {
+  images: Array<{ file: any; position: string }>;
+  setImages: (images) => void;
+  triggerChange: () => void;
+}
+
+const DataImages: React.FC<IProps> = props => {
+  const { images, setImages, triggerChange } = props;
   const classes = useStyles(props);
+
+  const handleFileChange = (position, file) => {
+    triggerChange();
+    const newImages = [...images];
+    const newImage = { ...newImages.find(img => img.position === position) };
+    newImage.file = file;
+    newImages[newImages.findIndex(img => img.position === position)] = newImage;
+    setImages(newImages);
+  };
+
+  return (
+    <CardContent className={classes.root}>
+      {position.map((pos, indx) => (
+        <Dropzone key={indx}>
+          {({ getInputProps, getRootProps }) => (
+            <SingleImage
+              position={pos}
+              classes={classes}
+              getInputProps={getInputProps()}
+              getRootProps={getRootProps()}
+              setFile={handleFileChange}
+              key={indx}
+            />
+          )}
+        </Dropzone>
+      ))}
+    </CardContent>
+  );
+};
+
+export default DataImages;
+
+export const SingleImage = props => {
+  const { position, classes, getRootProps, getInputProps, setFile } = props;
+
+  const [background, setBackground] = React.useState("");
 
   const handleIconClick = e => {
     const getParentId = elem => {
@@ -132,7 +178,7 @@ const DataImages: React.FC = props => {
     const id = getParentId(e.target);
     if (id === "trashIcon") {
       e.stopPropagation();
-      // setFile(position, "delete");
+      setFile(position, "delete");
       setBackground("");
       return;
     }
@@ -148,61 +194,47 @@ const DataImages: React.FC = props => {
     const file = e.target.files[0];
     setBackground("");
     setBackground(URL.createObjectURL(file));
-    // setFile(position, file);
-    setType(file.type);
+    setFile(position, file);
   };
 
   return (
-    <CardContent>
-      <Dropzone>
-        {({ isDragActive, getInputProps, getRootProps }) => (
-          <Card>
+    <Card className={`${position === "0" ? classes.spanMe : null} `}>
+      <div
+        {...getRootProps}
+        className={classes.singleDrop}
+        style={{
+          background: `url(${background}) center center / contain no-repeat`
+        }}
+      >
+        {background !== "" ? (
+          <>
             <div
-              {...getRootProps}
-              style={{
-                background: `url(${background}) center center / contain no-repeat`
-              }}
+              id="iconContainer"
+              className={classes.iconsContainer}
+              onClick={handleIconClick}
             >
-              {background !== "" ? (
-                <>
-                  <div id="iconContainer" onClick={handleIconClick}>
-                    <div
-                      id="trashIcon"
-                      className={`${classes.trash} trashIcon`}
-                    >
-                      <Trash />
-                    </div>
-                    <div id="editIcon" className={`${classes.edit} editIcon`}>
-                      <Edit />
-                    </div>
-                  </div>
-                  {type === "application/pdf" ? (
-                    <iframe
-                      className={classes.embedPdf}
-                      src={background}
-                      width="100%"
-                    />
-                  ) : null}
-                </>
-              ) : (
-                <div className={classes.plus}>
-                  <Plus />
-                  <p>Subir Archivo</p>
-                </div>
-              )}
-              <input
-                {...getInputProps}
-                onChange={handleFileChange}
-                accept="image/*, application/pdf"
-                name="file"
-                type="file"
-              />
+              <div id="trashIcon" className={`${classes.trash} trashIcon`}>
+                <Trash />
+              </div>
+              <div id="editIcon" className={`${classes.edit} editIcon`}>
+                <Edit />
+              </div>
             </div>
-          </Card>
+          </>
+        ) : (
+          <div className={classes.plus}>
+            <Plus />
+            <p>Subir Archivo</p>
+          </div>
         )}
-      </Dropzone>
-    </CardContent>
+        <input
+          {...getInputProps}
+          onChange={handleFileChange}
+          accept="image/*"
+          name="file"
+          type="file"
+        />
+      </div>
+    </Card>
   );
 };
-
-export default DataImages;

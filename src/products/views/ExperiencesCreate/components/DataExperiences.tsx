@@ -46,7 +46,9 @@ const DataExperiences: React.FC<IProps> = props => {
         multiline
         rowsMax={3}
         inputProps={{
-          maxLength: limitShort
+          maxLength: limitShort,
+          name: "descriptionShort",
+          value: data.descriptionShort
         }}
         variant="outlined"
         className={classes.short}
@@ -60,7 +62,9 @@ const DataExperiences: React.FC<IProps> = props => {
         multiline
         rowsMax={8}
         inputProps={{
-          maxLength: limitLong
+          maxLength: limitLong,
+          name: "descriptionLong",
+          value: data.descriptionLong
         }}
         variant="outlined"
         className={classes.long}
