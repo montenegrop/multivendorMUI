@@ -134,6 +134,13 @@ export const VendorData = props => {
   const [loading, setLoading] = React.useState(true);
   const mountedRef = React.useRef(true);
 
+  React.useEffect(
+    () => () => {
+      mountedRef.current = false;
+    },
+    []
+  );
+
   React.useEffect(() => {
     setLoading(true);
     fetch("https://apis.datos.gob.ar/georef/api/provincias?")
@@ -150,13 +157,6 @@ export const VendorData = props => {
         }
       });
   }, []);
-
-  React.useEffect(
-    () => () => {
-      mountedRef.current = false;
-    },
-    []
-  );
 
   const getCities = provincia => {
     if (!provincia) {
