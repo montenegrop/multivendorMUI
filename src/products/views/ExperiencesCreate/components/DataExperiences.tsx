@@ -29,10 +29,14 @@ const useStyles = makeStyles(
 interface IProps {
   data: any;
   change: FormChange;
+  error: {
+    descriptionShort: boolean;
+    descriptionLong: boolean;
+  };
 }
 
 const DataExperiences: React.FC<IProps> = props => {
-  const { change, data } = props;
+  const { change, data, error } = props;
 
   const limitShort = 90;
   const limitLong = 240;
@@ -45,6 +49,10 @@ const DataExperiences: React.FC<IProps> = props => {
       <TextField
         multiline
         rowsMax={3}
+        error={error.descriptionShort}
+        helperText={
+          error.descriptionShort ? "Describa en pocas palabras" : null
+        }
         inputProps={{
           maxLength: limitShort,
           name: "descriptionShort",
@@ -61,6 +69,8 @@ const DataExperiences: React.FC<IProps> = props => {
       <TextField
         multiline
         rowsMax={8}
+        error={error.descriptionLong}
+        helperText={error.descriptionLong ? "Describa la Experiencia" : null}
         inputProps={{
           maxLength: limitLong,
           name: "descriptionLong",

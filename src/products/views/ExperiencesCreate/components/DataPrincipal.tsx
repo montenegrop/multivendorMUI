@@ -35,10 +35,16 @@ interface IProps {
   data: any;
   location: { city: string; province: string };
   change: FormChange;
+  error: {
+    serviceId: boolean;
+    city: boolean;
+    province: boolean;
+    year: boolean;
+  };
 }
 
 export const DataPrincipal: React.FC<IProps> = props => {
-  const { vendorServices, year, data, change, location } = props;
+  const { vendorServices, year, data, change, location, error } = props;
 
   const classes = useStyles(props);
   // console.log(vendorServices);
@@ -53,6 +59,8 @@ export const DataPrincipal: React.FC<IProps> = props => {
               inputVariant="standard"
               label="Año"
               name="year"
+              error={error.year}
+              helperText={error.year ? "Indique el año de realización" : null}
               onChange={date => {
                 change({
                   target: {
@@ -79,10 +87,16 @@ export const DataPrincipal: React.FC<IProps> = props => {
             change({ target: { name: "serviceId", value: newValue.id } });
           }}
           renderInput={params => (
-            <TextField {...params} label="Servicio" variant="standard" />
+            <TextField
+              error={error.serviceId}
+              {...params}
+              label="Servicio"
+              variant="standard"
+            />
           )}
         />
         <PickPlace
+          error={error}
           data={data}
           change={change}
           className={classes.location}

@@ -27,3 +27,23 @@ const createExperience = gql`
 `;
 
 export const useCreateExperience = makeMutation(createExperience);
+
+const imageExperienceUpload = gql`
+  mutation pastExperienceImageCreate(
+    $position: String!
+    $image: Upload!
+    $title: String
+  ) {
+    pastExperienceImageCreate(
+      input: { position: $position, image: $image, pastExperience: $title }
+    ) {
+      position
+      pastExperience
+      image {
+        url
+      }
+    }
+  }
+`;
+
+export const useUploadExperienceImage = makeMutation(imageExperienceUpload);

@@ -8,6 +8,10 @@ interface IProps {
   change: any;
   className: any;
   noCP?: boolean;
+  error: {
+    city: boolean;
+    province: boolean;
+  };
 }
 
 const useStyles = makeStyles(
@@ -23,7 +27,7 @@ const useStyles = makeStyles(
 );
 
 const PickPlace: React.FC<IProps> = props => {
-  const { data, change, className, noCP } = props;
+  const { data, change, className, noCP, error } = props;
 
   const classes = useStyles(props);
 
@@ -120,6 +124,8 @@ const PickPlace: React.FC<IProps> = props => {
           renderInput={params => (
             <TextField
               {...params}
+              error={error.city}
+              helperText={error.city ? "Debe elegir ciudad" : null}
               name="province"
               variant="standard"
               inputProps={{
@@ -143,7 +149,13 @@ const PickPlace: React.FC<IProps> = props => {
             change({ target: { name: "city", value: newValue } });
           }}
           renderInput={params => (
-            <TextField {...params} name="city" variant="standard" />
+            <TextField
+              error={error.province}
+              helperText={error.province ? "Debe Elegir Provincia" : null}
+              {...params}
+              name="city"
+              variant="standard"
+            />
           )}
         />
       </div>

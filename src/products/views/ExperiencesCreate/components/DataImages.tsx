@@ -25,6 +25,9 @@ const useStyles = makeStyles(
     embedPdf: {
       position: "absolute"
     },
+    error: {
+      border: "1px solid red"
+    },
     iconsContainer: {
       "&:hover": {
         "& $edit": {
@@ -126,10 +129,13 @@ interface IProps {
   images: Array<{ file: any; position: string }>;
   setImages: (images) => void;
   triggerChange: () => void;
+  error: {
+    imageZero: boolean;
+  };
 }
 
 const DataImages: React.FC<IProps> = props => {
-  const { images, setImages, triggerChange } = props;
+  const { images, setImages, triggerChange, error } = props;
   const classes = useStyles(props);
 
   const handleFileChange = (position, file) => {
@@ -149,6 +155,7 @@ const DataImages: React.FC<IProps> = props => {
             <SingleImage
               position={pos}
               classes={classes}
+              error={error}
               getInputProps={getInputProps()}
               getRootProps={getRootProps()}
               setFile={handleFileChange}
@@ -164,7 +171,14 @@ const DataImages: React.FC<IProps> = props => {
 export default DataImages;
 
 export const SingleImage = props => {
-  const { position, classes, getRootProps, getInputProps, setFile } = props;
+  const {
+    position,
+    classes,
+    getRootProps,
+    getInputProps,
+    setFile,
+    error
+  } = props;
 
   const [background, setBackground] = React.useState("");
 
@@ -198,7 +212,11 @@ export const SingleImage = props => {
   };
 
   return (
-    <Card className={`${position === "0" ? classes.spanMe : null} `}>
+    <Card
+      className={`${position === "0" ? classes.spanMe : null} ${
+        position === "0" ? (error.imageZero ? classes.error : null) : null
+      }`}
+    >
       <div
         {...getRootProps}
         className={classes.singleDrop}
@@ -224,9 +242,12 @@ export const SingleImage = props => {
         ) : (
           <div className={classes.plus}>
             <Plus />
-            <p>Subir Archivo</p>
+            <p>{`${
+              position === "0" ? "Subir Imagen Principal" : "Subir Imagen"
+            } `}</p>
           </div>
         )}
+
         <input
           {...getInputProps}
           onChange={handleFileChange}

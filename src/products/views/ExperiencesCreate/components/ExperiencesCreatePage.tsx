@@ -10,7 +10,7 @@ import React from "react";
 
 import Form from "../../../../components/Form";
 import PageHeader from "../../../../components/PageHeader";
-import { useCreateExperience } from "../mutation";
+import { useCreateExperience, useUploadExperienceImage } from "../mutation";
 import DataExperiences from "./DataExperiences";
 import DataImages from "./DataImages";
 import DataPrincipal from "./DataPrincipal";
@@ -35,18 +35,44 @@ interface IProps {
   data: any;
 }
 
+interface MandatoryData {
+  city: boolean;
+  province: boolean;
+  descriptionShort: boolean;
+  descriptionLong: boolean;
+  imageZero: boolean;
+  year: boolean;
+  serviceId: boolean;
+}
+
 const initImages = ["0", "1", "2", "3", "4"].map(position => ({
-  file: "",
+  file: null,
   position
 }));
 
 const ExperiencesCreatePage: React.FC<IProps> = props => {
   const [createExperience, stateCreateExperience] = useCreateExperience({});
+  const [uploadExperienceImage, stateImageUpload] = useUploadExperienceImage(
+    {}
+  );
+
   const vendorServices = props.data.vendor.services.edges.map(
     edge => edge.node
   );
 
-  const [images, setImages] = React.useState(initImages);
+  const [images, setImages] = React.useState<
+    Array<{ file: any; position: string }>
+  >(initImages);
+
+  const [error, setError] = React.useState<MandatoryData>({
+    city: false,
+    descriptionLong: false,
+    descriptionShort: false,
+    imageZero: false,
+    province: false,
+    serviceId: false,
+    year: false
+  });
 
   const location = props.data.vendor.location;
 
@@ -61,22 +87,55 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
     year: new Date().getFullYear()
   };
 
+  const weHaveImageZero = images =>
+    images.find(image => image.position === "0").file !== null;
+
   const handleSubmit = data => {
     // validar data obligatoria
-    // console.log(data);
+    // error fields
+    Object.keys(data).forEach(key =>
+      setError(prev => ({ ...prev, [key]: data[key] === "" }))
+    );
+
+    setError(prev => ({
+      ...prev,
+      imageZero: !weHaveImageZero(images)
+    }));
+
     // realizar submit
-    if (data) {
-      createExperience({
-        variables: {
-          city: data.city,
-          descriptionLong: data.descriptionLong,
-          descriptionShort: data.descriptionShort,
-          province: data.province,
-          serviceId: data.serviceId,
-          year: data.year
-        }
-      });
-    }
+    // if (data) {
+    //   createExperience({
+    //     variables: {
+    //       city: data.city,
+    //       descriptionLong: data.descriptionLong,
+    //       descriptionShort: data.descriptionShort,
+    //       province: data.province,
+    //       serviceId: data.serviceId,
+    //       year: data.year
+    //     }
+    //   });
+    //   images.forEach(image => {
+    //     if (image.file !== null) {
+    //       if (image.file === "delete") {
+    //         uploadExperienceImage({
+    //           variables: {
+    //             file: null,
+    //             position: image.position
+    //           }
+    //         });
+    //         return;
+    //       }
+    //       if (image.file?.type) {
+    //         uploadExperienceImage({
+    //           variables: {
+    //             file: image.file,
+    //             position: image.position
+    //           }
+    //         });
+    //       }
+    //     }
+    //   });
+    // }
   };
 
   React.useEffect(() => {
@@ -97,15 +156,16 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
                   change={change}
                   data={data}
                   location={location}
+                  error={error}
                 />
-
-                <DataExperiences change={change} data={data} />
+                <DataExperiences change={change} data={data} error={error} />
               </Card>
               <Card>
                 <DataImages
                   images={images}
                   setImages={setImages}
                   triggerChange={triggerChange}
+                  error={error}
                 />
               </Card>
             </div>
