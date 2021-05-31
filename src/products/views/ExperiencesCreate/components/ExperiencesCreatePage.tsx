@@ -103,39 +103,39 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
     }));
 
     // realizar submit
-    // if (data) {
-    //   createExperience({
-    //     variables: {
-    //       city: data.city,
-    //       descriptionLong: data.descriptionLong,
-    //       descriptionShort: data.descriptionShort,
-    //       province: data.province,
-    //       serviceId: data.serviceId,
-    //       year: data.year
-    //     }
-    //   });
-    //   images.forEach(image => {
-    //     if (image.file !== null) {
-    //       if (image.file === "delete") {
-    //         uploadExperienceImage({
-    //           variables: {
-    //             file: null,
-    //             position: image.position
-    //           }
-    //         });
-    //         return;
-    //       }
-    //       if (image.file?.type) {
-    //         uploadExperienceImage({
-    //           variables: {
-    //             file: image.file,
-    //             position: image.position
-    //           }
-    //         });
-    //       }
-    //     }
-    //   });
-    // }
+    if (data) {
+      createExperience({
+        variables: {
+          city: data.city,
+          descriptionLong: data.descriptionLong,
+          descriptionShort: data.descriptionShort,
+          province: data.province,
+          serviceId: data.serviceId,
+          year: data.year
+        }
+      });
+      images.forEach(image => {
+        if (image.file !== null) {
+          if (image.file === "delete") {
+            uploadExperienceImage({
+              variables: {
+                file: null,
+                position: image.position
+              }
+            });
+            return;
+          }
+          if (image.file?.type) {
+            uploadExperienceImage({
+              variables: {
+                file: image.file,
+                position: image.position
+              }
+            });
+          }
+        }
+      });
+    }
   };
 
   React.useEffect(() => {
