@@ -1,16 +1,30 @@
 import makeMutation from "@saleor/hooks/makeMutation";
 import gql from "graphql-tag";
 
+const createEmptyExperience = gql`
+  mutation emptyPastExperienceCreate {
+    pastExperienceCreate(input: {}) {
+      pastExperience {
+        id
+      }
+    }
+  }
+`;
+
+export const useCreateEmptyExperience = makeMutation(createEmptyExperience);
+
 const createExperience = gql`
-  mutation pastExperienceCreate(
+  mutation pastExperienceUpdate(
     $serviceId: ID!
     $province: String
     $city: String
     $descriptionShort: String
     $descriptionLong: String
+    $expId: ID!
     $year: String
   ) {
     pastExperienceCreate(
+      id: $expId
       input: {
         serviceId: $serviceId
         country: "AR"
@@ -32,10 +46,10 @@ const imageExperienceUpload = gql`
   mutation pastExperienceImageCreate(
     $position: String!
     $image: Upload!
-    $title: String
+    $expId: ID!
   ) {
     pastExperienceImageCreate(
-      input: { position: $position, image: $image, pastExperience: $title }
+      input: { position: $position, image: $image, pastExperience: $expId }
     ) {
       position
       pastExperience

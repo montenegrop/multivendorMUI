@@ -7,10 +7,11 @@ export interface FormProps<T> {
   initial?: T;
   resetOnSubmit?: boolean;
   onSubmit?: (data: T) => SubmitPromise | void;
+  formId?: string;
 }
 
 function Form<T>(props: FormProps<T>) {
-  const { children, initial, resetOnSubmit, onSubmit } = props;
+  const { children, initial, resetOnSubmit, onSubmit, formId } = props;
   const renderProps = useForm(initial, onSubmit);
 
   function handleSubmit(event?: React.FormEvent<any>, cb?: () => void) {
@@ -32,7 +33,11 @@ function Form<T>(props: FormProps<T>) {
     submit();
   }
 
-  return <form onSubmit={handleSubmit}>{children(renderProps)}</form>;
+  return (
+    <form id={formId} onSubmit={handleSubmit}>
+      {children(renderProps)}
+    </form>
+  );
 }
 Form.displayName = "Form";
 

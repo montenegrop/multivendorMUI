@@ -143,6 +143,7 @@ const DataImages: React.FC<IProps> = props => {
     const newImages = [...images];
     const newImage = { ...newImages.find(img => img.position === position) };
     newImage.file = file;
+
     newImages[newImages.findIndex(img => img.position === position)] = newImage;
     setImages(newImages);
   };
