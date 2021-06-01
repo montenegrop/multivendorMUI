@@ -14,6 +14,17 @@ import { ExpForm } from "./ExpForm";
 
 const useStyles = makeStyles(
   theme => ({
+    bar: {
+      backgroundColor: theme.palette.background.paper,
+      borderRadius: "16px 16px 0 0",
+      bottom: "0px",
+      boxShadow: theme.shadows[15],
+      display: "flex",
+      justifyContent: "space-between",
+      padding: "0.8rem",
+      position: "sticky",
+      zIndex: 2000
+    },
     root: {
       display: "grid",
       gridColumnGap: theme.spacing(2),
@@ -79,18 +90,20 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
           vendorServices={vendorServices}
         />
       ))}
-      {stateEmptyExp.loading ? (
-        <CircularProgress />
-      ) : (
-        <Button variant="outlined" onClick={handleCreateExp}>
-          Suma Experiencia
-        </Button>
-      )}
-      {expIds.length > 0 ? (
-        <Button variant="outlined" onClick={handleBulkSubmit}>
-          Guardar experiencias
-        </Button>
-      ) : null}
+      <div className={classes.bar}>
+        {stateEmptyExp.loading ? (
+          <CircularProgress />
+        ) : (
+          <Button variant="outlined" onClick={handleCreateExp}>
+            Sumar Experiencia
+          </Button>
+        )}
+        {expIds.length > 0 ? (
+          <Button variant="outlined" onClick={handleBulkSubmit}>
+            Guardar experiencias
+          </Button>
+        ) : null}
+      </div>
     </Container>
   );
 };
