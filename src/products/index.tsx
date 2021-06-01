@@ -22,6 +22,7 @@ import {
   productVariantEditPath,
   ProductVariantEditUrlQueryParams
 } from "./urls";
+import ExperiencesCreate from "./views/ExperiencesCreate";
 import ProductCreateComponent from "./views/ProductCreate";
 import ProductImageComponent from "./views/ProductImage";
 import ProductListComponent from "./views/ProductList";
@@ -121,6 +122,7 @@ const Component = () => {
       <Switch>
         <Route exact path={productListPath} component={ProductList} />
         <Route exact path={"/productsManager"} component={ProductManager} />
+        <Route exact path={"/experiences"} component={ExperiencesCreate} />
         <Route exact path={productAddPath} component={ProductCreate} />
         <Route
           path={productVariantCreatorPath(":id")}
