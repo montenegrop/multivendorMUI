@@ -88,7 +88,7 @@ export const ExpForm = props => {
       }).then(data => {
         // console.log(data.data.pastExperienceCreate.pastExperience.id);
         // console.log(data);
-        deleteExp(data.data.pastExperienceCreate.pastExperience.id);
+        // deleteExp(data.data.pastExperienceCreate.pastExperience.id);
       });
 
       images.forEach(image => {

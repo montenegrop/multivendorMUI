@@ -197,7 +197,7 @@ export const SingleImage = props => {
     const id = getParentId(e.target);
     if (id === "trashIcon") {
       e.stopPropagation();
-      setFile(position, "delete");
+      setFile(position, null);
       setBackground("");
       return;
     }
