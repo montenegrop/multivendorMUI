@@ -212,7 +212,7 @@ export const sectionNames = defineMessages({
     description: "Manage and Order your experiences"
   },
   experiences: {
-    defaultMessage: "Experiencias",
+    defaultMessage: "Cargar Trabajos",
     description: "Manage and Update your experiences"
   },
   home: {
