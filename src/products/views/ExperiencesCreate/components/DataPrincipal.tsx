@@ -65,7 +65,7 @@ export const DataPrincipal: React.FC<IProps> = props => {
                 change({
                   target: {
                     name: "year",
-                    value: new Date(date.getFullYear(), 0, 1)
+                    value: date
                   }
                 });
               }}

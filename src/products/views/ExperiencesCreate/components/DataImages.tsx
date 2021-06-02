@@ -70,6 +70,9 @@ const useStyles = makeStyles(
         flexWrap: "wrap",
         justifyContent: "center"
       },
+      [theme.breakpoints.down("sm")]: {
+        display: "inline"
+      },
       display: "grid",
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
@@ -91,7 +94,8 @@ const useStyles = makeStyles(
       textAlign: "center"
     },
     spanMe: {
-      gridColumnStart: "span 4"
+      gridColumnStart: "span 4",
+      width: "100%"
     },
     titleField: {
       margin: "1rem 0",

@@ -25,7 +25,19 @@ const useStyles = makeStyles(
       position: "sticky",
       zIndex: 2000
     },
+    container: {
+      backgroundColor: theme.palette.grey[200],
+      padding: "0.5rem"
+    },
+    deleteButton: {
+      backgroundColor: theme.palette.secondary.contrastText,
+      margin: "1rem"
+    },
     root: {
+      [theme.breakpoints.down("sm")]: {
+        gridTemplateColumns: "1fr",
+        gridTemplateRow: "1fr 1fr"
+      },
       display: "grid",
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
@@ -81,13 +93,14 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
     <Container>
       <PageHeader title={"Ingresa aquí tus Experiences"} />
 
-      {expIds.map((expId, indx) => (
+      {expIds.map(expId => (
         <ExpForm
           location={location}
           expId={expId}
-          key={indx}
+          key={expId}
           classes={classes}
           vendorServices={vendorServices}
+          deleteExp={deleteExp}
         />
       ))}
       <div className={classes.bar}>
