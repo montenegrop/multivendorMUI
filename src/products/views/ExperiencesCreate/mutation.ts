@@ -11,7 +11,9 @@ const createEmptyExperience = gql`
   }
 `;
 
-export const useCreateEmptyExperience = makeMutation(createEmptyExperience);
+export const useCreateEmptyExperience = makeMutation<any, any>(
+  createEmptyExperience
+);
 
 const createExperience = gql`
   mutation pastExperienceUpdate(
@@ -40,7 +42,7 @@ const createExperience = gql`
   }
 `;
 
-export const useCreateExperience = makeMutation(createExperience);
+export const useCreateExperience = makeMutation<any, any>(createExperience);
 
 const imageExperienceUpload = gql`
   mutation pastExperienceImageCreate(
