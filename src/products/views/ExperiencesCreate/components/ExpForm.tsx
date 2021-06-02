@@ -50,7 +50,7 @@ export const ExpForm = props => {
     expId,
     province: location.province,
     serviceId: "",
-    year: new Date().getFullYear()
+    year: new Date()
   };
 
   const validate = data => {

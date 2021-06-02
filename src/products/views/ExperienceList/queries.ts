@@ -1,8 +1,10 @@
 import gql from "graphql-tag";
 
+import { TypedQuery } from "../../../queries";
+
 const pastExperiencesList = gql`
-  query vendorPastExperiences {
-    vendor(id: "VmVuZG9yOjI=") {
+  query vendorPastExperiences($vendorId: ID!) {
+    vendor(id: $vendorId) {
       pastExperiences {
         descriptionShort
         pastExperienceImages(first: 1) {
@@ -16,3 +18,5 @@ const pastExperiencesList = gql`
     }
   }
 `;
+
+export const PastExperiencesListQuery = TypedQuery(pastExperiencesList);

@@ -31,7 +31,7 @@ const useStyles = makeStyles(
 
 interface IProps {
   vendorServices: [{ id: string; name: string }];
-  year: number;
+  year: number | Date;
   data: any;
   location: { city: string; province: string };
   change: FormChange;
