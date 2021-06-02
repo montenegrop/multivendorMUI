@@ -29,5 +29,5 @@ export interface pastExperienceUpdateVariables {
   descriptionShort?: string | null;
   descriptionLong?: string | null;
   expId: string;
-  year?: string | null;
+  year?: number | null;
 }

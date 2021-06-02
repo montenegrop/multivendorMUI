@@ -1,8 +1,11 @@
 import React from "react";
 
-const ExperiencesListPage = data => (
+import ExperiencesTable from "./ExperiencesTable";
+
+const ExperiencesListPage = props => {
+  const { data } = props;
   // console.log(data);
-  <h1>Hola Data</h1>
-);
+  return <ExperiencesTable data={data.vendor.pastExperiences} />;
+};
 
 export default ExperiencesListPage;
