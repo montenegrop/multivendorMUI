@@ -31,7 +31,6 @@ interface IProps {
   change: FormChange;
   error: {
     descriptionShort: boolean;
-    descriptionLong: boolean;
   };
 }
 
@@ -69,8 +68,6 @@ const DataExperiences: React.FC<IProps> = props => {
       <TextField
         multiline
         rowsMax={8}
-        error={error.descriptionLong}
-        helperText={error.descriptionLong ? "Describa la Experiencia" : null}
         inputProps={{
           maxLength: limitLong,
           name: "descriptionLong",

@@ -14,7 +14,6 @@ interface MandatoryData {
   city: boolean;
   province: boolean;
   descriptionShort: boolean;
-  descriptionLong: boolean;
   imageZero: boolean;
   year: boolean;
   serviceId: boolean;
@@ -34,7 +33,6 @@ export const ExpForm = props => {
 
   const [error, setError] = React.useState<MandatoryData>({
     city: false,
-    descriptionLong: false,
     descriptionShort: false,
     imageZero: false,
     province: false,
