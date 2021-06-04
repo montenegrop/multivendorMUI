@@ -3,6 +3,7 @@ import Card from "@material-ui/core/Card";
 import { CardSpacer } from "@saleor/components/CardSpacer";
 import Form from "@saleor/components/Form";
 import { SaveButtonBar } from "@saleor/components/SaveButtonBar";
+import useNotifier from "@saleor/hooks/useNotifier";
 import React from "react";
 
 import { useCreateExperience, useUploadExperienceImage } from "../mutation";
@@ -25,8 +26,26 @@ const initImages = ["0", "1", "2", "3", "4"].map(position => ({
 }));
 
 export const ExpForm = props => {
-  const { location, expId, classes, vendorServices, deleteExp } = props;
-  const [createExperience, stateCreateExperience] = useCreateExperience({});
+  const notify = useNotifier();
+  const {
+    location,
+    expId,
+    classes,
+    vendorServices,
+    deleteExp,
+    setHasChanges,
+    hasChanges
+  } = props;
+  const [createExperience, stateCreateExperience] = useCreateExperience({
+    onCompleted: data =>
+      notify({
+        autohide: 5,
+        status: "success",
+        text: "<h2>Exito</h2>",
+        title: "Guardado con"
+      })
+    // onError: error => console.log(error)
+  });
   const [uploadExperienceImage, stateImageUpload] = useUploadExperienceImage(
     {}
   );
@@ -54,8 +73,8 @@ export const ExpForm = props => {
   };
 
   const validate = data => {
-    const weHaveImageZero = images =>
-      images.find(image => image.position === "0").file !== null;
+    const weHaveImageZero =
+      images.find(image => image.position === "0").file === null;
 
     // error fields
     Object.keys(data).forEach(key =>
@@ -64,9 +83,8 @@ export const ExpForm = props => {
 
     setError(prev => ({
       ...prev,
-      imageZero: !weHaveImageZero(images)
+      imageZero: weHaveImageZero
     }));
-
     return Object.values(error).includes(true);
   };
 
@@ -115,6 +133,8 @@ export const ExpForm = props => {
     }
   };
 
+  // React.useEffect(() => {}, [stateCreateExperience, stateImageUpload]);
+
   return (
     <div>
       <Form
@@ -124,41 +144,56 @@ export const ExpForm = props => {
           if (!validate(data)) {
             handleSubmit(data);
           }
+          setHasChanges(prev => ({ ...prev, [expId]: false }));
         }}
       >
-        {({ change, data, hasChanged, submit, reset, triggerChange }) => (
-          <>
-            <Card className={classes.container}>
-              <div className={classes.root}>
-                <Card>
-                  <DataPrincipal
-                    vendorServices={vendorServices}
-                    year={data.year}
-                    change={change}
-                    data={data}
-                    location={location}
-                    error={error}
-                  />
-                  <DataExperiences change={change} data={data} error={error} />
-                </Card>
-                <Card>
-                  <DataImages
-                    images={images}
-                    setImages={setImages}
-                    triggerChange={triggerChange}
-                    error={error}
-                  />
-                </Card>
-              </div>
-              <Button
-                className={classes.deleteButton}
-                variant="outlined"
-                onClick={() => deleteExp(expId)}
-              >
-                Borrar
-              </Button>
-            </Card>
-            {/* <SaveButtonBar
+        {({ change, data, hasChanged, triggerChange }) => {
+          React.useEffect(() => {
+            setHasChanges(prev => ({ ...prev, [expId]: hasChanged }));
+          }, [hasChanged]);
+          React.useEffect(() => {
+            if (hasChanges[expId] === false) {
+              triggerChange(false);
+            }
+          }, [hasChanges]);
+
+          return (
+            <>
+              <Card className={classes.container}>
+                <div className={classes.root}>
+                  <Card>
+                    <DataPrincipal
+                      vendorServices={vendorServices}
+                      year={data.year}
+                      change={change}
+                      data={data}
+                      location={location}
+                      error={error}
+                    />
+                    <DataExperiences
+                      change={change}
+                      data={data}
+                      error={error}
+                    />
+                  </Card>
+                  <Card>
+                    <DataImages
+                      images={images}
+                      setImages={setImages}
+                      triggerChange={triggerChange}
+                      error={error}
+                    />
+                  </Card>
+                </div>
+                <Button
+                  className={classes.deleteButton}
+                  variant="outlined"
+                  onClick={() => deleteExp(expId)}
+                >
+                  Borrar
+                </Button>
+              </Card>
+              {/* <SaveButtonBar
               labels={{
                 cancel: "Borrar"
               }}
@@ -167,8 +202,9 @@ export const ExpForm = props => {
               state={"default"}
               disabled={!hasChanged}
             /> */}
-          </>
-        )}
+            </>
+          );
+        }}
       </Form>
       <CardSpacer />
     </div>

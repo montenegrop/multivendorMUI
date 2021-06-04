@@ -16,6 +16,11 @@ const useStyles = makeStyles(
     colImages: {
       width: "15%"
     },
+    descriptionShort: {
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap"
+    },
     imgSize: {
       height: "auto",
       maxHeight: "60px",
@@ -65,7 +70,9 @@ const ExperiencesTable = props => {
                     src={exp.pastExperienceImages.edges[0]?.node.url}
                   />
                 </TableCell>
-                <TableCell>{exp.descriptionShort}</TableCell>
+                <TableCell className={classes.descriptionShort}>
+                  {exp.descriptionShort}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

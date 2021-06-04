@@ -33,6 +33,14 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.secondary.contrastText,
       margin: "1rem"
     },
+    disabled: {
+      "& span": {
+        color: theme.palette.grey[200]
+      },
+      backgroundColor: theme.palette.grey[300],
+      borderColor: theme.palette.grey[200],
+      color: theme.palette.grey[200]
+    },
     root: {
       [theme.breakpoints.down("sm")]: {
         gridTemplateColumns: "1fr",
@@ -59,6 +67,7 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
   const [createEmptyExperience, stateEmptyExp] = useCreateEmptyExperience({});
 
   const [expIds, setExpIds] = React.useState([]);
+  const [hasChanges, setHasChanges] = React.useState([]);
 
   const handleCreateExp = () => {
     createEmptyExperience({}).then(response => {
@@ -101,18 +110,25 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
           classes={classes}
           vendorServices={vendorServices}
           deleteExp={deleteExp}
+          setHasChanges={setHasChanges}
+          hasChanges={hasChanges}
         />
       ))}
       <div className={classes.bar}>
         {stateEmptyExp.loading ? (
           <CircularProgress />
         ) : (
-          <Button variant="outlined" onClick={handleCreateExp}>
+          <Button color="primary" variant="outlined" onClick={handleCreateExp}>
             Sumar Experiencia
           </Button>
         )}
         {expIds.length > 0 ? (
-          <Button variant="outlined" onClick={handleBulkSubmit}>
+          <Button
+            disabled={Object.values(hasChanges).includes(true) ? false : true}
+            variant="outlined"
+            onClick={handleBulkSubmit}
+            classes={{ disabled: classes.disabled }}
+          >
             Guardar experiencias
           </Button>
         ) : null}

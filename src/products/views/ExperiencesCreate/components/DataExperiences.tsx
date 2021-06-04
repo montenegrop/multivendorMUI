@@ -37,7 +37,7 @@ interface IProps {
 const DataExperiences: React.FC<IProps> = props => {
   const { change, data, error } = props;
 
-  const limitShort = 20;
+  const limitShort = 80;
   const limitLong = 240;
 
   const classes = useStyles(props);
