@@ -149,11 +149,14 @@ export const VendorData = props => {
         setProvincias(
           result.provincias.map(provincia => provincia.nombre).sort()
         );
+        setLoading(false);
         if (data.province === "") {
           setLoading(false);
         }
-        if (data.province !== "") {
+        if (data.province && data.province !== "") {
+          setLoading(true);
           getCities(data.province);
+          return;
         }
       });
   }, []);

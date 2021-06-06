@@ -212,7 +212,7 @@ const Perfil: React.FC = props => {
 
   useEffect(() => {
     if (vendor) {
-      setSelectedBanner(perfilVendorData.mainImage.url);
+      setSelectedBanner(perfilVendorData.mainImage?.url);
       const newCerts = [...certificates];
       perfilVendorData.serviceImages.forEach(cert => {
         newCerts[
