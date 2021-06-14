@@ -26,11 +26,11 @@ const useStyles = makeStyles(
       zIndex: 2000
     },
     container: {
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.background.default,
       padding: "0.5rem"
     },
     deleteButton: {
-      backgroundColor: theme.palette.secondary.contrastText,
+      backgroundColor: theme.palette.background.default,
       margin: "1rem"
     },
     disabled: {
@@ -100,7 +100,7 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
 
   return (
     <Container>
-      <PageHeader title={"Ingresa aquí tus Experiences"} />
+      <PageHeader title={"Ingresa aquí tus Trabajos Previos"} />
 
       {expIds.map(expId => (
         <ExpForm
@@ -119,7 +119,7 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
           <CircularProgress />
         ) : (
           <Button color="primary" variant="outlined" onClick={handleCreateExp}>
-            Sumar Experiencia
+            Sumar Trabajo Previo{" "}
           </Button>
         )}
         {expIds.length > 0 ? (
@@ -129,7 +129,7 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
             onClick={handleBulkSubmit}
             classes={{ disabled: classes.disabled }}
           >
-            Guardar experiencias
+            Guardar Trabajos Previos
           </Button>
         ) : null}
       </div>

@@ -208,11 +208,11 @@ export const sectionNames = defineMessages({
     description: "Manage and Update your warehouse information"
   },
   experienceList: {
-    defaultMessage: "Lista de Experiencias",
+    defaultMessage: "Trabajos Previos",
     description: "Manage and Order your experiences"
   },
   experiences: {
-    defaultMessage: "Cargar Trabajos",
+    defaultMessage: "Cargar Trabajos Previos",
     description: "Manage and Update your experiences"
   },
   home: {
