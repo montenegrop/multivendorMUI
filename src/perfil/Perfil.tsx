@@ -16,6 +16,7 @@ import PageHeader from "../components/PageHeader";
 import { UserTypeOfIdentification } from "../types/globalTypes";
 import { DropCertificates } from "./components/DropCertificates";
 import { ServicesCheckboxes } from "./components/ServicesCheckboxes";
+import SocialMedia from "./components/SocialMedia";
 import { VendorData } from "./components/VendorData";
 import {
   useUpdateServices,
@@ -200,6 +201,11 @@ const Perfil: React.FC = props => {
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
+    facebook: "",
+    instagram: "",
+    youtube: "",
+    twitter: "",
+    linkedin: "",
     mainImage: perfilVendorData && perfilVendorData.mainImage?.url,
     phone: user.phone,
     postalCode: perfilVendorData && perfilVendorData.location?.postalCode,
@@ -365,6 +371,13 @@ const Perfil: React.FC = props => {
                       user={user}
                       vendor={vendor}
                     />
+                  </CardContent>
+                </Card>
+                <CardSpacer />
+                <Card>
+                  <CardTitle title="Redes Sociales" />
+                  <CardContent>
+                    <SocialMedia data={data} change={change} />
                   </CardContent>
                 </Card>
                 <CardSpacer />
