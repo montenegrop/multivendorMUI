@@ -6,6 +6,10 @@ export const categoryFragment = gql`
   fragment CategoryFragment on Category {
     id
     name
+    level
+    parent {
+      name
+    }
     children {
       totalCount
     }
