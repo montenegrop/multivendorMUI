@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
 import React from "react";
 
+import useNotifier from "../../hooks/useNotifier";
+
 const useStyles = makeStyles(
   theme => ({
     container: {
@@ -51,6 +53,7 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
 
   const [localBaseServices, setLocalBaseServices] = React.useState([]);
   const classes = useStyles(props);
+  const notify = useNotifier();
 
   React.useEffect(() => {
     // checkboxes state
@@ -75,13 +78,20 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
       change({ target: { name: "services", value: vendorServices } });
       return;
     }
+    if (vendorServices.length === 5) {
+      notify({
+        status: "info",
+        text: "El máximo de servicios que puedes ofrecer es 5"
+      });
+      return;
+    }
     setVendorServices(vendorServices.concat(event.target.id));
     change({ target: { name: "services", value: vendorServices } });
   };
 
   return (
     <div className={classes.container}>
-      {localBaseServices?.map((service, indx) => (
+      {localBaseServices?.sort().map((service, indx) => (
         <FormControlLabel
           key={indx}
           control={
@@ -90,6 +100,7 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
               onChange={handleChange}
               id={service.id}
               name={service.name}
+              color="secondary"
             />
           }
           label={service.name}

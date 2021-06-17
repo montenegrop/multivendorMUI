@@ -21,7 +21,7 @@ export interface UseFormResult<T> {
   reset: () => void;
   set: (data: T) => void;
   submit: () => void;
-  triggerChange: () => void;
+  triggerChange: (boolean?: boolean) => void;
   toggleValue: FormChange;
 }
 
@@ -119,8 +119,8 @@ function useForm<T extends FormData>(
     }
   }
 
-  function triggerChange() {
-    setChanged(true);
+  function triggerChange(boolean: boolean = true) {
+    setChanged(boolean);
   }
 
   return {

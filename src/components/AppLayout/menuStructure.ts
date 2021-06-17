@@ -54,12 +54,12 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       url: "/experiences"
     },
     {
-      ariaLabel: "experienceList",
+      ariaLabel: "experiencesList",
       icon: customerIcon,
       label: intl.formatMessage(sectionNames.experienceList),
       permission: PermissionEnum.MANAGE_USERS,
-      testingContextId: "experienceList",
-      url: "/experienceList"
+      testingContextId: "experiencesList",
+      url: "/experiencesList"
     },
     {
       ariaLabel: "products",
