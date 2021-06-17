@@ -216,7 +216,7 @@ const Routes: React.FC = () => {
               />
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
-                path="/experienceList"
+                path="/experiencesList"
                 component={ProductSection}
               />
               <SectionRoute

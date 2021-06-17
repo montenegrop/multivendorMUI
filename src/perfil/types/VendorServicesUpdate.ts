@@ -22,5 +22,5 @@ export interface VendorServicesUpdate {
 }
 
 export interface VendorServicesUpdateVariables {
-  services?: (string | null)[] | null;
+  services: (string | null)[];
 }

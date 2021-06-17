@@ -265,7 +265,7 @@ export const DropCertificates = props => {
               <SingleCertificate
                 id={indx}
                 position={certificate.position}
-                title={certificates.title}
+                title={certificate.title}
                 url={certificate.url}
                 setFile={handleFileChange}
                 setTitle={handleTitleChange}
