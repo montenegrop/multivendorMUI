@@ -143,3 +143,19 @@ export const useUpdateServices = makeMutation<
   VendorServicesUpdate,
   VendorServicesUpdateVariables
 >(updateServices);
+
+export const socialMediaUpdate = gql`
+  mutation VendorSocialMediaUpdate($IG: String, $FB: String, $TW: String) {
+    vendorSocialMediaUpdate(
+      socialMedia: [
+        { code: "IG", userString: $IG }
+        { code: "FB", userString: $FB }
+        { code: "TW", userString: $TW }
+      ]
+    ) {
+      socialMedia
+    }
+  }
+`;
+
+export const useSocialMediaUpdate = makeMutation<any, any>(updateServices);

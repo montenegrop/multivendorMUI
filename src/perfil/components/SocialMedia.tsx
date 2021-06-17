@@ -2,10 +2,12 @@ import { InputLabel, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import React from "react";
 
+import Form from "../../components/Form";
 import FacebookIcon from "../../icons/FacebookIcon";
 import InstagramIcon from "../../icons/InstragramIcon";
 import TwitterIcon from "../../icons/TwitterIcon";
 import YoutubeIcon from "../../icons/YoutubeIcon";
+import { useSocialMediaUpdate } from "../mutations";
 
 const useStyles = makeStyles(
   theme => ({
@@ -35,62 +37,85 @@ const useStyles = makeStyles(
 );
 
 const SocialMedia = props => {
-  const { data, change } = props;
   const classes = useStyles(props);
+  const [socialMediaUpdateFunc, stateSocialMediaUpdate] = useSocialMediaUpdate(
+    {}
+  );
+
+  const initialForm = {
+    facebook: "",
+    instagram: "",
+    linkedin: "",
+    twitter: "",
+    youtube: ""
+  };
+
+  const handleSubmit = data => {
+    socialMediaUpdateFunc({
+      variables: {
+        FB: data.facebook,
+        IG: data.instagram,
+        TW: data.twitter
+      }
+    });
+  };
+
   return (
-    <div>
-      <div className={`${classes.row}`}>
-        {" "}
-        <div className={`${classes.column}`}>
-          <InputLabel className={`${classes.svg}`}>
-            <FacebookIcon />
-          </InputLabel>
-          <TextField
-            label="URL"
-            name="facebook"
-            className={classes.textfield}
-            value={data.facebook}
-            onChange={change}
-          />
+    <Form formId="SocialMedia" initial={initialForm} onSubmit={handleSubmit}>
+      {({ change, data, hasChanged, submit, reset, triggerChange }) => (
+        <div className={`${classes.row}`}>
+          {" "}
+          <div className={`${classes.column}`}>
+            <InputLabel className={`${classes.svg}`}>
+              <FacebookIcon />
+            </InputLabel>
+            <TextField
+              label="URL"
+              name="facebook"
+              className={classes.textfield}
+              value={data.facebook}
+              onChange={change}
+            />
+          </div>
+          <div className={`${classes.column}`}>
+            <InputLabel className={`${classes.svg}`}>
+              <InstagramIcon />
+            </InputLabel>
+            <TextField
+              label="URL"
+              name="instagram"
+              className={classes.textfield}
+              value={data.instagram}
+              onChange={change}
+            />
+          </div>
+          <div className={`${classes.column}`}>
+            <InputLabel className={`${classes.svg}`}>
+              <YoutubeIcon />
+            </InputLabel>
+            <TextField
+              label="URL"
+              name="youtube"
+              className={classes.textfield}
+              value={data.youtube}
+              onChange={change}
+            />
+          </div>
+          <div className={`${classes.column}`}>
+            <InputLabel className={`${classes.svg}`}>
+              <TwitterIcon />
+            </InputLabel>
+            <TextField
+              label="URL"
+              name="twitter"
+              className={classes.textfield}
+              value={data.twitter}
+              onChange={change}
+            />
+          </div>
         </div>
-        <div className={`${classes.column}`}>
-          <InputLabel className={`${classes.svg}`}>
-            <InstagramIcon />
-          </InputLabel>
-          <TextField
-            label="URL"
-            name="instagram"
-            className={classes.textfield}
-            value={data.instagram}
-            onChange={change}
-          />
-        </div>
-        <div className={`${classes.column}`}>
-          <InputLabel className={`${classes.svg}`}>
-            <YoutubeIcon />
-          </InputLabel>
-          <TextField
-            label="URL"
-            name="youtube"
-            className={classes.textfield}
-            value={data.youtube}
-            onChange={change}
-          />
-        </div>
-        <div className={`${classes.column}`}>
-          <InputLabel className={`${classes.svg}`}>
-            <TwitterIcon />
-          </InputLabel>
-          <TextField
-            label="URL"
-            name="twitter"
-            className={classes.textfield}
-            value={data.twitter}
-            onChange={change}
-          />
-        </div>
-      </div>
-    </div>
+      )}
+    </Form>
   );
 };
 

@@ -114,6 +114,15 @@ const Perfil: React.FC = props => {
 
   const classes = useStyles(props);
 
+  const [hasChanged, setHasChanged] = React.useState({
+    certificateData: false,
+    locationData: false,
+    servicesData: false,
+    socialMediaData: false,
+    userData: false,
+    vendorData: false
+  });
+
   const [error, setError] = React.useState<MandatoryData>({
     email: false,
     firstName: false,
@@ -201,11 +210,6 @@ const Perfil: React.FC = props => {
     id: user.id,
     identification: user.identification,
     lastName: user.lastName,
-    facebook: "",
-    instagram: "",
-    youtube: "",
-    twitter: "",
-    linkedin: "",
     mainImage: perfilVendorData && perfilVendorData.mainImage?.url,
     phone: user.phone,
     postalCode: perfilVendorData && perfilVendorData.location?.postalCode,
