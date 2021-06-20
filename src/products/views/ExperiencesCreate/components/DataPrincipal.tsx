@@ -31,7 +31,7 @@ const useStyles = makeStyles(
 
 interface IProps {
   vendorServices: [{ id: string; name: string }];
-  year: number;
+  year: number | Date;
   data: any;
   location: { city: string; province: string };
   change: FormChange;
@@ -44,10 +44,9 @@ interface IProps {
 }
 
 export const DataPrincipal: React.FC<IProps> = props => {
-  const { vendorServices, year, data, change, location, error } = props;
+  const { vendorServices, data, change, error } = props;
 
   const classes = useStyles(props);
-  // console.log(vendorServices);
 
   return (
     <div id="data-principal">
@@ -65,7 +64,7 @@ export const DataPrincipal: React.FC<IProps> = props => {
                 change({
                   target: {
                     name: "year",
-                    value: new Date(date.getFullYear(), 0, 1)
+                    value: date
                   }
                 });
               }}
@@ -84,7 +83,7 @@ export const DataPrincipal: React.FC<IProps> = props => {
           options={vendorServices.map(service => service)}
           getOptionLabel={option => option.name}
           onChange={(event, newValue: any) => {
-            change({ target: { name: "serviceId", value: newValue.id } });
+            change({ target: { name: "serviceId", value: newValue?.id } });
           }}
           renderInput={params => (
             <TextField

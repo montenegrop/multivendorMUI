@@ -70,6 +70,9 @@ const useStyles = makeStyles(
         flexWrap: "wrap",
         justifyContent: "center"
       },
+      [theme.breakpoints.down("sm")]: {
+        display: "inline"
+      },
       display: "grid",
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
@@ -91,7 +94,8 @@ const useStyles = makeStyles(
       textAlign: "center"
     },
     spanMe: {
-      gridColumnStart: "span 4"
+      gridColumnStart: "span 4",
+      width: "100%"
     },
     titleField: {
       margin: "1rem 0",
@@ -143,6 +147,7 @@ const DataImages: React.FC<IProps> = props => {
     const newImages = [...images];
     const newImage = { ...newImages.find(img => img.position === position) };
     newImage.file = file;
+
     newImages[newImages.findIndex(img => img.position === position)] = newImage;
     setImages(newImages);
   };
@@ -192,7 +197,7 @@ export const SingleImage = props => {
     const id = getParentId(e.target);
     if (id === "trashIcon") {
       e.stopPropagation();
-      setFile(position, "delete");
+      setFile(position, null);
       setBackground("");
       return;
     }

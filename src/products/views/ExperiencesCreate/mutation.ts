@@ -1,16 +1,41 @@
 import makeMutation from "@saleor/hooks/makeMutation";
 import gql from "graphql-tag";
 
+import {
+  pastExperienceImageCreate,
+  pastExperienceImageCreateVariables
+} from "./types/pastExperienceImageCreate";
+import {
+  pastExperienceUpdate,
+  pastExperienceUpdateVariables
+} from "./types/pastExperienceUpdate";
+
+const createEmptyExperience = gql`
+  mutation emptyPastExperienceCreate {
+    pastExperienceCreate(input: {}) {
+      pastExperience {
+        id
+      }
+    }
+  }
+`;
+
+export const useCreateEmptyExperience = makeMutation<any, any>(
+  createEmptyExperience
+);
+
 const createExperience = gql`
-  mutation pastExperienceCreate(
+  mutation pastExperienceUpdate(
     $serviceId: ID!
     $province: String
     $city: String
     $descriptionShort: String
     $descriptionLong: String
-    $year: String
+    $expId: ID!
+    $year: Int
   ) {
     pastExperienceCreate(
+      id: $expId
       input: {
         serviceId: $serviceId
         country: "AR"
@@ -18,27 +43,36 @@ const createExperience = gql`
         city: $city
         descriptionShort: $descriptionShort
         descriptionLong: $descriptionLong
-        yearPermormed: $year
+        yearPerformed: $year
       }
     ) {
-      experience
+      pastExperience {
+        id
+        descriptionShort
+        yearPerformed
+      }
     }
   }
 `;
 
-export const useCreateExperience = makeMutation(createExperience);
+export const useCreateExperience = makeMutation<
+  pastExperienceUpdate,
+  pastExperienceUpdateVariables
+>(createExperience);
 
 const imageExperienceUpload = gql`
   mutation pastExperienceImageCreate(
     $position: String!
     $image: Upload!
-    $title: String
+    $expId: ID!
   ) {
     pastExperienceImageCreate(
-      input: { position: $position, image: $image, pastExperience: $title }
+      input: { position: $position, image: $image, pastExperience: $expId }
     ) {
       position
-      pastExperience
+      pastExperience {
+        id
+      }
       image {
         url
       }
@@ -46,4 +80,7 @@ const imageExperienceUpload = gql`
   }
 `;
 
-export const useUploadExperienceImage = makeMutation(imageExperienceUpload);
+export const useUploadExperienceImage = makeMutation<
+  pastExperienceImageCreate,
+  pastExperienceImageCreateVariables
+>(imageExperienceUpload);
