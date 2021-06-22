@@ -1,9 +1,11 @@
 import { Button, FormControlLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
+import Form from "../../components/Form";
 import useNotifier from "../../hooks/useNotifier";
+import { useUpdateServices } from "../mutations";
 
 const useStyles = makeStyles(
   theme => ({
@@ -34,29 +36,31 @@ export interface ChangeEvent<TData = any> {
 
 interface IProps {
   data?: any;
-  change: (event: ChangeEvent, cb?: () => void) => void;
-  triggerChange: () => void;
-  setVendorServices: (array: string[]) => void;
-  vendorServices: string[];
+  perfilVendorData: any;
+  user: any;
+  setHasChanges: Dispatch<SetStateAction<any>>;
   baseServices: Service[];
 }
 
 export const ServicesCheckboxes: React.FC<IProps> = props => {
-  const {
-    data,
-    change,
-    triggerChange,
-    setVendorServices,
-    vendorServices,
-    baseServices
-  } = props;
+  const { perfilVendorData, user, baseServices, setHasChanges } = props;
+
+  const [updateServices, stateUpdateServices] = useUpdateServices({});
 
   const [localBaseServices, setLocalBaseServices] = React.useState([]);
   const classes = useStyles(props);
   const notify = useNotifier();
 
+  const [vendorServices, setVendorServices] = React.useState<string[]>([]);
+
   React.useEffect(() => {
-    // checkboxes state
+    const servicesIdArray = perfilVendorData.services.edges.map(
+      service => service.node.id
+    );
+    setVendorServices(servicesIdArray);
+  }, []);
+
+  React.useEffect(() => {
     const checkboxesState = baseServices.map(service => {
       service.node.checked = false;
 
@@ -71,7 +75,14 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
     setLocalBaseServices(checkboxesState);
   }, [vendorServices]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const initialForm = {
+    id: user?.id,
+    services:
+      perfilVendorData &&
+      perfilVendorData.services.edges.map(service => service.node.id)
+  };
+
+  const handleChange = (event, change) => {
     if (vendorServices.includes(event.target.id)) {
       const newServices = vendorServices.filter(id => id !== event.target.id);
       setVendorServices(newServices);
@@ -89,24 +100,42 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
     change({ target: { name: "services", value: vendorServices } });
   };
 
+  const handleSubmit = () => {
+    updateServices({
+      variables: {
+        services: vendorServices
+      }
+    });
+    console.log("serviceData");
+  };
+
   return (
-    <div className={classes.container}>
-      {localBaseServices?.sort().map((service, indx) => (
-        <FormControlLabel
-          key={indx}
-          control={
-            <Checkbox
-              checked={service.checked}
-              onChange={handleChange}
-              id={service.id}
-              name={service.name}
-              color="secondary"
-            />
-          }
-          label={service.name}
-          classes={{ label: classes.label, root: classes.root }}
-        />
-      ))}
-    </div>
+    <Form formId="serviceData" onSubmit={handleSubmit} initial={initialForm}>
+      {({ change, hasChanged }) => {
+        React.useEffect(() => {
+          setHasChanges(prev => ({ ...prev, serviceData: hasChanged }));
+        }, [hasChanged]);
+        return (
+          <div className={classes.container}>
+            {localBaseServices?.sort().map((service, indx) => (
+              <FormControlLabel
+                key={indx}
+                control={
+                  <Checkbox
+                    checked={service.checked}
+                    onChange={event => handleChange(event, change)}
+                    id={service.id}
+                    name={service.name}
+                    color="secondary"
+                  />
+                }
+                label={service.name}
+                classes={{ label: classes.label, root: classes.root }}
+              />
+            ))}
+          </div>
+        );
+      }}
+    </Form>
   );
 };

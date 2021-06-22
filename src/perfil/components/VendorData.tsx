@@ -9,8 +9,11 @@ import { makeStyles } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import Form from "@saleor/components/Form";
 import React from "react";
 import Dropzone from "react-dropzone";
+
+import { useVendorMainImage, useVendorUpdate } from "../mutations";
 
 const useStylesVendor = makeStyles(
   theme => ({
@@ -31,6 +34,7 @@ const useStylesVendor = makeStyles(
       borderRadius: "50%",
       bottom: "10px",
       color: "#a8a8a8",
+      cursor: "pointer",
       height: "130px",
       left: "10px",
       padding: "55px 0",
@@ -81,7 +85,7 @@ const useStylesVendor = makeStyles(
       display: "grid",
       gridColumnGap: theme.spacing(2),
       gridRowGap: theme.spacing(3),
-      gridTemplateColumns: "1fr 1fr",
+
       gridTemplateRows: "260px 1fr "
     },
     textarea: {
@@ -95,23 +99,38 @@ const useStylesVendor = makeStyles(
   { name: "CustomerCreateDetails" }
 );
 
+interface Certificate {
+  file?: any;
+  url?: string;
+  title?: string;
+  position: string | number;
+}
+const initCert: Certificate[] = ["1", "2", "3", "4", "5"].map(pos => ({
+  file: "",
+  position: pos,
+  title: "",
+  url: ""
+}));
+
 export const VendorData = props => {
   const {
-    setSelectedBanner,
-    setSelectedAvatar,
-    setAvatarFile,
-    setBannerFile,
-    setCoordinates,
-
-    selectedBanner,
-    selectedAvatar,
     triggerChange,
-
-    change,
-    data,
+    setHasChanges,
+    perfilVendorData,
     user,
     vendor
   } = props;
+
+  const [useVendorUpdateFunc, statesVendorUpdate] = useVendorUpdate({});
+  const [useMainImageUpdateFunc, stateMainImageUpadte] = useVendorMainImage({});
+
+  const [selectedBanner, setSelectedBanner] = React.useState<string>("");
+  const [bannerFile, setBannerFile] = React.useState<any>("");
+
+  const [coordinates, setCoordinates] = React.useState({ lat: "", lon: "" });
+
+  const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
+  const [avatarFile, setAvatarFile] = React.useState<any>("");
 
   const classesVendor = useStylesVendor(selectedBanner);
 
@@ -134,6 +153,17 @@ export const VendorData = props => {
   const [loading, setLoading] = React.useState(true);
   const mountedRef = React.useRef(true);
 
+  const initialFormVendor = {
+    mainImage: perfilVendorData && perfilVendorData.mainImage?.url
+  };
+
+  const initialFormLocation = {
+    city: perfilVendorData && perfilVendorData.location?.city,
+    id: user.id,
+    postalCode: perfilVendorData && perfilVendorData.location?.postalCode,
+    province: perfilVendorData && perfilVendorData.location?.province
+  };
+
   React.useEffect(
     () => () => {
       mountedRef.current = false;
@@ -150,16 +180,23 @@ export const VendorData = props => {
           result.provincias.map(provincia => provincia.nombre).sort()
         );
         setLoading(false);
-        if (data.province === "") {
+        if (initialFormLocation.province === "") {
           setLoading(false);
         }
-        if (data.province && data.province !== "") {
+        if (
+          initialFormLocation.province &&
+          initialFormLocation.province !== ""
+        ) {
           setLoading(true);
-          getCities(data.province);
+          getCities(initialFormLocation.province);
           return;
         }
       });
   }, []);
+
+  React.useEffect(() => {
+    setSelectedBanner(perfilVendorData.mainImage?.url);
+  }, [vendor]);
 
   const getCities = provincia => {
     if (!provincia) {
@@ -216,179 +253,239 @@ export const VendorData = props => {
     stringify: option => option.toString()
   });
 
+  const handleVendorSubmit = data => {
+    if (bannerFile !== "") {
+      useMainImageUpdateFunc({
+        variables: {
+          mainImage: bannerFile,
+          vendorId: user.vendorId
+        }
+      });
+    }
+    console.log("vendorData");
+  };
+
+  const handleLocationSubmit = data => {
+    useVendorUpdateFunc({
+      variables: {
+        city: data.city,
+        lat: coordinates.lat,
+        lon: coordinates.lon,
+        postalCode: data.postalCode,
+        province: data.province
+      }
+    });
+  };
+
   return (
     <>
       {loading ? (
         <CircularProgress />
       ) : (
         <div className={classesVendor.root}>
-          <div className={classesVendor.dropContainer}>
-            <InputLabel className={classesVendor.label}>
-              Imagen de Portada para tu Tienda
-            </InputLabel>
-            <div className={classesVendor.relative}>
-              <Dropzone
-                onDrop={e => {
-                  handleOnDropBanner(e);
-                  triggerChange();
-                  return;
-                }}
-              >
-                {({ isDragActive, getInputProps, getRootProps }) => (
-                  <div
-                    {...getRootProps()}
-                    className={`${classesVendor.dropzone} ${
-                      isDragActive ? classesVendor.dragActive : null
-                    }`}
-                    style={{
-                      background:
-                        selectedBanner !== ""
-                          ? `url(${selectedBanner}) center center / cover no-repeat`
-                          : "inherit",
-                      backgroundSize: selectedBanner !== "" ? "cover" : null
-                    }}
-                  >
-                    <input
-                      {...getInputProps()}
-                      accept="image/png, image/gif, image/jpeg, image/jpg"
-                      name="mainImage"
-                    />
-                    {selectedBanner ? null : "PORTADA"}
+          <Form
+            formId="vendorData"
+            initial={initialFormVendor}
+            onSubmit={handleVendorSubmit}
+          >
+            {({ change, data, hasChanged }) => {
+              React.useEffect(() => {
+                setHasChanges(prev => ({ ...prev, vendorData: hasChanged }));
+              }, [hasChanged]);
+              return (
+                <>
+                  <div id="vendor-data" className={classesVendor.dropContainer}>
+                    <InputLabel className={classesVendor.label}>
+                      Imagen de Portada para tu Tienda
+                    </InputLabel>
+                    <div className={classesVendor.relative}>
+                      <Dropzone
+                        onDrop={e => {
+                          handleOnDropBanner(e);
+                          triggerChange();
+                          return;
+                        }}
+                      >
+                        {({ isDragActive, getInputProps, getRootProps }) => (
+                          <div
+                            {...getRootProps()}
+                            className={`${classesVendor.dropzone} ${
+                              isDragActive ? classesVendor.dragActive : null
+                            }`}
+                            style={{
+                              background:
+                                selectedBanner !== ""
+                                  ? `url(${selectedBanner}) center center / cover no-repeat`
+                                  : "inherit",
+                              backgroundSize:
+                                selectedBanner !== "" ? "cover" : null
+                            }}
+                          >
+                            <input
+                              {...getInputProps()}
+                              accept="image/png, image/gif, image/jpeg, image/jpg"
+                              name="mainImage"
+                            />
+                            {selectedBanner ? null : "PORTADA"}
+                          </div>
+                        )}
+                      </Dropzone>
+                      <Dropzone
+                        onDrop={e => {
+                          handleOnDropAvatar(e);
+                          triggerChange();
+                        }}
+                      >
+                        {({ isDragActive, getInputProps, getRootProps }) => (
+                          <div
+                            {...getRootProps()}
+                            className={`${classesVendor.dropAvatar} ${
+                              isDragActive ? classesVendor.dragActive : null
+                            }`}
+                            style={{
+                              background:
+                                selectedAvatar !== ""
+                                  ? `url(${selectedAvatar}) center center no-repeat`
+                                  : undefined,
+                              backgroundSize:
+                                selectedAvatar !== "" ? "cover" : null,
+                              filter:
+                                selectedAvatar !== ""
+                                  ? "opacity(1)"
+                                  : "opacity(0.8)"
+                            }}
+                          >
+                            <input
+                              {...getInputProps()}
+                              accept="image/png, image/gif, image/jpeg, image/jpg"
+                            />
+
+                            {selectedAvatar ? null : "AVATAR"}
+                          </div>
+                        )}
+                      </Dropzone>
+                    </div>
+
+                    <div className={classesVendor.helper}>
+                      El tamaño recomendado es de 970px x 250px
+                    </div>
                   </div>
-                )}
-              </Dropzone>
-              <Dropzone
-                onDrop={e => {
-                  handleOnDropAvatar(e);
-                  triggerChange();
-                }}
-              >
-                {({ isDragActive, getInputProps, getRootProps }) => (
-                  <div
-                    {...getRootProps()}
-                    className={`${classesVendor.dropAvatar} ${
-                      isDragActive ? classesVendor.dragActive : null
-                    }`}
-                    style={{
-                      background:
-                        selectedAvatar !== ""
-                          ? `url(${selectedAvatar}) center center no-repeat`
-                          : undefined,
-                      backgroundSize: selectedAvatar !== "" ? "cover" : null,
-                      filter:
-                        selectedAvatar !== "" ? "opacity(1)" : "opacity(0.8)"
-                    }}
-                  >
-                    <input
-                      {...getInputProps()}
-                      accept="image/png, image/gif, image/jpeg, image/jpg"
+                  {user.userPermissions[0] ? null : (
+                    <div
+                      id="datePicker"
+                      className={classesVendor.datePickerContainer}
+                    >
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DatePicker
+                          className={classesVendor.datePicker}
+                          id="foundingYearInput"
+                          inputVariant="standard"
+                          label="Año de Fundación"
+                          name="foundingYear"
+                          autoOk
+                          variant="dialog"
+                          views={["year"]}
+                          value={data.foundingYear}
+                          maxDate={new Date()}
+                          onChange={date => {
+                            change({
+                              target: {
+                                name: "foundingYear",
+                                value: new Date(date.getFullYear(), 0, 1)
+                              }
+                            });
+                          }}
+                          InputLabelProps={{
+                            shrink: true
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                    </div>
+                  )}
+                  {user.userPermissions[0] ? null : (
+                    <TextField
+                      id="descripcion"
+                      label="Descripcion"
+                      name="description"
+                      onChange={change}
+                      multiline
+                      className={classesVendor.textarea}
                     />
+                  )}
+                </>
+              );
+            }}
+          </Form>
+          <Form
+            formId="locationData"
+            initial={initialFormLocation}
+            onSubmit={handleLocationSubmit}
+          >
+            {({ change, data, hasChanged }) => {
+              React.useEffect(() => {
+                setHasChanges(prev => ({ ...prev, locationData: hasChanged }));
+              }, [hasChanged]);
+              return (
+                <div id="ubicacion" className={classesVendor.location}>
+                  <div>
+                    <InputLabel id="provinceLabel">Provincia</InputLabel>
 
-                    {selectedAvatar ? null : "AVATAR"}
+                    <Autocomplete
+                      value={data.province}
+                      onChange={(event: any, newValue: string | null) => {
+                        change({
+                          target: { name: "province", value: newValue }
+                        });
+                        getCities(newValue);
+                        // console.log(data);
+                      }}
+                      filterOptions={filterOptions}
+                      options={provincias}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          name="province"
+                          variant="standard"
+                          inputProps={{
+                            ...params.inputProps,
+                            autoComplete: "new-password" // disable autocomplete and autofill
+                          }}
+                        />
+                      )}
+                    />
                   </div>
-                )}
-              </Dropzone>
-            </div>
+                  <div>
+                    <InputLabel id="cityLabel">Ciudad</InputLabel>
 
-            <div className={classesVendor.helper}>
-              El tamaño recomendado es de 970px x 250px
-            </div>
-          </div>
-          {user.userPermissions[0] ? null : (
-            <div id="datePicker" className={classesVendor.datePickerContainer}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DatePicker
-                  className={classesVendor.datePicker}
-                  id="foundingYearInput"
-                  inputVariant="standard"
-                  label="Año de Fundación"
-                  name="foundingYear"
-                  autoOk
-                  variant="dialog"
-                  views={["year"]}
-                  value={data.foundingYear}
-                  maxDate={new Date()}
-                  onChange={date => {
-                    change({
-                      target: {
-                        name: "foundingYear",
-                        value: new Date(date.getFullYear(), 0, 1)
-                      }
-                    });
-                  }}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                />
-              </MuiPickersUtilsProvider>
-            </div>
-          )}
-          <div id="ubicacion" className={classesVendor.location}>
-            <div>
-              <InputLabel id="provinceLabel">Provincia</InputLabel>
-
-              <Autocomplete
-                value={data.province}
-                onChange={(event: any, newValue: string | null) => {
-                  change({ target: { name: "province", value: newValue } });
-                  getCities(newValue);
-                  // console.log(data);
-                }}
-                filterOptions={filterOptions}
-                options={provincias}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    name="province"
-                    variant="standard"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "new-password" // disable autocomplete and autofill
-                    }}
-                  />
-                )}
-              />
-            </div>
-            <div>
-              <InputLabel id="cityLabel">Ciudad</InputLabel>
-
-              <Autocomplete
-                noOptionsText="Seleccione una Provincia"
-                options={ciudades && ciudades}
-                value={data.city}
-                fullWidth
-                onChange={(event: any, newValue: string | null) => {
-                  getCoordinates(newValue);
-                  change({ target: { name: "city", value: newValue } });
-                }}
-                renderInput={params => (
-                  <TextField {...params} name="city" variant="standard" />
-                )}
-              />
-            </div>
-            <div>
-              <InputLabel id="postalCodeLabel">C.P.:</InputLabel>
-              <TextField
-                id="postalCode"
-                value={data.postalCode}
-                name="postalCode"
-                onChange={change}
-                variant="standard"
-                fullWidth
-              />
-            </div>
-          </div>
-
-          {user.userPermissions[0] ? null : (
-            <TextField
-              id="descripcion"
-              label="Descripcion"
-              name="description"
-              onChange={change}
-              multiline
-              className={classesVendor.textarea}
-            />
-          )}
+                    <Autocomplete
+                      noOptionsText="Seleccione una Provincia"
+                      options={ciudades && ciudades}
+                      value={data.city}
+                      fullWidth
+                      onChange={(event: any, newValue: string | null) => {
+                        getCoordinates(newValue);
+                        change({ target: { name: "city", value: newValue } });
+                      }}
+                      renderInput={params => (
+                        <TextField {...params} name="city" variant="standard" />
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <InputLabel id="postalCodeLabel">C.P.:</InputLabel>
+                    <TextField
+                      id="postalCode"
+                      value={data.postalCode}
+                      name="postalCode"
+                      onChange={change}
+                      variant="standard"
+                      fullWidth
+                    />
+                  </div>
+                </div>
+              );
+            }}
+          </Form>
         </div>
       )}
     </>

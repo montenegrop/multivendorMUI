@@ -2,11 +2,16 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { CategoryFilterInput, CategorySortingInput } from "./../../types/globalTypes";
+import { CategoryFilterInput } from "./../../types/globalTypes";
 
 // ====================================================
 // GraphQL query operation: RootCategories
 // ====================================================
+
+export interface RootCategories_categories_edges_node_parent {
+  __typename: "Category";
+  name: string;
+}
 
 export interface RootCategories_categories_edges_node_children {
   __typename: "CategoryCountableConnection";
@@ -22,6 +27,8 @@ export interface RootCategories_categories_edges_node {
   __typename: "Category";
   id: string;
   name: string;
+  level: number;
+  parent: RootCategories_categories_edges_node_parent | null;
   children: RootCategories_categories_edges_node_children | null;
   products: RootCategories_categories_edges_node_products | null;
 }
@@ -55,5 +62,4 @@ export interface RootCategoriesVariables {
   last?: number | null;
   before?: string | null;
   filter?: CategoryFilterInput | null;
-  sort?: CategorySortingInput | null;
 }

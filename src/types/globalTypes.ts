@@ -102,13 +102,6 @@ export enum AttributeTypeEnum {
   PRODUCT_TYPE = "PRODUCT_TYPE",
 }
 
-export enum CategorySortField {
-  NAME = "NAME",
-  PRODUCT_COUNT = "PRODUCT_COUNT",
-  RELEVANCE = "RELEVANCE",
-  SUBCATEGORY_COUNT = "SUBCATEGORY_COUNT",
-}
-
 export enum ChannelErrorCode {
   ALREADY_EXISTS = "ALREADY_EXISTS",
   CHANNELS_CURRENCY_MUST_BE_THE_SAME = "CHANNELS_CURRENCY_MUST_BE_THE_SAME",
@@ -1117,12 +1110,6 @@ export interface CategoryInput {
   seo?: SeoInput | null;
   backgroundImage?: any | null;
   backgroundImageAlt?: string | null;
-}
-
-export interface CategorySortingInput {
-  direction: OrderDirection;
-  channel?: string | null;
-  field: CategorySortField;
 }
 
 export interface ChannelCreateInput {

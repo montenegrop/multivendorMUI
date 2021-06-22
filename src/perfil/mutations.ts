@@ -41,7 +41,7 @@ const userVendorUpdate = gql`
 export const useVendorUpdate = makeMutation(userVendorUpdate);
 
 const userVendorMainImage = gql`
-  mutation VendorImageCreateOrUpdate($vendorId: ID!, $mainImage: Upload!) {
+  mutation VendorMainImageCreateOrUpdate($vendorId: ID!, $mainImage: Upload!) {
     vendorImageCreateOrUpdate(
       input: { vendorId: $vendorId, image: $mainImage }
     ) {
@@ -55,8 +55,23 @@ const userVendorMainImage = gql`
 
 export const useVendorMainImage = makeMutation(userVendorMainImage);
 
+const vendorAvatar = gql`
+mutation VendorAvatarUpdate ($vendorId: ID, $image:Upload) {
+  vendorImageCreateOrUpdate(
+    input: {
+      vendorId: $vendorId
+      image: $Upload
+    }
+   	isAvatar: true 
+  ) {
+    imageUrl
+  }
+}`
+export const useVendorAvatarImage = makeMutation(vendorAvatar);
+
+
 const userVendorServiceImage = gql`
-  mutation VendorImageCreateOrUpdate(
+  mutation VendorServiceImageCreateOrUpdate(
     $vendorId: ID!
     $serviceImage: Upload!
     $title: String
@@ -153,9 +168,11 @@ export const socialMediaUpdate = gql`
         { code: "TW", userString: $TW }
       ]
     ) {
-      socialMedia
+      socialMedia{
+        url
+      }
     }
   }
 `;
 
-export const useSocialMediaUpdate = makeMutation<any, any>(updateServices);
+export const useSocialMediaUpdate = makeMutation<any, any>(socialMediaUpdate);
