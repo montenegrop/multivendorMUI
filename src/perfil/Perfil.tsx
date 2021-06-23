@@ -13,6 +13,7 @@ import React, { useEffect } from "react";
 import Container from "../components/Container";
 import Form from "../components/Form";
 import PageHeader from "../components/PageHeader";
+import useNotifier from "../hooks/useNotifier";
 import { UserTypeOfIdentification } from "../types/globalTypes";
 import { DropCertificates } from "./components/DropCertificates";
 import { ServicesCheckboxes } from "./components/ServicesCheckboxes";
@@ -141,8 +142,12 @@ const Perfil: React.FC = props => {
       setCertificates(newCerts);
     }
   }, [vendor]);
-
+  const notify = useNotifier();
   const handleBulkSubmit = () => {
+    notify({
+      status: "info",
+      text: "Guardando ...."
+    });
     Object.keys(hasChanges).forEach(data => {
       if (hasChanges[data] === true) {
         const form = document.getElementById(

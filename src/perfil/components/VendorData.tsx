@@ -260,10 +260,6 @@ export const VendorData = props => {
 
   const handleVendorSubmit = data => {
     if (bannerFile !== "") {
-      notify({
-        status: "info",
-        text: "Guardando ...."
-      });
       useMainImageUpdateFunc({
         variables: {
           mainImage: bannerFile,
@@ -284,10 +280,6 @@ export const VendorData = props => {
       });
     }
     if (avatarFile !== "") {
-      notify({
-        status: "info",
-        text: "Guardando ...."
-      });
       useAvatarUpdateFunc({
         variables: {
           image: avatarFile,
@@ -311,11 +303,6 @@ export const VendorData = props => {
   };
 
   const handleLocationSubmit = data => {
-    notify({
-      status: "info",
-      text: "Guardando ...."
-    });
-
     useVendorUpdateFunc({
       variables: {
         city: data.city,

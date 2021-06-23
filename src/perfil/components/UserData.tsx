@@ -68,11 +68,6 @@ const UserData: React.FC<IProps> = props => {
     const mandatoryDataIsFilled = !Object.values(error).includes(true);
 
     if (mandatoryDataIsFilled) {
-      notify({
-        status: "info",
-        text: "Guardando ...."
-      });
-
       useUserUpdateFunc({
         variables: {
           email: data.email.trim(),
@@ -85,6 +80,7 @@ const UserData: React.FC<IProps> = props => {
         }
       })
         .then(data => {
+          // console.log(data);
           if (data.data.accountUpdate.accountErrors.length > 0) {
             notify({
               status: "error",

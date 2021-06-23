@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core";
 import React from "react";
 
 import Form from "../../components/Form";
+import useNotifier from "../../hooks/useNotifier";
 import FacebookIcon from "../../icons/FacebookIcon";
 import InstagramIcon from "../../icons/InstragramIcon";
 import TwitterIcon from "../../icons/TwitterIcon";
@@ -65,11 +66,10 @@ const SocialMedia = props => {
     label: "Usuario"
   };
 
+  const notify = useNotifier();
+
   const handleSubmit = data => {
-    // console.log(data);
     Object.keys(data).forEach(social => {
-      //  console.log(social);
-      //  console.log(data[social]);
       if (
         data[social] &&
         data[social] !== "" &&
@@ -79,6 +79,14 @@ const SocialMedia = props => {
           variables: {
             code: social,
             userString: data[social]
+          }
+        }).then(data => {
+          if (data.data.vendorSocialMediaUpdate.socialMedia[0].url) {
+            notify({
+              status: "success",
+              text: "Guardado con Exito"
+            });
+            return;
           }
         });
       }
