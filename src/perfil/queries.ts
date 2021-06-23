@@ -21,6 +21,11 @@ const perfilVendorData = gql`
       avatarImage {
         url
       }
+      socialMedia {
+        code
+        userString
+        url
+      }
       location {
         country
         province

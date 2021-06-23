@@ -47,18 +47,18 @@ const useStyles = makeStyles(
 );
 
 const SocialMedia = props => {
-  const { setHasChanges } = props;
+  const { setHasChanges, socialMedia } = props;
   const classes = useStyles(props);
   const [socialMediaUpdateFunc, stateSocialMediaUpdate] = useSocialMediaUpdate(
     {}
   );
 
   const initialForm = {
-    facebook: "",
-    instagram: "",
-    linkedin: "",
-    twitter: "",
-    youtube: ""
+    FB: socialMedia.find(social => social.code === "FB").userString,
+    IG: socialMedia.find(social => social.code === "IG").userString,
+    LK: "",
+    TW: socialMedia.find(social => social.code === "TW").userString,
+    YT: ""
   };
 
   const message = {
@@ -66,11 +66,21 @@ const SocialMedia = props => {
   };
 
   const handleSubmit = data => {
-    socialMediaUpdateFunc({
-      variables: {
-        FB: data.facebook,
-        IG: data.instagram,
-        TW: data.twitter
+    // console.log(data);
+    Object.keys(data).forEach(social => {
+      //  console.log(social);
+      //  console.log(data[social]);
+      if (
+        data[social] &&
+        data[social] !== "" &&
+        data[social] !== initialForm[social]
+      ) {
+        socialMediaUpdateFunc({
+          variables: {
+            code: social,
+            userString: data[social]
+          }
+        });
       }
     });
   };
@@ -94,12 +104,12 @@ const SocialMedia = props => {
               </InputLabel>
               <TextField
                 label={message.label}
-                name="facebook"
+                name="FB"
                 className={classes.textfield}
-                value={data.facebook}
+                value={data.FB}
                 onChange={change}
               />
-              <p>https://www.facebook.com/{data.facebook}</p>
+              <p>https://www.facebook.com/{data.FB}</p>
             </div>
             <div className={`${classes.column}`}>
               <InputLabel className={`${classes.svg}`}>
@@ -107,12 +117,12 @@ const SocialMedia = props => {
               </InputLabel>
               <TextField
                 label={message.label}
-                name="instagram"
+                name="IG"
                 className={classes.textfield}
-                value={data.instagram}
+                value={data.IG}
                 onChange={change}
               />
-              <p>https://www.instagram.com/{data.instagram}</p>
+              <p>https://www.instagram.com/{data.IG}</p>
             </div>
             <div className={`${classes.column}`}>
               <InputLabel className={`${classes.svg}`}>
@@ -120,12 +130,12 @@ const SocialMedia = props => {
               </InputLabel>
               <TextField
                 label={message.label}
-                name="youtube"
+                name="YT"
                 className={classes.textfield}
-                value={data.youtube}
+                value={data.YT}
                 onChange={change}
               />
-              <p>https://www.youtube.com/{data.youtube}</p>
+              <p>https://www.youtube.com/{data.YT}</p>
             </div>
             <div className={`${classes.column}`}>
               <InputLabel className={`${classes.svg}`}>
@@ -133,12 +143,12 @@ const SocialMedia = props => {
               </InputLabel>
               <TextField
                 label={message.label}
-                name="twitter"
+                name="TW"
                 className={classes.textfield}
-                value={data.twitter}
+                value={data.TW}
                 onChange={change}
               />
-              <p>https://www.twitter.com/{data.twitter}</p>
+              <p>https://www.twitter.com/{data.TW}</p>
             </div>
           </div>
         );

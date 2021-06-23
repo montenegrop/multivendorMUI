@@ -228,7 +228,10 @@ const Perfil: React.FC = props => {
             <Card>
               <CardTitle title="Redes Sociales" />
               <CardContent>
-                <SocialMedia setHasChanges={setHasChanges} />
+                <SocialMedia
+                  setHasChanges={setHasChanges}
+                  socialMedia={perfilVendorData.socialMedia}
+                />
               </CardContent>
             </Card>
           </>
