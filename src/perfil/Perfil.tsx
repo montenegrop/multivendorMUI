@@ -173,12 +173,14 @@ const Perfil: React.FC = props => {
               classes={classes}
               user={user}
               setHasChanges={setHasChanges}
+              hasChanges={hasChanges}
             />
             <CardSpacer />
             <Card id="vendor-data">
               <CardTitle title={"Lo que va a ver tu Cliente"} />
               <CardContent>
                 <VendorData
+                  hasChanges={hasChanges}
                   setHasChanges={setHasChanges}
                   perfilVendorData={perfilVendorData}
                   user={user}

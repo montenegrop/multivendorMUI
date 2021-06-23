@@ -5,7 +5,9 @@
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
-
+export interface CategorySortField {
+  data: any
+}
 export enum AccountErrorCode {
   ACTIVATE_OWN_ACCOUNT = "ACTIVATE_OWN_ACCOUNT",
   ACTIVATE_SUPERUSER_ACCOUNT = "ACTIVATE_SUPERUSER_ACCOUNT",

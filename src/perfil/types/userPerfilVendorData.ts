@@ -24,6 +24,8 @@ export interface userPerfilVendorData_vendor_location {
   province: string;
   city: string;
   postalCode: string;
+  lat: string;
+  lon: string;
 }
 
 export interface userPerfilVendorData_vendor_services_edges_node {

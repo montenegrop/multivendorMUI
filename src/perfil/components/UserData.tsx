@@ -32,10 +32,11 @@ interface IProps {
   user: any;
   classes: any;
   setHasChanges: Dispatch<SetStateAction<any>>;
+  hasChanges: any;
 }
 
 const UserData: React.FC<IProps> = props => {
-  const { user, classes, setHasChanges } = props;
+  const { user, classes, setHasChanges, hasChanges } = props;
   const [useUserUpdateFunc, stateUserUpdate] = useUserUpdate({});
   const [error, setError] = React.useState<MandatoryData>({
     email: false,
@@ -84,11 +85,10 @@ const UserData: React.FC<IProps> = props => {
         }
       })
         .then(data => {
-          console.log(data);
-          if (data.data.accountUpdate.accountErrors) {
+          if (data.data.accountUpdate.accountErrors.length > 0) {
             notify({
               status: "error",
-              text: `Hubo un error: ${data.data.accountUpdate.accountErrors[0].message}`
+              text: `Hubo un error: ${data.data.accountUpdate.accountErrors[0]?.message}`
             });
             return;
           }
@@ -97,7 +97,7 @@ const UserData: React.FC<IProps> = props => {
             text: "Guardado con Exito"
           });
         })
-        .catch(() => {
+        .catch(error => {
           notify({
             status: "error",
             text: "Hubo un error"
@@ -108,10 +108,15 @@ const UserData: React.FC<IProps> = props => {
 
   return (
     <Form formId="userData" initial={initialForm} onSubmit={handleSubmit}>
-      {({ change, data, hasChanged }) => {
+      {({ change, data, hasChanged, triggerChange }) => {
         React.useEffect(() => {
           setHasChanges(prev => ({ ...prev, userData: hasChanged }));
         }, [hasChanged]);
+        React.useEffect(() => {
+          if (hasChanges.userData === false) {
+            triggerChange(false);
+          }
+        }, [hasChanges]);
         return (
           <>
             <Card id="user-data">

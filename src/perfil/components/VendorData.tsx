@@ -13,7 +13,12 @@ import Form from "@saleor/components/Form";
 import React from "react";
 import Dropzone from "react-dropzone";
 
-import { useVendorMainImage, useVendorUpdate } from "../mutations";
+import useNotifier from "../../hooks/useNotifier";
+import {
+  useVendorAvatarImage,
+  useVendorMainImage,
+  useVendorUpdate
+} from "../mutations";
 
 const useStylesVendor = makeStyles(
   theme => ({
@@ -113,21 +118,19 @@ const initCert: Certificate[] = ["1", "2", "3", "4", "5"].map(pos => ({
 }));
 
 export const VendorData = props => {
-  const {
-    triggerChange,
-    setHasChanges,
-    perfilVendorData,
-    user,
-    vendor
-  } = props;
+  const { hasChanges, setHasChanges, perfilVendorData, user, vendor } = props;
 
   const [useVendorUpdateFunc, statesVendorUpdate] = useVendorUpdate({});
   const [useMainImageUpdateFunc, stateMainImageUpadte] = useVendorMainImage({});
+  const [useAvatarUpdateFunc, stateAvatarUpdate] = useVendorAvatarImage({});
 
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
-  const [coordinates, setCoordinates] = React.useState({ lat: "", lon: "" });
+  const [coordinates, setCoordinates] = React.useState({
+    lat: perfilVendorData.location.lat,
+    lon: perfilVendorData.location.lon
+  });
 
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
   const [avatarFile, setAvatarFile] = React.useState<any>("");
@@ -152,6 +155,7 @@ export const VendorData = props => {
   const [ciudades, setCiudades] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const mountedRef = React.useRef(true);
+  const notify = useNotifier();
 
   const initialFormVendor = {
     mainImage: perfilVendorData && perfilVendorData.mainImage?.url
@@ -196,6 +200,7 @@ export const VendorData = props => {
 
   React.useEffect(() => {
     setSelectedBanner(perfilVendorData.mainImage?.url);
+    setSelectedAvatar(perfilVendorData.avatarImage?.url);
   }, [vendor]);
 
   const getCities = provincia => {
@@ -255,17 +260,62 @@ export const VendorData = props => {
 
   const handleVendorSubmit = data => {
     if (bannerFile !== "") {
+      notify({
+        status: "info",
+        text: "Guardando ...."
+      });
       useMainImageUpdateFunc({
         variables: {
           mainImage: bannerFile,
           vendorId: user.vendorId
         }
+      }).then(data => {
+        if (data.data.vendorImageCreateOrUpdate.vendor.mainImage.url) {
+          notify({
+            status: "success",
+            text: "Guardado con Exito"
+          });
+          return;
+        }
+        notify({
+          status: "error",
+          text: `Hubo un error al subir el Banner`
+        });
       });
     }
-    console.log("vendorData");
+    if (avatarFile !== "") {
+      notify({
+        status: "info",
+        text: "Guardando ...."
+      });
+      useAvatarUpdateFunc({
+        variables: {
+          image: avatarFile,
+          vendorId: user.vendorId
+        }
+      }).then(data => {
+        if (data.data.vendorImageCreateOrUpdate.imageUrl) {
+          notify({
+            status: "success",
+            text: "Guardado con Exito"
+          });
+          return;
+        }
+        notify({
+          status: "error",
+          text: `Hubo un error al subir el Avatar`
+        });
+      });
+      // .catch(error => console.log(error));
+    }
   };
 
   const handleLocationSubmit = data => {
+    notify({
+      status: "info",
+      text: "Guardando ...."
+    });
+
     useVendorUpdateFunc({
       variables: {
         city: data.city,
@@ -274,7 +324,20 @@ export const VendorData = props => {
         postalCode: data.postalCode,
         province: data.province
       }
+    }).then(data => {
+      if (data.data.vendorLocationCreateOrUpdate.vendorLocation.lon) {
+        notify({
+          status: "success",
+          text: "Guardado con Exito"
+        });
+        return;
+      }
+      notify({
+        status: "error",
+        text: `Hubo un error al cambiar tu locacion`
+      });
     });
+    // .catch(error => console.log(error));
   };
 
   return (
@@ -288,10 +351,15 @@ export const VendorData = props => {
             initial={initialFormVendor}
             onSubmit={handleVendorSubmit}
           >
-            {({ change, data, hasChanged }) => {
+            {({ change, data, hasChanged, triggerChange }) => {
               React.useEffect(() => {
                 setHasChanges(prev => ({ ...prev, vendorData: hasChanged }));
               }, [hasChanged]);
+              React.useEffect(() => {
+                if (hasChanges.vendorData === false) {
+                  triggerChange(false);
+                }
+              }, [hasChanges]);
               return (
                 <>
                   <div id="vendor-data" className={classesVendor.dropContainer}>
@@ -303,7 +371,6 @@ export const VendorData = props => {
                         onDrop={e => {
                           handleOnDropBanner(e);
                           triggerChange();
-                          return;
                         }}
                       >
                         {({ isDragActive, getInputProps, getRootProps }) => (
@@ -344,7 +411,7 @@ export const VendorData = props => {
                             }`}
                             style={{
                               background:
-                                selectedAvatar !== ""
+                                selectedAvatar !== "" && selectedAvatar
                                   ? `url(${selectedAvatar}) center center no-repeat`
                                   : undefined,
                               backgroundSize:
@@ -421,10 +488,15 @@ export const VendorData = props => {
             initial={initialFormLocation}
             onSubmit={handleLocationSubmit}
           >
-            {({ change, data, hasChanged }) => {
+            {({ change, data, hasChanged, triggerChange }) => {
               React.useEffect(() => {
                 setHasChanges(prev => ({ ...prev, locationData: hasChanged }));
               }, [hasChanged]);
+              React.useEffect(() => {
+                if (hasChanges.locationData === false) {
+                  triggerChange(false);
+                }
+              }, [hasChanges]);
               return (
                 <div id="ubicacion" className={classesVendor.location}>
                   <div>

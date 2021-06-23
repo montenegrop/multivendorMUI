@@ -73,7 +73,6 @@ const SocialMedia = props => {
         TW: data.twitter
       }
     });
-    console.log("socialMediaData");
   };
 
   return (

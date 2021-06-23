@@ -106,7 +106,6 @@ export const ServicesCheckboxes: React.FC<IProps> = props => {
         services: vendorServices
       }
     });
-    console.log("serviceData");
   };
 
   return (

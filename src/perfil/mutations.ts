@@ -6,6 +6,18 @@ import {
   userDataMutationVariables
 } from "./types/userDataMutation";
 import {
+  VendorAvatarUpdate,
+  VendorAvatarUpdateVariables
+} from "./types/VendorAvatarUpdate";
+import {
+  vendorLocationCreateOrUpdate,
+  vendorLocationCreateOrUpdateVariables
+} from "./types/vendorLocationCreateOrUpdate";
+import {
+  VendorMainImageCreateOrUpdate,
+  VendorMainImageCreateOrUpdateVariables
+} from "./types/VendorMainImageCreateOrUpdate";
+import {
   VendorServicesUpdate,
   VendorServicesUpdateVariables
 } from "./types/VendorServicesUpdate";
@@ -38,7 +50,10 @@ const userVendorUpdate = gql`
   }
 `;
 
-export const useVendorUpdate = makeMutation(userVendorUpdate);
+export const useVendorUpdate = makeMutation<
+  vendorLocationCreateOrUpdate,
+  vendorLocationCreateOrUpdateVariables
+>(userVendorUpdate);
 
 const userVendorMainImage = gql`
   mutation VendorMainImageCreateOrUpdate($vendorId: ID!, $mainImage: Upload!) {
@@ -46,29 +61,35 @@ const userVendorMainImage = gql`
       input: { vendorId: $vendorId, image: $mainImage }
     ) {
       vendor {
-        id
-        name
+        mainImage {
+          url
+        }
       }
     }
   }
 `;
 
-export const useVendorMainImage = makeMutation(userVendorMainImage);
+export const useVendorMainImage = makeMutation<
+  VendorMainImageCreateOrUpdate,
+  VendorMainImageCreateOrUpdateVariables
+>(userVendorMainImage);
 
 const vendorAvatar = gql`
 mutation VendorAvatarUpdate ($vendorId: ID, $image:Upload) {
   vendorImageCreateOrUpdate(
     input: {
-      vendorId: $vendorId
-      image: $Upload
+      vendorId: $vendorId!
+      image: $Upload!
     }
    	isAvatar: true 
   ) {
     imageUrl
   }
-}`
-export const useVendorAvatarImage = makeMutation(vendorAvatar);
-
+}`;
+export const useVendorAvatarImage = makeMutation<
+  VendorAvatarUpdate,
+  VendorAvatarUpdateVariables
+>(vendorAvatar);
 
 const userVendorServiceImage = gql`
   mutation VendorServiceImageCreateOrUpdate(
@@ -168,7 +189,7 @@ export const socialMediaUpdate = gql`
         { code: "TW", userString: $TW }
       ]
     ) {
-      socialMedia{
+      socialMedia {
         url
       }
     }

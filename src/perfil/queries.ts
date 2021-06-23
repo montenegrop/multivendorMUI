@@ -26,6 +26,8 @@ const perfilVendorData = gql`
         province
         city
         postalCode
+        lat
+        lon
       }
       services(first: 20) {
         edges {

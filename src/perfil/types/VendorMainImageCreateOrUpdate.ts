@@ -6,10 +6,14 @@
 // GraphQL mutation operation: VendorMainImageCreateOrUpdate
 // ====================================================
 
+export interface VendorMainImageCreateOrUpdate_vendorImageCreateOrUpdate_vendor_mainImage {
+  __typename: "VendorMainImage";
+  url: string | null;
+}
+
 export interface VendorMainImageCreateOrUpdate_vendorImageCreateOrUpdate_vendor {
   __typename: "Vendor";
-  id: string;
-  name: string;
+  mainImage: VendorMainImageCreateOrUpdate_vendorImageCreateOrUpdate_vendor_mainImage | null;
 }
 
 export interface VendorMainImageCreateOrUpdate_vendorImageCreateOrUpdate {
