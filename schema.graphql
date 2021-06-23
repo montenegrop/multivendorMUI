@@ -86,11 +86,7 @@ input AccountInput {
   lastName: String
   defaultBillingAddress: AddressInput
   defaultShippingAddress: AddressInput
-  typeOfIdentification: String
-  identification: String
-  phone: String
   vendorSlug: String
-  email: String
 }
 
 type AccountRegister {
@@ -794,49 +790,6 @@ enum AuthorizationKeyType {
   GOOGLE_OAUTH2
 }
 
-type BaseProduct implements Node & ObjectWithMetadata {
-  id: ID!
-  productType: ProductType
-  category: Category
-  name: String!
-  slug: String!
-  privateMetadata: [MetadataItem]!
-  metadata: [MetadataItem]!
-  images: [PastExperienceImage]
-}
-
-type BaseProductCountableConnection {
-  pageInfo: PageInfo!
-  edges: [BaseProductCountableEdge!]!
-  totalCount: Int
-}
-
-type BaseProductCountableEdge {
-  node: BaseProduct!
-  cursor: String!
-}
-
-type BaseProductCreate {
-  errors: [Error!]!
-    @deprecated(
-      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
-    )
-  productErrors: [ProductError!]!
-  baseProduct: BaseProduct
-}
-
-input BaseProductCreateInput {
-  productType: ID!
-  category: ID
-  name: String
-  slug: String
-}
-
-input BaseProductFilterInput {
-  search: String
-  ids: [ID]
-}
-
 input BulkAttributeValueInput {
   id: ID
   values: [String]!
@@ -875,7 +828,6 @@ type Category implements Node & ObjectWithMetadata {
   descriptionJson: JSONString!
   slug: String!
   parent: Category
-  relevance: Int!
   level: Int!
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
@@ -911,11 +863,6 @@ type CategoryBulkDelete {
     )
   count: Int!
   productErrors: [ProductError!]!
-}
-
-type CategoryBulkRelevanceSort {
-  errors: [String]
-  success: Boolean
 }
 
 type CategoryCountableConnection {
@@ -966,7 +913,6 @@ enum CategorySortField {
   NAME
   PRODUCT_COUNT
   SUBCATEGORY_COUNT
-  RELEVANCE
 }
 
 input CategorySortingInput {
@@ -1606,14 +1552,15 @@ type ConfirmEmailChange {
 
 enum CountryCode {
   AF
+  AX
   AL
-  DE
+  DZ
+  AS
+  AD
   AO
   AI
   AQ
   AG
-  SA
-  DZ
   AR
   AM
   AW
@@ -1621,110 +1568,99 @@ enum CountryCode {
   AT
   AZ
   BS
+  BH
   BD
   BB
-  BH
+  BY
   BE
   BZ
   BJ
   BM
-  BY
-  MM
+  BT
   BO
   BQ
   BA
   BW
+  BV
   BR
+  IO
   BN
   BG
   BF
   BI
-  BT
   CV
   KH
   CM
   CA
-  QA
-  CZ
+  KY
+  CF
+  TD
   CL
   CN
+  CX
+  CC
   CO
   KM
   CG
-  KP
-  KR
+  CD
+  CK
   CR
   CI
   HR
   CU
   CW
+  CY
+  CZ
   DK
+  DJ
   DM
+  DO
   EC
   EG
   SV
-  AE
+  GQ
   ER
-  SK
-  SI
-  ES
-  PS
-  FM
-  US
   EE
+  SZ
   ET
   EU
-  PH
-  FI
+  FK
+  FO
   FJ
+  FI
   FR
+  GF
+  PF
+  TF
   GA
   GM
   GE
+  DE
   GH
   GI
-  GD
   GR
   GL
+  GD
   GP
   GU
   GT
-  GF
   GG
   GN
-  GQ
   GW
   GY
   HT
+  HM
+  VA
   HN
   HK
   HU
+  IS
   IN
   ID
-  IQ
   IR
+  IQ
   IE
-  BV
-  NF
   IM
-  CX
-  IS
-  KY
-  CC
-  CK
-  FO
-  GS
-  HM
-  FK
-  MP
-  MH
-  PN
-  SB
-  TC
-  UM
-  VG
-  VI
-  AX
   IL
   IT
   JM
@@ -1733,125 +1669,135 @@ enum CountryCode {
   JO
   KZ
   KE
-  KG
   KI
   KW
+  KG
   LA
-  LS
   LV
   LB
+  LS
   LR
   LY
   LI
   LT
   LU
   MO
-  MK
   MG
-  MY
   MW
+  MY
   MV
   ML
   MT
-  MA
+  MH
   MQ
-  MU
   MR
+  MU
   YT
   MX
+  FM
   MD
   MC
   MN
   ME
   MS
+  MA
   MZ
+  MM
   NA
   NR
   NP
+  NL
+  NC
+  NZ
   NI
   NE
   NG
   NU
+  NF
+  KP
+  MK
+  MP
   NO
-  NC
-  NZ
   OM
-  NL
   PK
   PW
+  PS
   PA
   PG
   PY
   PE
-  PF
+  PH
+  PN
   PL
   PT
-  AD
   PR
-  GB
-  CD
-  DO
-  TZ
-  CF
-  CY
-  DJ
-  TD
+  QA
   RE
-  RW
   RO
   RU
-  EH
-  WS
-  AS
+  RW
   BL
+  SH
   KN
-  SM
+  LC
   MF
-  SX
   PM
   VC
-  SH
-  LC
-  VA
+  WS
+  SM
   ST
+  SA
   SN
   RS
   SC
   SL
   SG
-  SY
+  SX
+  SK
+  SI
+  SB
   SO
-  LK
-  SZ
   ZA
-  SD
+  GS
+  KR
   SS
-  SE
-  CH
+  ES
+  LK
+  SD
   SR
   SJ
-  TH
+  SE
+  CH
+  SY
   TW
   TJ
-  IO
-  TF
+  TZ
+  TH
   TL
   TG
   TK
   TO
   TT
   TN
-  TM
   TR
+  TM
+  TC
   TV
-  UA
   UG
+  UA
+  AE
+  GB
+  UM
+  US
   UY
   UZ
   VU
   VE
   VN
+  VG
+  VI
   WF
+  EH
   YE
   ZM
   ZW
@@ -2243,13 +2189,6 @@ type DraftOrderUpdate {
 type Error {
   field: String
   message: String
-}
-
-type ExperienceLocation {
-  id: ID!
-  country: String!
-  province: String!
-  city: String!
 }
 
 type ExportError {
@@ -3020,16 +2959,7 @@ input MoveProductInput {
 }
 
 type Mutation {
-  vendorCreateOrUpdate(
-    id: ID
-    input: VendorCreateOrUpdateInput!
-  ): VendorCreateOrUpdate
-  vendorLocationCreateOrUpdate(
-    id: ID
-    input: VendorLocationCreateOrUpdateInput!
-  ): VendorLocationCreateOrUpdate
-  vendorImageCreateOrUpdate(input: VendorImageCreateInput): VendorImageCreate
-  vendorServicesUpdate(services: [ID]!): VendorServicesUpdate
+  vendorCreate(input: VendorInput!): VendorRegister
   webhookCreate(input: WebhookCreateInput!): WebhookCreate
   webhookDelete(id: ID!): WebhookDelete
   webhookUpdate(id: ID!, input: WebhookUpdateInput!): WebhookUpdate
@@ -3110,7 +3040,6 @@ type Mutation {
   categoryCreate(input: CategoryInput!, parent: ID): CategoryCreate
   categoryDelete(id: ID!): CategoryDelete
   categoryBulkDelete(ids: [ID]!): CategoryBulkDelete
-  categoryBulkRelevanceSort(ids: [ID]!): CategoryBulkRelevanceSort
   categoryUpdate(id: ID!, input: CategoryInput!): CategoryUpdate
   categoryTranslate(
     id: ID!
@@ -3227,14 +3156,6 @@ type Mutation {
   ): ProductVariantChannelListingUpdate
   variantImageAssign(imageId: ID!, variantId: ID!): VariantImageAssign
   variantImageUnassign(imageId: ID!, variantId: ID!): VariantImageUnassign
-  pastExperienceCreate(
-    id: ID
-    input: PastExperienceCreateInput!
-  ): PastExperienceCreate
-  baseProductCreate(input: BaseProductCreateInput!): BaseProductCreate
-  pastExperienceImageCreate(
-    input: PastExperienceImageCreateInput!
-  ): PastExperienceImageCreate
   paymentCapture(amount: PositiveDecimal, paymentId: ID!): PaymentCapture
   paymentRefund(amount: PositiveDecimal, paymentId: ID!): PaymentRefund
   paymentVoid(paymentId: ID!): PaymentVoid
@@ -3496,7 +3417,7 @@ type Mutation {
     type: AddressTypeEnum!
   ): AccountSetDefaultAddress
   accountRegister(input: AccountRegisterInput!): AccountRegister
-  accountUpdate(id: ID, input: AccountInput!): AccountUpdate
+  accountUpdate(input: AccountInput!): AccountUpdate
   accountRequestDeletion(redirectUrl: String!): AccountRequestDeletion
   accountDelete(token: String!): AccountDelete
   addressCreate(input: AddressInput!, userId: ID!): AddressCreate
@@ -4297,78 +4218,6 @@ type PasswordChange {
   accountErrors: [AccountError!]!
 }
 
-type PastExperience implements Node {
-  id: ID!
-  location: ExperienceLocation
-  descriptionShort: String!
-  descriptionLong: String!
-  yearPerformed: Int
-  pastExperienceImages(
-    before: String
-    after: String
-    first: Int
-    last: Int
-  ): PastExperienceImageCountableConnection!
-}
-
-type PastExperienceCreate {
-  errors: [Error!]!
-    @deprecated(
-      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
-    )
-  productErrors: [ProductError!]!
-  pastExperience: PastExperience
-}
-
-input PastExperienceCreateInput {
-  serviceId: ID
-  country: String
-  province: String
-  city: String
-  descriptionShort: String
-  descriptionLong: String
-  yearPerformed: Int
-}
-
-type PastExperienceImage implements Node {
-  id: ID!
-  image: String!
-  ppoi: String!
-  alt: String!
-  pastExperience: PastExperience!
-  position: Int!
-  url(size: Int): String!
-}
-
-type PastExperienceImageCountableConnection {
-  pageInfo: PageInfo!
-  edges: [PastExperienceImageCountableEdge!]!
-  totalCount: Int
-}
-
-type PastExperienceImageCountableEdge {
-  node: PastExperienceImage!
-  cursor: String!
-}
-
-type PastExperienceImageCreate {
-  errors: [Error!]!
-    @deprecated(
-      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
-    )
-  pastExperience: PastExperience
-  image: PastExperienceImage
-  position: String
-  productErrors: [ProductError!]!
-}
-
-input PastExperienceImageCreateInput {
-  alt: String
-  position: String!
-  image: Upload!
-  pastExperience: ID!
-}
-
 type Payment implements Node {
   id: ID!
   gateway: String!
@@ -4694,7 +4543,6 @@ type Product implements Node & ObjectWithMetadata {
   translation(languageCode: LanguageCodeEnum!): ProductTranslation
   availableForPurchase: Date
   isAvailableForPurchase: Boolean
-  pastExperiences: [PastExperience]
 }
 
 type ProductAttributeAssign {
@@ -4879,7 +4727,6 @@ input ProductFilterInput {
   minimalPrice: PriceRangeInput
   productTypes: [ID]
   ids: [ID]
-  vendors: [ID]
   channel: String
 }
 
@@ -5394,14 +5241,7 @@ input PublishableChannelListingInput {
 }
 
 type Query {
-  vendors(
-    sortBy: VendorSortingInput
-    before: String
-    after: String
-    first: Int
-    last: Int
-  ): VendorCountableConnection
-  vendor(id: ID): Vendor
+  vendors: [VendorType]
   webhook(id: ID!): Webhook
   webhookEvents: [WebhookEvent]
   webhookSamplePayload(eventType: WebhookSampleEventTypeEnum!): JSONString
@@ -5468,14 +5308,6 @@ type Query {
     last: Int
   ): CollectionCountableConnection
   product(id: ID, slug: String, channel: String): Product
-  baseProducts(
-    vendorId: String
-    filter: BaseProductFilterInput
-    before: String
-    after: String
-    first: Int
-    last: Int
-  ): BaseProductCountableConnection
   products(
     filter: ProductFilterInput
     sortBy: ProductOrder
@@ -6717,9 +6549,6 @@ type User implements Node & ObjectWithMetadata {
   dateJoined: DateTime!
   defaultShippingAddress: Address
   defaultBillingAddress: Address
-  typeOfIdentification: UserTypeOfIdentification
-  identification: String!
-  phone: String!
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
   addresses: [Address]
@@ -6750,8 +6579,6 @@ type User implements Node & ObjectWithMetadata {
   avatar(size: Int): Image
   events: [CustomerEvent]
   storedPaymentSources: [PaymentSource]
-  vendorId: ID
-  vendorLocationId: ID
 }
 
 type UserAvatarDelete {
@@ -6821,12 +6648,6 @@ input UserSortingInput {
   field: UserSortField!
 }
 
-enum UserTypeOfIdentification {
-  EMPTY
-  DNI
-  PASAPORTE
-}
-
 type VAT {
   countryCode: String!
   standardRate: Float
@@ -6868,182 +6689,38 @@ type VariantPricingInfo {
   priceLocalCurrency: TaxedMoney
 }
 
-type Vendor implements Node & ObjectWithMetadata {
+input VendorInput {
+  description: String
+  name: String
+  slug: String
+  id: ID
+}
+
+type VendorRegister {
+  errors: [Error!]!
+    @deprecated(
+      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
+    )
+  vendor: VendorType
+}
+
+type VendorType {
   id: ID!
   name: String!
   slug: String!
-  relevance: Int!
   description: String!
-  bussiness: String!
-  foundingYear: Int
-  totalEmployess: Int
-  qualityNorms: String!
-  openHours: String!
-  billing: String!
-  email: String
-  websiteUrl: String!
-  phone: String!
-  address: String!
-  location: VendorLocation
-  services(
+  users(
     before: String
     after: String
     first: Int
     last: Int
-  ): BaseProductCountableConnection!
-  contacts: [VendorContact!]!
-  privateMetadata: [MetadataItem]!
-  metadata: [MetadataItem]!
-  pastExperiences: [PastExperience]
-  mainImage: VendorMainImage
-  serviceImages: [VendorServiceImage]
-  mainCategories: [Category]
-}
-
-type VendorContact {
-  id: ID!
-  Vendor: Vendor!
-  name: String!
-  phone: String!
-  email: String!
-  role: VendorContactRole!
-}
-
-enum VendorContactRole {
-  NONE
-  SALES
-  PURCHASING
-  INDEFINITE
-}
-
-type VendorCountableConnection {
-  pageInfo: PageInfo!
-  edges: [VendorCountableEdge!]!
-  totalCount: Int
-}
-
-type VendorCountableEdge {
-  node: Vendor!
-  cursor: String!
-}
-
-type VendorCreateOrUpdate {
-  errors: [Error!]!
-    @deprecated(
-      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
-    )
-  vendorErrors: [VendorError!]!
-  vendor: Vendor
-}
-
-input VendorCreateOrUpdateInput {
-  slug: String
-  name: String
-  description: String
-}
-
-type VendorError {
-  field: String
-  message: String
-  code: VendorErrorCode!
-}
-
-enum VendorErrorCode {
-  ALREADY_EXISTS
-  DUPLICATED_INPUT_ITEM
-  GRAPHQL_ERROR
-  INVALID
-  NOT_VENDOR_MAIN_IMAGE
-  NOT_VENDOR_IMAGES
-  NOT_FOUND
-  REQUIRED
-  UNIQUE
-}
-
-type VendorImageCreate {
-  errors: [Error!]!
-    @deprecated(
-      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
-    )
-  vendor: Vendor
-  imageUrl: String
-  vendorErrors: [VendorError!]!
-}
-
-input VendorImageCreateInput {
-  vendorId: ID!
-  image: Upload!
-  title: String
-  position: String
-  alt: String
-}
-
-type VendorLocation {
-  id: ID!
-  country: String!
-  province: String!
-  city: String!
-  postalCode: String!
-  lat: String!
-  lon: String!
-  vendorSet(
+  ): UserCountableConnection!
+  products(
     before: String
     after: String
     first: Int
     last: Int
-  ): VendorCountableConnection!
-}
-
-type VendorLocationCreateOrUpdate {
-  errors: [Error!]!
-    @deprecated(
-      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
-    )
-  vendorErrors: [VendorError!]!
-  vendorLocation: VendorLocation
-}
-
-input VendorLocationCreateOrUpdateInput {
-  province: String
-  city: String
-  postalCode: String
-  lat: String
-  lon: String
-}
-
-type VendorMainImage implements Node {
-  id: ID!
-  alt: String!
-  url(size: Int): String
-}
-
-type VendorServiceImage implements Node {
-  sortOrder: Int
-  id: ID!
-  alt: String!
-  title: String!
-  position: Int!
-  url(size: Int): String
-}
-
-type VendorServicesUpdate {
-  errors: [Error!]!
-    @deprecated(
-      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
-    )
-  services: [String]
-  vendorErrors: [VendorError!]!
-}
-
-enum VendorSortField {
-  NAME
-  RELEVANCE
-}
-
-input VendorSortingInput {
-  direction: OrderDirection!
-  channel: String
-  field: VendorSortField!
+  ): ProductCountableConnection!
 }
 
 type VerifyToken {
@@ -7522,25 +7199,16 @@ enum WeightUnitsEnum {
 scalar _Any
 
 union _Entity =
-    ProductVariant
-  | BaseProduct
+    Address
+  | User
+  | Group
+  | App
+  | ProductVariant
   | Product
   | ProductType
   | Collection
   | Category
   | ProductImage
-  | PastExperienceImage
-  | ExperienceLocation
-  | PastExperience
-  | VendorLocation
-  | VendorContact
-  | VendorServiceImage
-  | VendorMainImage
-  | Vendor
-  | Address
-  | User
-  | Group
-  | App
   | PageType
 
 type _Service {
