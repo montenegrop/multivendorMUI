@@ -6,31 +6,41 @@
 // GraphQL query operation: vendorPastExperiences
 // ====================================================
 
-export interface vendorPastExperiences_vendor_pastExperiences_pastExperienceImages_edges_node {
+export interface vendorPastExperiences_vendor_pastExperiences_edges_node_pastExperienceImages_edges_node {
   __typename: "PastExperienceImage";
   url: string;
 }
 
-export interface vendorPastExperiences_vendor_pastExperiences_pastExperienceImages_edges {
+export interface vendorPastExperiences_vendor_pastExperiences_edges_node_pastExperienceImages_edges {
   __typename: "PastExperienceImageCountableEdge";
-  node: vendorPastExperiences_vendor_pastExperiences_pastExperienceImages_edges_node;
+  node: vendorPastExperiences_vendor_pastExperiences_edges_node_pastExperienceImages_edges_node;
 }
 
-export interface vendorPastExperiences_vendor_pastExperiences_pastExperienceImages {
+export interface vendorPastExperiences_vendor_pastExperiences_edges_node_pastExperienceImages {
   __typename: "PastExperienceImageCountableConnection";
-  edges: vendorPastExperiences_vendor_pastExperiences_pastExperienceImages_edges[];
+  edges: vendorPastExperiences_vendor_pastExperiences_edges_node_pastExperienceImages_edges[];
 }
 
-export interface vendorPastExperiences_vendor_pastExperiences {
+export interface vendorPastExperiences_vendor_pastExperiences_edges_node {
   __typename: "PastExperience";
   id: string;
   descriptionShort: string;
-  pastExperienceImages: vendorPastExperiences_vendor_pastExperiences_pastExperienceImages;
+  pastExperienceImages: vendorPastExperiences_vendor_pastExperiences_edges_node_pastExperienceImages;
+}
+
+export interface vendorPastExperiences_vendor_pastExperiences_edges {
+  __typename: "PastExperienceCountableEdge";
+  node: vendorPastExperiences_vendor_pastExperiences_edges_node;
+}
+
+export interface vendorPastExperiences_vendor_pastExperiences {
+  __typename: "PastExperienceCountableConnection";
+  edges: vendorPastExperiences_vendor_pastExperiences_edges[];
 }
 
 export interface vendorPastExperiences_vendor {
   __typename: "Vendor";
-  pastExperiences: (vendorPastExperiences_vendor_pastExperiences | null)[] | null;
+  pastExperiences: vendorPastExperiences_vendor_pastExperiences | null;
 }
 
 export interface vendorPastExperiences {

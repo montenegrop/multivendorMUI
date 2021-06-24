@@ -18,6 +18,18 @@ export interface userPerfilVendorData_vendor_mainImage {
   url: string | null;
 }
 
+export interface userPerfilVendorData_vendor_avatarImage {
+  __typename: "VendorAvatarImage";
+  url: string | null;
+}
+
+export interface userPerfilVendorData_vendor_socialMedia {
+  __typename: "VendorSocialMedia";
+  code: string | null;
+  userString: string | null;
+  url: string | null;
+}
+
 export interface userPerfilVendorData_vendor_location {
   __typename: "VendorLocation";
   country: string;
@@ -48,6 +60,8 @@ export interface userPerfilVendorData_vendor {
   __typename: "Vendor";
   serviceImages: (userPerfilVendorData_vendor_serviceImages | null)[] | null;
   mainImage: userPerfilVendorData_vendor_mainImage | null;
+  avatarImage: userPerfilVendorData_vendor_avatarImage | null;
+  socialMedia: (userPerfilVendorData_vendor_socialMedia | null)[] | null;
   location: userPerfilVendorData_vendor_location | null;
   services: userPerfilVendorData_vendor_services;
 }

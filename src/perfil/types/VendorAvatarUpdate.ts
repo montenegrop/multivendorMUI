@@ -7,7 +7,7 @@
 // ====================================================
 
 export interface VendorAvatarUpdate_vendorImageCreateOrUpdate {
-  __typename: "VendorImageCreate";
+  __typename: "VendorImageCreateOrUpdate";
   imageUrl: string | null;
 }
 
@@ -16,6 +16,6 @@ export interface VendorAvatarUpdate {
 }
 
 export interface VendorAvatarUpdateVariables {
-  vendorId?: string | null;
-  image?: any | null;
+  vendorId: string;
+  image: any;
 }

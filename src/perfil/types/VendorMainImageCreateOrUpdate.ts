@@ -17,7 +17,7 @@ export interface VendorMainImageCreateOrUpdate_vendorImageCreateOrUpdate_vendor 
 }
 
 export interface VendorMainImageCreateOrUpdate_vendorImageCreateOrUpdate {
-  __typename: "VendorImageCreate";
+  __typename: "VendorImageCreateOrUpdate";
   vendor: VendorMainImageCreateOrUpdate_vendorImageCreateOrUpdate_vendor | null;
 }
 
