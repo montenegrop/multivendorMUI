@@ -57,7 +57,7 @@ const SocialMedia = props => {
   const initialForm = {
     FB: socialMedia.find(social => social.code === "FB").userString,
     IG: socialMedia.find(social => social.code === "IG").userString,
-    LK: socialMedia.find(social => social.code === "LN").userString,
+    // LK: socialMedia.find(social => social.code === "LN").userString,
     TW: socialMedia.find(social => social.code === "TW").userString,
     YT: socialMedia.find(social => social.code === "YT").userString
   };
