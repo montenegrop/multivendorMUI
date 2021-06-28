@@ -156,6 +156,8 @@ const Perfil: React.FC = props => {
         form.requestSubmit();
       }
     });
+    const form = document.getElementById("certificateData") as HTMLFormElement;
+    form.requestSubmit();
     setHasChanges({
       certificateData: false,
       locationData: false,
@@ -213,21 +215,30 @@ const Perfil: React.FC = props => {
               initial={initialForm}
               onSubmit={handleSubmit}
             >
-              {({ change, data, hasChanged, submit, reset, triggerChange }) => (
-                <>
-                  <CardSpacer />
-                  <Card id="services-data">
-                    <CardTitle title={"Titulos/Certificados/Matriculas"} />
-                    <CardContent>
-                      <DropCertificates
-                        certificates={certificates}
-                        setCertificates={setCertificates}
-                        triggerChange={triggerChange}
-                      />
-                    </CardContent>
-                  </Card>
-                </>
-              )}
+              {({ change, data, hasChanged, submit, reset, triggerChange }) => {
+                //  #corregir: cambio en titulos no funciona
+                React.useEffect(() => {
+                  setHasChanges(prev => ({
+                    ...prev,
+                    certificateData: hasChanged
+                  }));
+                }, [hasChanged]);
+                return (
+                  <>
+                    <CardSpacer />
+                    <Card id="services-data">
+                      <CardTitle title={"Titulos/Certificados/Matriculas"} />
+                      <CardContent>
+                        <DropCertificates
+                          certificates={certificates}
+                          setCertificates={setCertificates}
+                          triggerChange={triggerChange}
+                        />
+                      </CardContent>
+                    </Card>
+                  </>
+                );
+              }}
             </Form>
             <CardSpacer />
             <Card>
@@ -241,9 +252,11 @@ const Perfil: React.FC = props => {
             </Card>
           </>
         )}
+
         <SaveButtonBar
           onCancel={() => null}
           onSave={handleBulkSubmit}
+          labels={{ save: "guardar-corregir" }}
           state={"default"}
           disabled={!handleSubmit || !Object.values(hasChanges).includes(true)}
         />
