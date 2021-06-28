@@ -55,11 +55,11 @@ const SocialMedia = props => {
   );
 
   const initialForm = {
-    FB: socialMedia.find(social => social.code === "FB").userString,
-    IG: socialMedia.find(social => social.code === "IG").userString,
+    FB: socialMedia.find(social => social.code === "FB")?.userString ?? null,
+    IG: socialMedia.find(social => social.code === "IG")?.userString ?? null,
     // LK: socialMedia.find(social => social.code === "LN").userString,
-    TW: socialMedia.find(social => social.code === "TW").userString,
-    YT: socialMedia.find(social => social.code === "YT").userString
+    TW: socialMedia.find(social => social.code === "TW")?.userString ?? null,
+    YT: socialMedia.find(social => social.code === "YT")?.userString ?? null
   };
 
   const message = {

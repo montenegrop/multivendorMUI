@@ -127,9 +127,11 @@ export const VendorData = props => {
   const [selectedBanner, setSelectedBanner] = React.useState<string>("");
   const [bannerFile, setBannerFile] = React.useState<any>("");
 
+  // debugger;
+
   const [coordinates, setCoordinates] = React.useState({
-    lat: perfilVendorData.location.lat,
-    lon: perfilVendorData.location.lon
+    lat: perfilVendorData.location?.lat ?? null,
+    lon: perfilVendorData.location?.lon ?? null
   });
 
   const [selectedAvatar, setSelectedAvatar] = React.useState<string>("");
@@ -248,7 +250,6 @@ export const VendorData = props => {
           lat: data.localidades_censales[0].centroide.lat,
           lon: data.localidades_censales[0].centroide.lon
         });
-        // console.log(data, ciudad);
         return;
       });
   };
