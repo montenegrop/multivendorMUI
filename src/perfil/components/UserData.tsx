@@ -22,6 +22,7 @@ interface MandatoryData {
   lastName: boolean;
   phone: boolean;
   typeOfIdentification: boolean;
+  cellphone: boolean;
 }
 
 const UserTypeOfIdentificationArray: string[] = Object.values(
@@ -44,7 +45,8 @@ const UserData: React.FC<IProps> = props => {
     identification: false,
     lastName: false,
     phone: false,
-    typeOfIdentification: false
+    typeOfIdentification: false,
+    cellphone: false
   });
   const notify = useNotifier();
 
@@ -55,7 +57,8 @@ const UserData: React.FC<IProps> = props => {
     identification: user.identification,
     lastName: user.lastName,
     phone: user.phone,
-    typeOfIdentification: user.typeOfIdentification
+    typeOfIdentification: user.typeOfIdentification,
+    cellphone: user.cellphone
   };
 
   const handleSubmit = data => {
@@ -76,7 +79,8 @@ const UserData: React.FC<IProps> = props => {
           identification: data.identification.trim(),
           lastName: data.lastName.trim(),
           phone: data.phone.trim(),
-          typeOfIdentification: data.typeOfIdentification
+          typeOfIdentification: data.typeOfIdentification,
+          cellphone: data.cellphone.trim()
         }
       })
         .then(data => {
@@ -154,6 +158,15 @@ const UserData: React.FC<IProps> = props => {
                     name="phone"
                     label="Telefono"
                     value={data.phone}
+                    onChange={change}
+                  />
+                  <TextField
+                    disabled={false}
+                    error={error?.cellphone}
+                    helperText={error.cellphone ? errorMessage : ""}
+                    name="cellpone"
+                    label="Celular"
+                    value={data.cellphone}
                     onChange={change}
                   />
                   <div>

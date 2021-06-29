@@ -23,6 +23,7 @@ export interface userDataMutation_accountUpdate_user {
   phone: string;
   typeOfIdentification: UserTypeOfIdentification | null;
   identification: string;
+  cellphone: string;
 }
 
 export interface userDataMutation_accountUpdate {
@@ -43,4 +44,5 @@ export interface userDataMutationVariables {
   typeOfIdentification?: string | null;
   phone?: string | null;
   id: string;
+  cellphone?: string | null;
 }

@@ -128,6 +128,7 @@ const updateUserData = gql`
     $typeOfIdentification: String
     $phone: String
     $id: ID!
+    $cellphone: String
   ) {
     accountUpdate(
       input: {
@@ -137,6 +138,7 @@ const updateUserData = gql`
         typeOfIdentification: $typeOfIdentification
         phone: $phone
         email: $email
+        cellphone: $cellphone
       }
       id: $id
     ) {
@@ -153,6 +155,7 @@ const updateUserData = gql`
         phone
         typeOfIdentification
         identification
+        cellphone
       }
     }
   }
