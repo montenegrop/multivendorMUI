@@ -4,6 +4,7 @@ import { InputLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { CardContent } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
+import Checkbox from "@material-ui/core/Checkbox";
 import { CardSpacer } from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
 import { SaveButtonBar } from "@saleor/components/SaveButtonBar";
@@ -168,6 +169,13 @@ const Perfil: React.FC = props => {
     });
   };
 
+  // #corregir: clases de checkbox
+  const [is24Hours, setIs24Hours] = React.useState(false);
+  const is24HoursChange = event => {
+    setIs24Hours(event.target.is24Hours);
+    // setHasChanges(prev => ({ ...prev, vendorData: true }));
+  };
+
   return (
     <>
       <Container>
@@ -198,6 +206,14 @@ const Perfil: React.FC = props => {
             <CardSpacer />
             <Card id="baseServices">
               <CardTitle title={"Servicios a Prestar"} />
+              <div className={"flex"}>
+                <p>Responde 24 horas</p>
+                <Checkbox
+                  checked={is24Hours}
+                  onChange={is24HoursChange}
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              </div>
               <CardContent>
                 <ServicesCheckboxes
                   perfilVendorData={perfilVendorData}
