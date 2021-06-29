@@ -156,7 +156,7 @@ const UserData: React.FC<IProps> = props => {
                     error={error?.phone}
                     helperText={error.phone ? errorMessage : ""}
                     name="phone"
-                    label="Telefono"
+                    label="Teléfono"
                     value={data.phone}
                     onChange={change}
                   />
@@ -164,7 +164,7 @@ const UserData: React.FC<IProps> = props => {
                     disabled={false}
                     error={error?.cellphone}
                     helperText={error.cellphone ? errorMessage : ""}
-                    name="cellpone"
+                    name="cellphone"
                     label="Celular"
                     value={data.cellphone}
                     onChange={change}

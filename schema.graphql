@@ -91,6 +91,7 @@ input AccountInput {
   phone: String
   vendorSlug: String
   email: String
+  cellphone: String
 }
 
 type AccountRegister {
@@ -113,6 +114,7 @@ input AccountRegisterInput {
   firstName: String
   lastName: String
   providesServices: Boolean
+  cellphone: String
 }
 
 type AccountRequestDeletion {
@@ -6758,6 +6760,7 @@ type User implements Node & ObjectWithMetadata {
   typeOfIdentification: UserTypeOfIdentification
   identification: String!
   phone: String!
+  cellphone: String!
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
   addresses: [Address]
