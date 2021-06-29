@@ -37,6 +37,7 @@ export interface TokenAuth_tokenCreate_user {
   vendorId: string | null;
   userPermissions: (TokenAuth_tokenCreate_user_userPermissions | null)[] | null;
   avatar: TokenAuth_tokenCreate_user_avatar | null;
+  cellphone: string;
 }
 
 export interface TokenAuth_tokenCreate {

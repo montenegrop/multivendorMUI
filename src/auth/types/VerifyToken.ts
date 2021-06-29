@@ -31,6 +31,7 @@ export interface VerifyToken_tokenVerify_user {
   vendorId: string | null;
   userPermissions: (VerifyToken_tokenVerify_user_userPermissions | null)[] | null;
   avatar: VerifyToken_tokenVerify_user_avatar | null;
+  cellphone: string;
 }
 
 export interface VerifyToken_tokenVerify {

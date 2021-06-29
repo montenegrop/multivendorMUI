@@ -91,6 +91,7 @@ input AccountInput {
   phone: String
   vendorSlug: String
   email: String
+  cellphone: String
 }
 
 type AccountRegister {
@@ -107,6 +108,13 @@ input AccountRegisterInput {
   email: String!
   password: String!
   redirectUrl: String
+  typeOfIdentification: String
+  identification: String
+  phone: String
+  firstName: String
+  lastName: String
+  providesServices: Boolean
+  cellphone: String
 }
 
 type AccountRequestDeletion {
@@ -3028,8 +3036,14 @@ type Mutation {
     id: ID
     input: VendorLocationCreateOrUpdateInput!
   ): VendorLocationCreateOrUpdate
-  vendorImageCreateOrUpdate(input: VendorImageCreateInput): VendorImageCreate
+  vendorImageCreateOrUpdate(
+    input: VendorImageCreateOrUpdateInput
+    isAvatar: Boolean
+  ): VendorImageCreateOrUpdate
   vendorServicesUpdate(services: [ID]!): VendorServicesUpdate
+  vendorSocialMediaUpdate(
+    socialMedia: [VendorSocialMediaUpdateInput]!
+  ): VendorSocialMediaUpdate
   webhookCreate(input: WebhookCreateInput!): WebhookCreate
   webhookDelete(id: ID!): WebhookDelete
   webhookUpdate(id: ID!, input: WebhookUpdateInput!): WebhookUpdate
@@ -4309,6 +4323,18 @@ type PastExperience implements Node {
     first: Int
     last: Int
   ): PastExperienceImageCountableConnection!
+  service: BaseProduct
+}
+
+type PastExperienceCountableConnection {
+  pageInfo: PageInfo!
+  edges: [PastExperienceCountableEdge!]!
+  totalCount: Int
+}
+
+type PastExperienceCountableEdge {
+  node: PastExperience!
+  cursor: String!
 }
 
 type PastExperienceCreate {
@@ -5471,6 +5497,7 @@ type Query {
   baseProducts(
     vendorId: String
     filter: BaseProductFilterInput
+    onlyServices: Boolean
     before: String
     after: String
     first: Int
@@ -5940,6 +5967,19 @@ type SelectedAttribute {
 input SeoInput {
   title: String
   description: String
+}
+
+type ServiceContact {
+  firstName: String
+  lastName: String
+  fullName: String
+  phone: String
+  celphone: String
+  city: String
+  postalCode: String
+  cityWithCode: String
+  address: String
+  email: String
 }
 
 type SetPassword {
@@ -6720,6 +6760,7 @@ type User implements Node & ObjectWithMetadata {
   typeOfIdentification: UserTypeOfIdentification
   identification: String!
   phone: String!
+  cellphone: String!
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
   addresses: [Address]
@@ -6894,10 +6935,24 @@ type Vendor implements Node & ObjectWithMetadata {
   contacts: [VendorContact!]!
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
-  pastExperiences: [PastExperience]
+  serviceContact: ServiceContact
+  pastExperiences(
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): PastExperienceCountableConnection
   mainImage: VendorMainImage
+  avatarImage: VendorAvatarImage
   serviceImages: [VendorServiceImage]
   mainCategories: [Category]
+  socialMedia: [VendorSocialMedia]
+}
+
+type VendorAvatarImage implements Node {
+  id: ID!
+  alt: String!
+  url(size: Int): String
 }
 
 type VendorContact {
@@ -6960,7 +7015,7 @@ enum VendorErrorCode {
   UNIQUE
 }
 
-type VendorImageCreate {
+type VendorImageCreateOrUpdate {
   errors: [Error!]!
     @deprecated(
       reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
@@ -6970,7 +7025,7 @@ type VendorImageCreate {
   vendorErrors: [VendorError!]!
 }
 
-input VendorImageCreateInput {
+input VendorImageCreateOrUpdateInput {
   vendorId: ID!
   image: Upload!
   title: String
@@ -6986,6 +7041,7 @@ type VendorLocation {
   postalCode: String!
   lat: String!
   lon: String!
+  fullAddress: String!
   vendorSet(
     before: String
     after: String
@@ -7033,6 +7089,26 @@ type VendorServicesUpdate {
     )
   services: [String]
   vendorErrors: [VendorError!]!
+}
+
+type VendorSocialMedia {
+  code: String
+  userString: String
+  url: String
+}
+
+type VendorSocialMediaUpdate {
+  errors: [Error!]!
+    @deprecated(
+      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
+    )
+  socialMedia: [VendorSocialMedia]
+  vendorErrors: [VendorError!]!
+}
+
+input VendorSocialMediaUpdateInput {
+  code: String!
+  userString: String
 }
 
 enum VendorSortField {
@@ -7535,7 +7611,10 @@ union _Entity =
   | VendorLocation
   | VendorContact
   | VendorServiceImage
+  | VendorAvatarImage
   | VendorMainImage
+  | VendorSocialMedia
+  | ServiceContact
   | Vendor
   | Address
   | User

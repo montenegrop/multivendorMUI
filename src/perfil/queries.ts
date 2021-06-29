@@ -8,7 +8,7 @@ import {
 } from "./types/userVendorData";
 
 const perfilVendorData = gql`
-  query userVendorData($id: ID!) {
+  query userPerfilVendorData($id: ID!) {
     vendor(id: $id) {
       serviceImages {
         title
@@ -18,11 +18,21 @@ const perfilVendorData = gql`
       mainImage {
         url
       }
+      avatarImage {
+        url
+      }
+      socialMedia {
+        code
+        userString
+        url
+      }
       location {
         country
         province
         city
         postalCode
+        lat
+        lon
       }
       services(first: 20) {
         edges {

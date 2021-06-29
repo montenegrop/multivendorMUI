@@ -13,7 +13,12 @@ export const categories: CategoryFragment[] = [
       totalCount: 2
     },
     id: "123123",
+    level: 2,
     name: "Lorem ipsum dolor",
+    parent: {
+      __typename: "Category",
+      name: "parent"
+    },
     products: {
       __typename: "ProductCountableConnection",
       totalCount: 4
@@ -26,7 +31,12 @@ export const categories: CategoryFragment[] = [
       totalCount: 54
     },
     id: "876752",
-    name: "Mauris vehicula tortor vulputate",
+    level: 2,
+    name: "Lorem ipsum dolor",
+    parent: {
+      __typename: "Category",
+      name: "parent"
+    },
     products: {
       __typename: "ProductCountableConnection",
       totalCount: 3
@@ -39,7 +49,12 @@ export const categories: CategoryFragment[] = [
       totalCount: 2
     },
     id: "876542",
-    name: "Excepteur sint occaecat cupidatat non proident",
+    level: 2,
+    name: "Lorem ipsum dolor",
+    parent: {
+      __typename: "Category",
+      name: "parent"
+    },
     products: {
       __typename: "ProductCountableConnection",
       totalCount: 6
@@ -52,7 +67,12 @@ export const categories: CategoryFragment[] = [
       totalCount: 6
     },
     id: "875352",
-    name: "Ut enim ad minim veniam",
+    level: 2,
+    name: "Lorem ipsum dolor",
+    parent: {
+      __typename: "Category",
+      name: "parent"
+    },
     products: {
       __typename: "ProductCountableConnection",
       totalCount: 12
@@ -65,7 +85,12 @@ export const categories: CategoryFragment[] = [
       totalCount: 76
     },
     id: "865752",
-    name: "Duis aute irure dolor in reprehenderit",
+    level: 2,
+    name: "Lorem ipsum dolor",
+    parent: {
+      __typename: "Category",
+      name: "parent"
+    },
     products: {
       __typename: "ProductCountableConnection",
       totalCount: 43
@@ -78,7 +103,12 @@ export const categories: CategoryFragment[] = [
       totalCount: 11
     },
     id: "878752",
-    name: "Neque porro quisquam est",
+    level: 2,
+    name: "Lorem ipsum dolor",
+    parent: {
+      __typename: "Category",
+      name: "parent"
+    },
     products: {
       __typename: "ProductCountableConnection",
       totalCount: 21

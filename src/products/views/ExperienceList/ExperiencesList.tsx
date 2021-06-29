@@ -21,7 +21,7 @@ const ExperiencesList: React.FC = () => {
 
         return (
           <Container>
-            <ExperiencesListPage data={data} />
+            <ExperiencesListPage data={data.vendor.pastExperiences?.edges} />
           </Container>
         );
       }}

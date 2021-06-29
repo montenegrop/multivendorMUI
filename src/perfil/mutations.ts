@@ -6,6 +6,18 @@ import {
   userDataMutationVariables
 } from "./types/userDataMutation";
 import {
+  VendorAvatarUpdate,
+  VendorAvatarUpdateVariables
+} from "./types/VendorAvatarUpdate";
+import {
+  vendorLocationCreateOrUpdate,
+  vendorLocationCreateOrUpdateVariables
+} from "./types/vendorLocationCreateOrUpdate";
+import {
+  VendorMainImageCreateOrUpdate,
+  VendorMainImageCreateOrUpdateVariables
+} from "./types/VendorMainImageCreateOrUpdate";
+import {
   VendorServicesUpdate,
   VendorServicesUpdateVariables
 } from "./types/VendorServicesUpdate";
@@ -38,25 +50,47 @@ const userVendorUpdate = gql`
   }
 `;
 
-export const useVendorUpdate = makeMutation(userVendorUpdate);
+export const useVendorUpdate = makeMutation<
+  vendorLocationCreateOrUpdate,
+  vendorLocationCreateOrUpdateVariables
+>(userVendorUpdate);
 
 const userVendorMainImage = gql`
-  mutation VendorImageCreateOrUpdate($vendorId: ID!, $mainImage: Upload!) {
+  mutation VendorMainImageCreateOrUpdate($vendorId: ID!, $mainImage: Upload!) {
     vendorImageCreateOrUpdate(
       input: { vendorId: $vendorId, image: $mainImage }
     ) {
       vendor {
-        id
-        name
+        mainImage {
+          url
+        }
       }
     }
   }
 `;
 
-export const useVendorMainImage = makeMutation(userVendorMainImage);
+export const useVendorMainImage = makeMutation<
+  VendorMainImageCreateOrUpdate,
+  VendorMainImageCreateOrUpdateVariables
+>(userVendorMainImage);
+
+const vendorAvatar = gql`
+  mutation VendorAvatarUpdate($vendorId: ID!, $image: Upload!) {
+    vendorImageCreateOrUpdate(
+      input: { vendorId: $vendorId, image: $image }
+      isAvatar: true
+    ) {
+      imageUrl
+    }
+  }
+`;
+export const useVendorAvatarImage = makeMutation<
+  VendorAvatarUpdate,
+  VendorAvatarUpdateVariables
+>(vendorAvatar);
 
 const userVendorServiceImage = gql`
-  mutation VendorImageCreateOrUpdate(
+  mutation VendorServiceImageCreateOrUpdate(
     $vendorId: ID!
     $serviceImage: Upload!
     $title: String
@@ -94,6 +128,7 @@ const updateUserData = gql`
     $typeOfIdentification: String
     $phone: String
     $id: ID!
+    $cellphone: String
   ) {
     accountUpdate(
       input: {
@@ -103,6 +138,7 @@ const updateUserData = gql`
         typeOfIdentification: $typeOfIdentification
         phone: $phone
         email: $email
+        cellphone: $cellphone
       }
       id: $id
     ) {
@@ -119,6 +155,7 @@ const updateUserData = gql`
         phone
         typeOfIdentification
         identification
+        cellphone
       }
     }
   }
@@ -143,3 +180,17 @@ export const useUpdateServices = makeMutation<
   VendorServicesUpdate,
   VendorServicesUpdateVariables
 >(updateServices);
+
+export const socialMediaUpdate = gql`
+  mutation VendorSocialMediaUpdate($code: String!, $userString: String!) {
+    vendorSocialMediaUpdate(
+      socialMedia: [{ code: $code, userString: $userString }]
+    ) {
+      socialMedia {
+        url
+      }
+    }
+  }
+`;
+
+export const useSocialMediaUpdate = makeMutation<any, any>(socialMediaUpdate);
