@@ -29,6 +29,11 @@ export interface CategoryDetails_category_parent {
   id: string;
 }
 
+export interface CategoryDetails_category_children_edges_node_parent {
+  __typename: "Category";
+  name: string;
+}
+
 export interface CategoryDetails_category_children_edges_node_children {
   __typename: "CategoryCountableConnection";
   totalCount: number | null;
@@ -43,6 +48,8 @@ export interface CategoryDetails_category_children_edges_node {
   __typename: "Category";
   id: string;
   name: string;
+  level: number;
+  parent: CategoryDetails_category_children_edges_node_parent | null;
   children: CategoryDetails_category_children_edges_node_children | null;
   products: CategoryDetails_category_children_edges_node_products | null;
 }

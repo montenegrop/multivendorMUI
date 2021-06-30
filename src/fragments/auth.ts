@@ -17,5 +17,6 @@ export const fragmentUser = gql`
     avatar {
       url
     }
+    cellphone
   }
 `;

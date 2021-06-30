@@ -9,13 +9,17 @@ import {
 const pastExperiencesList = gql`
   query vendorPastExperiences($vendorId: ID!) {
     vendor(id: $vendorId) {
-      pastExperiences {
-        id
-        descriptionShort
-        pastExperienceImages(first: 1) {
-          edges {
-            node {
-              url
+      pastExperiences(last: 15) {
+        edges {
+          node {
+            id
+            descriptionShort
+            pastExperienceImages(first: 1) {
+              edges {
+                node {
+                  url
+                }
+              }
             }
           }
         }

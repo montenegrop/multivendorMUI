@@ -5,7 +5,11 @@
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
-
+export enum CategorySortField {
+  NAME ="NAME",
+  PRODUCT_COUNT ="PRODUCT_COUNT",
+  SUBCATEGORY_COUNT="SUBCATEGORY_COUNT",
+}
 export enum AccountErrorCode {
   ACTIVATE_OWN_ACCOUNT = "ACTIVATE_OWN_ACCOUNT",
   ACTIVATE_SUPERUSER_ACCOUNT = "ACTIVATE_SUPERUSER_ACCOUNT",
@@ -100,13 +104,6 @@ export enum AttributeSortField {
 export enum AttributeTypeEnum {
   PAGE_TYPE = "PAGE_TYPE",
   PRODUCT_TYPE = "PRODUCT_TYPE",
-}
-
-export enum CategorySortField {
-  NAME = "NAME",
-  PRODUCT_COUNT = "PRODUCT_COUNT",
-  RELEVANCE = "RELEVANCE",
-  SUBCATEGORY_COUNT = "SUBCATEGORY_COUNT",
 }
 
 export enum ChannelErrorCode {
@@ -1117,12 +1114,6 @@ export interface CategoryInput {
   seo?: SeoInput | null;
   backgroundImage?: any | null;
   backgroundImageAlt?: string | null;
-}
-
-export interface CategorySortingInput {
-  direction: OrderDirection;
-  channel?: string | null;
-  field: CategorySortField;
 }
 
 export interface ChannelCreateInput {

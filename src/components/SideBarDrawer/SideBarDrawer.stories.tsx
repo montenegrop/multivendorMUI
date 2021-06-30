@@ -25,6 +25,7 @@ const user = {
   identification: "34121333",
   typeOfIdentification: null,
   vendorId: "AvsdsaD=",
+  cellphone: "+5493416966099",
   userPermissions: staffMember.userPermissions
 };
 

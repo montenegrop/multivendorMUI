@@ -38,7 +38,19 @@ const ExperiencesTable = props => {
   const { data } = props;
   const experiences = data.filter(dat => dat.descriptionShort !== "");
   const classes = useStyles({ props });
-  // console.log(experiences);
+
+  const [experiencesSelection, setExperiences] = React.useState([]);
+
+  const handleCheckboxChange = e => {
+    const id = e.target.id;
+    let newSelection = experiencesSelection;
+    if (newSelection.includes(id)) {
+      newSelection = newSelection.filter(expId => expId !== id);
+      return setExperiences(newSelection);
+    }
+    newSelection.push(id);
+    setExperiences(newSelection);
+  };
   return (
     <Card>
       <CardContent>
@@ -59,22 +71,29 @@ const ExperiencesTable = props => {
             ))}
           </TableHead>
           <TableBody>
-            {experiences.map(exp => (
-              <TableRow key={exp.descriptionShort}>
-                <TableCell padding="checkbox">
-                  <Checkbox disableClickPropagation></Checkbox>
-                </TableCell>
-                <TableCell>
-                  <img
-                    className={classes.imgSize}
-                    src={exp.pastExperienceImages.edges[0]?.node.url}
-                  />
-                </TableCell>
-                <TableCell className={classes.descriptionShort}>
-                  {exp.descriptionShort}
-                </TableCell>
-              </TableRow>
-            ))}
+            {experiences.map(experience => {
+              const exp = experience.node;
+              return (
+                <TableRow key={exp.descriptionShort}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      id={exp.id}
+                      onChange={handleCheckboxChange}
+                      disableClickPropagation
+                    ></Checkbox>
+                  </TableCell>
+                  <TableCell>
+                    <img
+                      className={classes.imgSize}
+                      src={exp.pastExperienceImages?.edges[0]?.node.url}
+                    />
+                  </TableCell>
+                  <TableCell className={classes.descriptionShort}>
+                    {exp.descriptionShort}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </ResponsiveTable>
       </CardContent>

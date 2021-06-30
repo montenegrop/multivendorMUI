@@ -23,7 +23,8 @@ const user = {
   identification: "34121333",
   typeOfIdentification: null,
   vendorId: "AvsdsaD=",
-  userPermissions: staffMember.userPermissions
+  userPermissions: staffMember.userPermissions,
+  cellphone: "+5493416966099"
 };
 
 const Story: React.FC<{ user: User }> = ({ user }) => {

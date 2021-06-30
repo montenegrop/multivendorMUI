@@ -28,7 +28,8 @@ const user: User = {
       code: PermissionEnum.MANAGE_CHANNELS,
       name: "Manage Channels"
     }
-  ]
+  ],
+  cellphone: "+5493416966099"
 };
 
 const productChannels = createChannelsDataFromProduct(product(""));

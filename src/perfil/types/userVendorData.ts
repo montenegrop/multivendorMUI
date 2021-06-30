@@ -43,6 +43,7 @@ export interface userVendorData_vendor_services {
 }
 
 export interface userVendorData_vendor {
+  socialMedia: any;
   __typename: "Vendor";
   serviceImages: (userVendorData_vendor_serviceImages | null)[] | null;
   mainImage: userVendorData_vendor_mainImage | null;

@@ -31,4 +31,5 @@ export interface User {
   vendorId: string | null;
   userPermissions: (User_userPermissions | null)[] | null;
   avatar: User_avatar | null;
+  cellphone: string;
 }
