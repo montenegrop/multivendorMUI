@@ -117,6 +117,143 @@ const initCert: Certificate[] = ["1", "2", "3", "4", "5"].map(pos => ({
   url: ""
 }));
 
+const VendorImagesData = ({
+  change,
+  data,
+  hasChanged,
+  triggerChange,
+  setHasChanges,
+  hasChanges,
+  classesVendor,
+  handleOnDropBanner,
+  selectedBanner,
+  handleOnDropAvatar,
+  selectedAvatar,
+  user
+}) => {
+  React.useEffect(() => {
+    setHasChanges(prev => ({ ...prev, vendorData: hasChanged }));
+  }, [hasChanged]);
+  React.useEffect(() => {
+    if (hasChanges.vendorData === false) {
+      triggerChange(false);
+    }
+  }, [hasChanges]);
+  return (
+    <>
+      <div id="vendor-data" className={classesVendor.dropContainer}>
+        <InputLabel className={classesVendor.label}>
+          Imagen de Portada para tu Tienda
+        </InputLabel>
+        <div className={classesVendor.relative}>
+          <Dropzone
+            onDrop={e => {
+              handleOnDropBanner(e);
+              triggerChange();
+            }}
+          >
+            {({ isDragActive, getInputProps, getRootProps }) => (
+              <div
+                {...getRootProps()}
+                className={`${classesVendor.dropzone} ${
+                  isDragActive ? classesVendor.dragActive : null
+                }`}
+                style={{
+                  background:
+                    selectedBanner !== ""
+                      ? `url(${selectedBanner}) center center / cover no-repeat`
+                      : "inherit",
+                  backgroundSize: selectedBanner !== "" ? "cover" : null
+                }}
+              >
+                <input
+                  {...getInputProps()}
+                  accept="image/png, image/gif, image/jpeg, image/jpg"
+                  name="mainImage"
+                />
+                {selectedBanner ? null : "PORTADA"}
+              </div>
+            )}
+          </Dropzone>
+          <Dropzone
+            onDrop={e => {
+              handleOnDropAvatar(e);
+              triggerChange();
+            }}
+          >
+            {({ isDragActive, getInputProps, getRootProps }) => (
+              <div
+                {...getRootProps()}
+                className={`${classesVendor.dropAvatar} ${
+                  isDragActive ? classesVendor.dragActive : null
+                }`}
+                style={{
+                  background:
+                    selectedAvatar !== "" && selectedAvatar
+                      ? `url(${selectedAvatar}) center center no-repeat`
+                      : undefined,
+                  backgroundSize: selectedAvatar !== "" ? "cover" : null,
+                  filter: selectedAvatar !== "" ? "opacity(1)" : "opacity(0.8)"
+                }}
+              >
+                <input
+                  {...getInputProps()}
+                  accept="image/png, image/gif, image/jpeg, image/jpg"
+                />
+
+                {selectedAvatar ? null : "AVATAR"}
+              </div>
+            )}
+          </Dropzone>
+        </div>
+
+        <div className={classesVendor.helper}>
+          El tamaño recomendado es de 970px x 250px
+        </div>
+      </div>
+      {user.userPermissions[0] ? null : (
+        <div id="datePicker" className={classesVendor.datePickerContainer}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DatePicker
+              className={classesVendor.datePicker}
+              id="foundingYearInput"
+              inputVariant="standard"
+              label="Año de Fundación"
+              name="foundingYear"
+              autoOk
+              variant="dialog"
+              views={["year"]}
+              value={data.foundingYear}
+              maxDate={new Date()}
+              onChange={date => {
+                change({
+                  target: {
+                    name: "foundingYear",
+                    value: new Date(date.getFullYear(), 0, 1)
+                  }
+                });
+              }}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </div>
+      )}
+      {user.userPermissions[0] ? null : (
+        <TextField
+          id="descripcion"
+          label="Descripcion"
+          name="description"
+          onChange={change}
+          multiline
+          className={classesVendor.textarea}
+        />
+      )}
+    </>
+  );
+};
+
 export const VendorData = props => {
   const { hasChanges, setHasChanges, perfilVendorData, user, vendor } = props;
 
@@ -339,137 +476,21 @@ export const VendorData = props => {
             initial={initialFormVendor}
             onSubmit={handleVendorSubmit}
           >
-            {({ change, data, hasChanged, triggerChange }) => {
-              React.useEffect(() => {
-                setHasChanges(prev => ({ ...prev, vendorData: hasChanged }));
-              }, [hasChanged]);
-              React.useEffect(() => {
-                if (hasChanges.vendorData === false) {
-                  triggerChange(false);
-                }
-              }, [hasChanges]);
-              return (
-                <>
-                  <div id="vendor-data" className={classesVendor.dropContainer}>
-                    <InputLabel className={classesVendor.label}>
-                      Imagen de Portada para tu Tienda
-                    </InputLabel>
-                    <div className={classesVendor.relative}>
-                      <Dropzone
-                        onDrop={e => {
-                          handleOnDropBanner(e);
-                          triggerChange();
-                        }}
-                      >
-                        {({ isDragActive, getInputProps, getRootProps }) => (
-                          <div
-                            {...getRootProps()}
-                            className={`${classesVendor.dropzone} ${
-                              isDragActive ? classesVendor.dragActive : null
-                            }`}
-                            style={{
-                              background:
-                                selectedBanner !== ""
-                                  ? `url(${selectedBanner}) center center / cover no-repeat`
-                                  : "inherit",
-                              backgroundSize:
-                                selectedBanner !== "" ? "cover" : null
-                            }}
-                          >
-                            <input
-                              {...getInputProps()}
-                              accept="image/png, image/gif, image/jpeg, image/jpg"
-                              name="mainImage"
-                            />
-                            {selectedBanner ? null : "PORTADA"}
-                          </div>
-                        )}
-                      </Dropzone>
-                      <Dropzone
-                        onDrop={e => {
-                          handleOnDropAvatar(e);
-                          triggerChange();
-                        }}
-                      >
-                        {({ isDragActive, getInputProps, getRootProps }) => (
-                          <div
-                            {...getRootProps()}
-                            className={`${classesVendor.dropAvatar} ${
-                              isDragActive ? classesVendor.dragActive : null
-                            }`}
-                            style={{
-                              background:
-                                selectedAvatar !== "" && selectedAvatar
-                                  ? `url(${selectedAvatar}) center center no-repeat`
-                                  : undefined,
-                              backgroundSize:
-                                selectedAvatar !== "" ? "cover" : null,
-                              filter:
-                                selectedAvatar !== ""
-                                  ? "opacity(1)"
-                                  : "opacity(0.8)"
-                            }}
-                          >
-                            <input
-                              {...getInputProps()}
-                              accept="image/png, image/gif, image/jpeg, image/jpg"
-                            />
-
-                            {selectedAvatar ? null : "AVATAR"}
-                          </div>
-                        )}
-                      </Dropzone>
-                    </div>
-
-                    <div className={classesVendor.helper}>
-                      El tamaño recomendado es de 970px x 250px
-                    </div>
-                  </div>
-                  {user.userPermissions[0] ? null : (
-                    <div
-                      id="datePicker"
-                      className={classesVendor.datePickerContainer}
-                    >
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <DatePicker
-                          className={classesVendor.datePicker}
-                          id="foundingYearInput"
-                          inputVariant="standard"
-                          label="Año de Fundación"
-                          name="foundingYear"
-                          autoOk
-                          variant="dialog"
-                          views={["year"]}
-                          value={data.foundingYear}
-                          maxDate={new Date()}
-                          onChange={date => {
-                            change({
-                              target: {
-                                name: "foundingYear",
-                                value: new Date(date.getFullYear(), 0, 1)
-                              }
-                            });
-                          }}
-                          InputLabelProps={{
-                            shrink: true
-                          }}
-                        />
-                      </MuiPickersUtilsProvider>
-                    </div>
-                  )}
-                  {user.userPermissions[0] ? null : (
-                    <TextField
-                      id="descripcion"
-                      label="Descripcion"
-                      name="description"
-                      onChange={change}
-                      multiline
-                      className={classesVendor.textarea}
-                    />
-                  )}
-                </>
-              );
-            }}
+            {props => (
+              <VendorImagesData
+                {...{
+                  ...props,
+                  setHasChanges,
+                  hasChanges,
+                  classesVendor,
+                  handleOnDropBanner,
+                  selectedBanner,
+                  handleOnDropAvatar,
+                  selectedAvatar,
+                  user
+                }}
+              />
+            )}
           </Form>
           <Form
             formId="locationData"

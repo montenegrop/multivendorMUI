@@ -183,6 +183,10 @@ export const sectionNames = defineMessages({
     defaultMessage: "Categories",
     description: "categories section name"
   },
+  activeServices: {
+    defaultMessage: "Servicios Activos",
+    description: "servicios no finalizados"
+  },
   channels: {
     defaultMessage: "Channels",
     description: "channels section name"
