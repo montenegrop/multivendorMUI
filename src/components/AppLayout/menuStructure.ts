@@ -86,6 +86,14 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       url: categoryListUrl()
     },
     {
+      ariaLabel: "activeServices",
+      icon: catalogIcon,
+      label: intl.formatMessage(sectionNames.activeServices),
+      permission: PermissionEnum.MANAGE_PRODUCTS,
+      testingContextId: "servicios",
+      url: "/activeServices"
+    },
+    {
       ariaLabel: "collections",
       icon: catalogIcon,
       label: intl.formatMessage(sectionNames.collections),
@@ -93,6 +101,7 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       testingContextId: "collections",
       url: collectionListUrl()
     },
+
     {
       ariaLabel: "orders",
       children: [
