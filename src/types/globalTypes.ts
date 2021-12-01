@@ -5,11 +5,7 @@
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
-export enum CategorySortField {
-  NAME ="NAME",
-  PRODUCT_COUNT ="PRODUCT_COUNT",
-  SUBCATEGORY_COUNT="SUBCATEGORY_COUNT",
-}
+
 export enum AccountErrorCode {
   ACTIVATE_OWN_ACCOUNT = "ACTIVATE_OWN_ACCOUNT",
   ACTIVATE_SUPERUSER_ACCOUNT = "ACTIVATE_SUPERUSER_ACCOUNT",
