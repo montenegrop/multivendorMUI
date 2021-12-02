@@ -6,20 +6,20 @@ import { TypedQuery } from "../../queries";
 const ActiveServicesList = gql`
   query vendorPastExperiences($vendorId: ID!) {
     vendor(id: $vendorId) {
-      pastExperiences(last: 15) {
-        edges {
-          node {
-            id
-            descriptionShort
-            pastExperienceImages(first: 1) {
-              edges {
-                node {
-                  url
-                }
-              }
-            }
-          }
-        }
+      id
+      name
+      email
+      serviceContacts {
+        id
+        firstName
+        fullName
+        email
+        phone
+        address
+        city
+        datetime
+        service
+        message
       }
     }
   }

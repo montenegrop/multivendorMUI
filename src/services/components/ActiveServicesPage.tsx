@@ -4,7 +4,7 @@ import ActiveServicesTable from "./ActiveServicesTable";
 
 const ExperiencesListPage = props => {
   const { data } = props;
-  return <ActiveServicesTable data="ad" />;
+  return <ActiveServicesTable data={data} />;
 };
 
 export default ExperiencesListPage;
