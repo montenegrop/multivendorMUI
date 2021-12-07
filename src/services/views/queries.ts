@@ -1,15 +1,16 @@
 import gql from "graphql-tag";
 
 import { TypedQuery } from "../../queries";
+import { vendorServiceContracts } from "./types/vendorServiceContracts";
 // aca importa los tipos
 
 const ActiveServicesList = gql`
-  query vendorPastExperiences($vendorId: ID!) {
+  query vendorServiceContracts($vendorId: ID!) {
     vendor(id: $vendorId) {
       id
       name
       email
-      serviceContacts {
+      serviceContracts {
         id
         firstName
         fullName
@@ -25,4 +26,6 @@ const ActiveServicesList = gql`
   }
 `;
 
-export const ActiveServicesListQuery = TypedQuery<any, any>(ActiveServicesList);
+export const ActiveServicesListQuery = TypedQuery<vendorServiceContracts, any>(
+  ActiveServicesList
+);

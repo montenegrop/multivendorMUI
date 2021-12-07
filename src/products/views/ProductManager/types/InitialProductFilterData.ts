@@ -47,22 +47,6 @@ export interface InitialProductFilterData_categories {
   edges: InitialProductFilterData_categories_edges[];
 }
 
-export interface InitialProductFilterData_collections_edges_node {
-  __typename: "Collection";
-  id: string;
-  name: string;
-}
-
-export interface InitialProductFilterData_collections_edges {
-  __typename: "CollectionCountableEdge";
-  node: InitialProductFilterData_collections_edges_node;
-}
-
-export interface InitialProductFilterData_collections {
-  __typename: "CollectionCountableConnection";
-  edges: InitialProductFilterData_collections_edges[];
-}
-
 export interface InitialProductFilterData_productTypes_edges_node {
   __typename: "ProductType";
   id: string;
@@ -82,7 +66,6 @@ export interface InitialProductFilterData_productTypes {
 export interface InitialProductFilterData {
   attributes: InitialProductFilterData_attributes | null;
   categories: InitialProductFilterData_categories | null;
-  collections: InitialProductFilterData_collections | null;
   productTypes: InitialProductFilterData_productTypes | null;
 }
 

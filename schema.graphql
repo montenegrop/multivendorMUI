@@ -108,7 +108,7 @@ input AccountRegisterInput {
   email: String!
   password: String!
   redirectUrl: String
-  typeOfIdentification: String
+  typeOfIdentification: type_of_identification
   identification: String
   phone: String
   firstName: String
@@ -588,9 +588,9 @@ input AttributeFilterInput {
 }
 
 input AttributeInput {
-  slug: String!
+  slugs: [String]!
   value: String
-  values: [String]
+  values: [[String]]
 }
 
 enum AttributeInputTypeEnum {
@@ -3028,6 +3028,17 @@ input MoveProductInput {
 }
 
 type Mutation {
+  serviceContractCreateOrUpdate(
+    accepting: Boolean
+    concreted: Boolean
+    creating: Boolean
+    id: ID
+    input: ServiceContractCreateOrUpdateInput!
+    serviceId: String
+    serviceReviewing: Boolean
+    userReviewing: Boolean
+    vendorId: String
+  ): ServiceContractCreateOrUpdate
   vendorCreateOrUpdate(
     id: ID
     input: VendorCreateOrUpdateInput!
@@ -4311,7 +4322,7 @@ type PasswordChange {
   accountErrors: [AccountError!]!
 }
 
-type PastExperience implements Node {
+type PastExperience {
   id: ID!
   location: ExperienceLocation
   descriptionShort: String!
@@ -4703,6 +4714,7 @@ type Product implements Node & ObjectWithMetadata {
   weight: Weight
   defaultVariant: ProductVariant
   rating: Float
+  baseProduct: BaseProduct
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
   url: String!
@@ -4838,6 +4850,7 @@ input ProductCreateInput {
   seo: SeoInput
   weight: WeightScalar
   rating: Float
+  baseProduct: ID
   productType: ID!
 }
 
@@ -4988,6 +5001,7 @@ input ProductInput {
   seo: SeoInput
   weight: WeightScalar
   rating: Float
+  baseProduct: ID
 }
 
 input ProductOrder {
@@ -5421,6 +5435,7 @@ input PublishableChannelListingInput {
 
 type Query {
   vendors(
+    filter: VendorFilterInput
     sortBy: VendorSortingInput
     before: String
     after: String
@@ -5969,7 +5984,8 @@ input SeoInput {
   description: String
 }
 
-type ServiceContact {
+type ServiceContract {
+  id: ID
   firstName: String
   lastName: String
   fullName: String
@@ -5980,6 +5996,25 @@ type ServiceContact {
   cityWithCode: String
   address: String
   email: String
+  datetime: String
+  service: String
+  message: String
+}
+
+type ServiceContractCreateOrUpdate {
+  errors: [Error!]!
+    @deprecated(
+      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
+    )
+  error: String
+  contractId: String
+}
+
+input ServiceContractCreateOrUpdateInput {
+  date: String!
+  address: String!
+  message: String!
+  stage: String!
 }
 
 type SetPassword {
@@ -6935,7 +6970,7 @@ type Vendor implements Node & ObjectWithMetadata {
   contacts: [VendorContact!]!
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
-  serviceContact: ServiceContact
+  serviceContracts: [ServiceContract]
   pastExperiences(
     before: String
     after: String
@@ -6946,6 +6981,7 @@ type Vendor implements Node & ObjectWithMetadata {
   avatarImage: VendorAvatarImage
   serviceImages: [VendorServiceImage]
   mainCategories: [Category]
+  category(id: ID): Category
   socialMedia: [VendorSocialMedia]
 }
 
@@ -7013,6 +7049,10 @@ enum VendorErrorCode {
   NOT_FOUND
   REQUIRED
   UNIQUE
+}
+
+input VendorFilterInput {
+  services: [ID]
 }
 
 type VendorImageCreateOrUpdate {
@@ -7614,7 +7654,7 @@ union _Entity =
   | VendorAvatarImage
   | VendorMainImage
   | VendorSocialMedia
-  | ServiceContact
+  | ServiceContract
   | Vendor
   | Address
   | User
@@ -7624,4 +7664,10 @@ union _Entity =
 
 type _Service {
   sdl: String
+}
+
+enum type_of_identification {
+  EMPTY
+  DNI
+  PASSPORT
 }
