@@ -9,7 +9,9 @@ import {
   Grid,
   Input,
   InputLabel,
-  TextareaAutosize
+  TextareaAutosize,
+  TextField,
+  Typography
 } from "@material-ui/core";
 import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -18,6 +20,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import useUser from "@saleor/hooks/useUser";
+import DataImages from "@saleor/products/views/ExperiencesCreate/components/DataImages";
 import React from "react";
 
 import ActiveServicesPage from "../../services/components/ActiveServicesPage";
@@ -57,6 +60,23 @@ const ActiveServices = () => {
             [event.target.value]: event.target.checked
           });
         };
+
+        const [
+          otraRazonNoConcretada,
+          setOtraRazonNoConcretada
+        ] = React.useState("");
+
+        const handleTextAreaChange = event => {
+          setOtraRazonNoConcretada(event.target.value);
+        };
+
+        // tercer modal:
+        const initImages = ["0", "1", "2", "3", "4"].map(position => ({
+          file: null,
+          position
+        }));
+
+        const [images, setImages] = React.useState(initImages);
 
         if (loading) {
           return (
@@ -130,11 +150,57 @@ const ActiveServices = () => {
                       value="razon_4"
                     />
                     <TextareaAutosize
+                      value={otraRazonNoConcretada}
+                      onChange={handleTextAreaChange}
+                      disabled={!razonNoConcretada.razon_4}
                       minRows={3}
-                      style={{ width: 200, height: 42 }}
+                      style={{ width: 200, minHeight: 42 }}
                     />
                   </Grid>
                 </FormGroup>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setEtapa(-1)} data-test="cancel">
+                  cerrar
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+            <Dialog open={true} maxWidth="sm" fullWidth>
+              <DialogContent>
+                <Typography variant="h6" component="div" gutterBottom>
+                  Excelente, vamos a finalizar la experiencia NUMERO
+                </Typography>
+                <Typography variant="h6" component="div" gutterBottom>
+                  DATA INFO
+                </Typography>
+                <Grid
+                  container
+                  direction={"column"}
+                  style={{ padding: "0.5em" }}
+                >
+                  <Typography variant="subtitle2">
+                    Escribí un título del trabajo realizado
+                  </Typography>
+                  <TextField variant="standard" />
+                </Grid>
+                <Grid
+                  container
+                  direction={"column"}
+                  style={{ padding: "0.5em" }}
+                >
+                  <Typography variant="subtitle2">
+                    Si deseas, explayate en el trabajo realizado
+                  </Typography>
+                  <TextareaAutosize minRows={3} style={{ minHeight: 80 }} />
+                </Grid>
+
+                <DataImages
+                  images={[]}
+                  setImages={() => {}}
+                  triggerChange={() => {}}
+                  error={{ imageZero: false }}
+                />
               </DialogContent>
               <DialogActions>
                 <Button onClick={() => setEtapa(-1)} data-test="cancel">
