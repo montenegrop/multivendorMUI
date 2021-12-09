@@ -2,18 +2,19 @@ import makeMutation from "@saleor/hooks/makeMutation";
 import gql from "graphql-tag";
 
 const ActiveServiceImageCreate = gql`
-  mutation pastExperienceImageCreate(
+  mutation ServiceContractImageCreate(
     $position: String!
     $image: Upload!
     $contractId: ID!
   ) {
-    pastExperienceImageCreate(
-      input: { position: $position, image: $image, pastExperience: $expId }
+    serviceContractImageCreate(
+      input: {
+        position: $position
+        image: $image
+        service_contract: $contractId
+      }
     ) {
       position
-      pastExperience {
-        id
-      }
       image {
         url
       }
@@ -21,6 +22,6 @@ const ActiveServiceImageCreate = gql`
   }
 `;
 
-export const useUploadExperienceImage = makeMutation<any, any>(
+export const ActiveServiceImageCreateMutation = makeMutation<any, any>(
   ActiveServiceImageCreate
 );

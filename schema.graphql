@@ -3039,6 +3039,9 @@ type Mutation {
     userReviewing: Boolean
     vendorId: String
   ): ServiceContractCreateOrUpdate
+  serviceContractImageCreate(
+    input: ServiceContractCreateInput!
+  ): ServiceContractImageCreate
   vendorCreateOrUpdate(
     id: ID
     input: VendorCreateOrUpdateInput!
@@ -4322,7 +4325,7 @@ type PasswordChange {
   accountErrors: [AccountError!]!
 }
 
-type PastExperience {
+type PastExperience implements Node & ObjectWithMetadata {
   id: ID!
   location: ExperienceLocation
   descriptionShort: String!
@@ -4334,6 +4337,8 @@ type PastExperience {
     first: Int
     last: Int
   ): PastExperienceImageCountableConnection!
+  privateMetadata: [MetadataItem]!
+  metadata: [MetadataItem]!
   service: BaseProduct
 }
 
@@ -5556,6 +5561,7 @@ type Query {
     first: Int
     last: Int
   ): ProductVariantCountableConnection
+  pastExperience(id: ID): PastExperience
   payment(id: ID!): Payment
   payments(
     before: String
@@ -5984,21 +5990,41 @@ input SeoInput {
   description: String
 }
 
-type ServiceContract {
-  id: ID
+type ServiceContract implements Node & ObjectWithMetadata {
+  id: ID!
+  address: String
+  message: String!
+  privateMetadata: [MetadataItem]!
+  metadata: [MetadataItem]!
   firstName: String
   lastName: String
   fullName: String
   phone: String
-  celphone: String
+  cellphone: String
   city: String
   postalCode: String
   cityWithCode: String
-  address: String
   email: String
   datetime: String
   service: String
-  message: String
+}
+
+type ServiceContractCountableConnection {
+  pageInfo: PageInfo!
+  edges: [ServiceContractCountableEdge!]!
+  totalCount: Int
+}
+
+type ServiceContractCountableEdge {
+  node: ServiceContract!
+  cursor: String!
+}
+
+input ServiceContractCreateInput {
+  alt: String
+  position: String!
+  image: Upload!
+  serviceContract: ID!
 }
 
 type ServiceContractCreateOrUpdate {
@@ -6012,9 +6038,31 @@ type ServiceContractCreateOrUpdate {
 
 input ServiceContractCreateOrUpdateInput {
   date: String!
+  hour: String!
+  city: String!
   address: String!
   message: String!
   stage: String!
+}
+
+type ServiceContractImage implements Node {
+  id: ID!
+  image: String!
+  ppoi: String!
+  alt: String!
+  position: Int!
+  url(size: Int): String!
+}
+
+type ServiceContractImageCreate {
+  errors: [Error!]!
+    @deprecated(
+      reason: "Use typed errors with error codes. This field will be removed after 2020-07-31."
+    )
+  serviceContract: ServiceContract
+  image: ServiceContractImage
+  position: String
+  productErrors: [ProductError!]!
 }
 
 type SetPassword {
@@ -6970,7 +7018,12 @@ type Vendor implements Node & ObjectWithMetadata {
   contacts: [VendorContact!]!
   privateMetadata: [MetadataItem]!
   metadata: [MetadataItem]!
-  serviceContracts: [ServiceContract]
+  serviceContracts(
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): ServiceContractCountableConnection
   pastExperiences(
     before: String
     after: String
@@ -7661,6 +7714,7 @@ union _Entity =
   | Group
   | App
   | PageType
+  | ServiceContractImage
 
 type _Service {
   sdl: String

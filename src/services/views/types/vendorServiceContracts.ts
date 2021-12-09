@@ -6,9 +6,9 @@
 // GraphQL query operation: vendorServiceContracts
 // ====================================================
 
-export interface vendorServiceContracts_vendor_serviceContracts {
+export interface vendorServiceContracts_vendor_serviceContracts_edges_node {
   __typename: "ServiceContract";
-  id: string | null;
+  id: string;
   firstName: string | null;
   fullName: string | null;
   email: string | null;
@@ -17,7 +17,17 @@ export interface vendorServiceContracts_vendor_serviceContracts {
   city: string | null;
   datetime: string | null;
   service: string | null;
-  message: string | null;
+  message: string;
+}
+
+export interface vendorServiceContracts_vendor_serviceContracts_edges {
+  __typename: "ServiceContractCountableEdge";
+  node: vendorServiceContracts_vendor_serviceContracts_edges_node;
+}
+
+export interface vendorServiceContracts_vendor_serviceContracts {
+  __typename: "ServiceContractCountableConnection";
+  edges: vendorServiceContracts_vendor_serviceContracts_edges[];
 }
 
 export interface vendorServiceContracts_vendor {
@@ -25,7 +35,7 @@ export interface vendorServiceContracts_vendor {
   id: string;
   name: string;
   email: string | null;
-  serviceContracts: (vendorServiceContracts_vendor_serviceContracts | null)[] | null;
+  serviceContracts: vendorServiceContracts_vendor_serviceContracts | null;
 }
 
 export interface vendorServiceContracts {

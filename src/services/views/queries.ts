@@ -10,17 +10,21 @@ const ActiveServicesList = gql`
       id
       name
       email
-      serviceContracts {
-        id
-        firstName
-        fullName
-        email
-        phone
-        address
-        city
-        datetime
-        service
-        message
+      serviceContracts(first: 15) {
+        edges {
+          node {
+            id
+            firstName
+            fullName
+            email
+            phone
+            address
+            city
+            datetime
+            service
+            message
+          }
+        }
       }
     }
   }
