@@ -1,5 +1,6 @@
+import React, { useEffect } from "react";
+
 import {
-  Box,
   Checkbox,
   CircularProgress,
   Container,
@@ -21,62 +22,80 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import useUser from "@saleor/hooks/useUser";
 import DataImages from "@saleor/products/views/ExperiencesCreate/components/DataImages";
-import React from "react";
 
 import ActiveServicesPage from "../../services/components/ActiveServicesPage";
 import { ActiveServicesListQuery } from "./queries";
 
+import { imageChange } from "../components/Images";
+import { useUploadServiceContractImage } from "./mutations";
+
 const ActiveServices = () => {
   const { user } = useUser();
+
+  const [concretada, setConcretada] = React.useState(true);
+  const [etapa, setEtapa] = React.useState(0);
+  const experienciaConcretada = () => {
+    setConcretada(true);
+    setEtapa(1);
+  };
+  const experienciaNoConcretada = () => {
+    setConcretada(false);
+    setEtapa(1);
+  };
+  // segundo modal:
+
+  const initialNoConcretada = {
+    razon_1: false,
+    razon_2: false,
+    razon_3: false,
+    razon_4: false
+  };
+  const [razonNoConcretada, setRazonNoConcretada] = React.useState(
+    initialNoConcretada
+  );
+
+  const handleCheckboxChange = event => {
+    setRazonNoConcretada({
+      ...initialNoConcretada,
+      [event.target.value]: event.target.checked
+    });
+  };
+
+  const [otraRazonNoConcretada, setOtraRazonNoConcretada] = React.useState("");
+
+  const handleTextAreaChange = event => {
+    setOtraRazonNoConcretada(event.target.value);
+  };
+
+  // tercer modal:
+  const initImages = ["0", "1", "2", "3", "4"].map(position => ({
+    file: null,
+    position
+  }));
+
+  const [images, setImages] = React.useState<
+    Array<{ file: any; position: string }>
+  >(initImages);
+
+  const [
+    uploadServiceContractImage,
+    stateServiceContractImageUpload
+  ] = useUploadServiceContractImage({});
+
+  const onImageChange = () => {
+    // console.log(images);
+    imageChange(images, uploadServiceContractImage);
+  };
+
+  useEffect(() => {
+    onImageChange();
+    console.log("handle");
+  }, [images]);
+
   return (
     <ActiveServicesListQuery variables={{ vendorId: "VmVuZG9yOjE=" }}>
       {({ data, loading }) => {
         // primer modal:
-        const [concretada, setConcretada] = React.useState(true);
-        const [etapa, setEtapa] = React.useState(0);
-        const experienciaConcretada = () => {
-          setConcretada(true);
-          setEtapa(1);
-        };
-        const experienciaNoConcretada = () => {
-          setConcretada(false);
-          setEtapa(1);
-        };
-        // segundo modal:
-
-        const initialNoConcretada = {
-          razon_1: false,
-          razon_2: false,
-          razon_3: false,
-          razon_4: false
-        };
-        const [razonNoConcretada, setRazonNoConcretada] = React.useState(
-          initialNoConcretada
-        );
-
-        const handleCheckboxChange = event => {
-          setRazonNoConcretada({
-            ...initialNoConcretada,
-            [event.target.value]: event.target.checked
-          });
-        };
-
-        const [
-          otraRazonNoConcretada,
-          setOtraRazonNoConcretada
-        ] = React.useState("");
-
-        const handleTextAreaChange = event => {
-          setOtraRazonNoConcretada(event.target.value);
-        };
-
-        // tercer modal:
-        const initImages = ["0", "1", "2", "3", "4"].map(position => ({
-          file: null,
-          position
-        }));
-
-        const [images, setImages] = React.useState(initImages);
 
         if (loading) {
           return (
@@ -153,7 +172,7 @@ const ActiveServices = () => {
                       value={otraRazonNoConcretada}
                       onChange={handleTextAreaChange}
                       disabled={!razonNoConcretada.razon_4}
-                      minRows={3}
+                      rowsMin={3}
                       style={{ width: 200, minHeight: 42 }}
                     />
                   </Grid>
@@ -192,12 +211,12 @@ const ActiveServices = () => {
                   <Typography variant="subtitle2">
                     Si deseas, explayate en el trabajo realizado
                   </Typography>
-                  <TextareaAutosize minRows={3} style={{ minHeight: 80 }} />
+                  <TextareaAutosize rowsMin={3} style={{ minHeight: 80 }} />
                 </Grid>
 
                 <DataImages
-                  images={[]}
-                  setImages={() => {}}
+                  images={images}
+                  setImages={setImages}
                   triggerChange={() => {}}
                   error={{ imageZero: false }}
                 />

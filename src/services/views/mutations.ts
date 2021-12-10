@@ -10,11 +10,7 @@ const ImageServiceContractUpload = gql`
     $contractId: ID!
   ) {
     serviceContractImageCreate(
-      input: {
-        position: $position
-        image: $image
-        service_contract: $contractId
-      }
+      input: { position: $position, image: $image, contractId: $contractId }
     ) {
       position
       image {

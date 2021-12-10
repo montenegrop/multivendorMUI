@@ -3040,7 +3040,7 @@ type Mutation {
     vendorId: String
   ): ServiceContractCreateOrUpdate
   serviceContractImageCreate(
-    input: ServiceContractCreateInput!
+    input: ServiceContractImageCreateInput!
   ): ServiceContractImageCreate
   vendorCreateOrUpdate(
     id: ID
@@ -6020,13 +6020,6 @@ type ServiceContractCountableEdge {
   cursor: String!
 }
 
-input ServiceContractCreateInput {
-  alt: String
-  position: String!
-  image: Upload!
-  serviceContract: ID!
-}
-
 type ServiceContractCreateOrUpdate {
   errors: [Error!]!
     @deprecated(
@@ -6063,6 +6056,13 @@ type ServiceContractImageCreate {
   image: ServiceContractImage
   position: String
   productErrors: [ProductError!]!
+}
+
+input ServiceContractImageCreateInput {
+  alt: String
+  position: String!
+  image: Upload!
+  contractId: ID!
 }
 
 type SetPassword {
