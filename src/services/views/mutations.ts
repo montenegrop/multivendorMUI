@@ -1,7 +1,9 @@
 import makeMutation from "@saleor/hooks/makeMutation";
 import gql from "graphql-tag";
 
-const ActiveServiceImageCreate = gql`
+import { ServiceContractImageCreate } from "./types/ServiceContractImageCreate";
+
+const ImageServiceContractUpload = gql`
   mutation ServiceContractImageCreate(
     $position: String!
     $image: Upload!
@@ -21,7 +23,7 @@ const ActiveServiceImageCreate = gql`
     }
   }
 `;
-
-export const ActiveServiceImageCreateMutation = makeMutation<any, any>(
-  ActiveServiceImageCreate
-);
+export const useUploadServiceContractImage = makeMutation<
+  ServiceContractImageCreate,
+  any
+>(ImageServiceContractUpload);
