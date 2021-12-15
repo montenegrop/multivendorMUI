@@ -5,11 +5,7 @@
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
-export enum CategorySortField {
-  NAME ="NAME",
-  PRODUCT_COUNT ="PRODUCT_COUNT",
-  SUBCATEGORY_COUNT="SUBCATEGORY_COUNT",
-}
+
 export enum AccountErrorCode {
   ACTIVATE_OWN_ACCOUNT = "ACTIVATE_OWN_ACCOUNT",
   ACTIVATE_SUPERUSER_ACCOUNT = "ACTIVATE_SUPERUSER_ACCOUNT",
@@ -1055,9 +1051,9 @@ export interface AttributeFilterInput {
 }
 
 export interface AttributeInput {
-  slug: string;
+  slugs: (string | null)[];
   value?: string | null;
-  values?: (string | null)[] | null;
+  values?: ((string | null)[] | null)[] | null;
 }
 
 export interface AttributeSortingInput {
@@ -1519,6 +1515,7 @@ export interface ProductCreateInput {
   seo?: SeoInput | null;
   weight?: any | null;
   rating?: number | null;
+  baseProduct?: string | null;
   productType: string;
 }
 
@@ -1553,6 +1550,7 @@ export interface ProductInput {
   seo?: SeoInput | null;
   weight?: any | null;
   rating?: number | null;
+  baseProduct?: string | null;
 }
 
 export interface ProductOrder {

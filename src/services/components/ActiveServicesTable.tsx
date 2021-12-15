@@ -1,4 +1,5 @@
-import { Card, CardContent } from "@material-ui/core";
+import { Card, CardContent, Hidden } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -9,30 +10,61 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 
+import { vendorServiceContracts_vendor_serviceContracts } from "../views/types/vendorServiceContracts";
+
 const useStyles = makeStyles(
   {
     table: {
       minWidth: 650
+    },
+    message: {
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+      width: "250px",
+      display: "block",
+      overflow: "hidden"
+    },
+    stage: {
+      color: "blue"
     }
   },
   { name: "ActiveServicesTable" }
 );
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(id, datetime, address, city, service, message, state) {
+  return { id, datetime, address, city, service, message, state };
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9)
-];
+interface Props {
+  propWhichIsArray: Array<{
+    __typename: "ServiceContract";
+    id: string | null;
+    firstName: string | null;
+    fullName: string | null;
+    email: string | null;
+    phone: string | null;
+    address: string | null;
+    city: string | null;
+    datetime: string | null;
+    service: string | null;
+    message: string | null;
+  }>;
+}
 
-const ActiveServicesTable = props => {
-  const { data } = props;
+const ActiveServicesTable = ({ propWhichIsArray }) => {
   const classes = useStyles();
+
+  const rows = propWhichIsArray.map(contract =>
+    createData(
+      contract.id,
+      contract.datetime,
+      contract.address,
+      contract.city,
+      contract.service,
+      contract.message,
+      contract.stage
+    )
+  );
 
   return (
     <Card>
@@ -45,23 +77,38 @@ const ActiveServicesTable = props => {
           >
             <TableHead>
               <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                <TableCell>Id trabajo</TableCell>
+                <TableCell align="right">Fecha y Hora</TableCell>
+                <TableCell align="right">Dirección</TableCell>
+                <TableCell align="right">Localidad</TableCell>
+                <TableCell align="right">Servicio</TableCell>
+                <TableCell align="right">Titulo</TableCell>
+                <TableCell align="right">Estado</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map(row => (
-                <TableRow key={row.name}>
+                <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {row.id}
                   </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
-                  <TableCell align="right">{row.protein}</TableCell>
+                  <TableCell align="right">{row.datetime}</TableCell>
+                  <TableCell align="right">{row.address}</TableCell>
+                  <TableCell align="right">{row.city}</TableCell>
+                  <TableCell align="right">{row.service}</TableCell>
+                  <TableCell className={classes.message} align="right">
+                    {row.message}
+                  </TableCell>
+                  <TableCell className={classes.stage} align="right">
+                    {row.stage}
+                    <Link
+                      underline="hover"
+                      color="inherit"
+                      href="/getting-started/installation/"
+                    >
+                      link
+                    </Link>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

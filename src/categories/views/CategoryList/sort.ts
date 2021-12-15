@@ -1,17 +1,14 @@
 import { CategoryListUrlSortField } from "@saleor/categories/urls";
-import { CategorySortField } from "@saleor/types/globalTypes";
 import { createGetSortQueryVariables } from "@saleor/utils/sort";
 
-export function getSortQueryField(
-  sort: CategoryListUrlSortField
-): CategorySortField {
+export function getSortQueryField(sort: CategoryListUrlSortField): any {
   switch (sort) {
     case CategoryListUrlSortField.name:
-      return CategorySortField.NAME;
+      return "name";
     case CategoryListUrlSortField.productCount:
-      return CategorySortField.PRODUCT_COUNT;
+      return "products";
     case CategoryListUrlSortField.subcategoryCount:
-      return CategorySortField.SUBCATEGORY_COUNT;
+      return "subcategories";
     default:
       return undefined;
   }

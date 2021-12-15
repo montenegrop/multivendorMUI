@@ -196,10 +196,12 @@ export function getFilterVariables(
     attributes: !!params.attributes
       ? Object.keys(params.attributes).map(key => ({
           slug: key,
+          slugs: ["corregir1", "corregir2"],
           // It is possible for qs to parse values not as string[] but string
-          values: isArray(params.attributes[key])
-            ? params.attributes[key]
-            : (([params.attributes[key]] as unknown) as string[])
+          values: [
+            ["corregir1", "corregir2"],
+            ["corregir3:", "corregir:"]
+          ]
         }))
       : null,
     categories: params.categories !== undefined ? params.categories : null,
