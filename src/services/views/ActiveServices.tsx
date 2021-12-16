@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-
 import {
   Checkbox,
   CircularProgress,
@@ -22,12 +20,12 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import useUser from "@saleor/hooks/useUser";
 import DataImages from "@saleor/products/views/ExperiencesCreate/components/DataImages";
+import React, { useEffect } from "react";
 
 import ActiveServicesPage from "../../services/components/ActiveServicesPage";
-import { ActiveServicesListQuery } from "./queries";
-
 import { imageChange } from "../components/Images";
 import { useUploadServiceContractImage } from "./mutations";
+import { ActiveServicesListQuery } from "./queries";
 
 const ActiveServices = () => {
   const { user } = useUser();
@@ -89,7 +87,7 @@ const ActiveServices = () => {
 
   useEffect(() => {
     onImageChange();
-    console.log("handle");
+    // console.log("handle");
   }, [images]);
 
   return (
@@ -185,7 +183,7 @@ const ActiveServices = () => {
               </DialogActions>
             </Dialog>
 
-            <Dialog open={true} maxWidth="sm" fullWidth>
+            <Dialog open={concretada && etapa === 1} maxWidth="sm" fullWidth>
               <DialogContent>
                 <Typography variant="h6" component="div" gutterBottom>
                   Excelente, vamos a finalizar la experiencia NUMERO
@@ -217,7 +215,7 @@ const ActiveServices = () => {
                 <DataImages
                   images={images}
                   setImages={setImages}
-                  triggerChange={() => {}}
+                  triggerChange={alert}
                   error={{ imageZero: false }}
                 />
               </DialogContent>
