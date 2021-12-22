@@ -13,7 +13,7 @@
   },
   "homepage": "http://getsaleor.com/",
   "engines": {
-    "node": ">=14.17.0",
+    "node": "~14.17.0",
     "npm": ">=6.14.0"
   },
   "dependencies": {
