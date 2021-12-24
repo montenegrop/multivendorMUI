@@ -170,41 +170,42 @@ const Routes: React.FC = () => {
                 path="/categories"
                 component={CategorySection}
               />
-              <SectionRoute
+              {/* corregir: */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
                 path="/collections"
                 component={CollectionSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_USERS]}
                 path="/customers"
                 component={CustomerSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
                 path="/discounts"
                 component={DiscountSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PAGES]}
                 path="/pages"
                 component={PageSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PAGES]}
                 path="/page-types"
                 component={PageTypesSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PLUGINS]}
                 path="/plugins"
                 component={PluginsSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_ORDERS]}
                 path="/orders"
                 component={OrdersSection}
-              />
+              /> */}
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
                 path="/products"
@@ -252,21 +253,21 @@ const Routes: React.FC = () => {
                 path="/site-settings"
                 component={SiteSettingsSection}
               />
-              <SectionRoute
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_SETTINGS]}
                 path="/taxes"
                 component={TaxesSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_SHIPPING]}
                 path="/shipping"
                 component={ShippingSection}
-              />
-              <SectionRoute
+              /> */}
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_TRANSLATIONS]}
                 path="/translations"
                 component={TranslationsSection}
-              />
+              /> */}
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_MENUS]}
                 path={navigationSection}
@@ -279,11 +280,11 @@ const Routes: React.FC = () => {
                 path={attributeSection}
                 component={AttributeSection}
               />
-              <SectionRoute
+              {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_APPS]}
                 path={appsSection}
                 component={AppsSection}
-              />
+              /> */}
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
                 path={warehouseSection}

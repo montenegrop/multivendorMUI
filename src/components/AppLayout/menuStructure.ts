@@ -92,85 +92,85 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       permission: PermissionEnum.MANAGE_PRODUCTS,
       testingContextId: "servicios",
       url: "/activeServices"
-    },
-    {
-      ariaLabel: "collections",
-      icon: catalogIcon,
-      label: intl.formatMessage(sectionNames.collections),
-      permission: PermissionEnum.MANAGE_PRODUCTS,
-      testingContextId: "collections",
-      url: collectionListUrl()
-    },
-
-    {
-      ariaLabel: "orders",
-      children: [
-        {
-          ariaLabel: "orders",
-          label: intl.formatMessage(sectionNames.orders),
-          permission: PermissionEnum.MANAGE_ORDERS,
-          testingContextId: "orders",
-          url: orderListUrl()
-        },
-        {
-          ariaLabel: "order drafts",
-          label: intl.formatMessage(commonMessages.drafts),
-          permission: PermissionEnum.MANAGE_ORDERS,
-          testingContextId: "order drafts",
-          url: orderDraftListUrl()
-        }
-      ],
-      icon: ordersIcon,
-      label: intl.formatMessage(sectionNames.orders),
-      permission: PermissionEnum.MANAGE_ORDERS,
-      testingContextId: "orders"
-    },
-    {
-      ariaLabel: "customers",
-      icon: customerIcon,
-      label: intl.formatMessage(sectionNames.customers),
-      permission: PermissionEnum.MANAGE_USERS,
-      testingContextId: "customers",
-      url: customerListUrl()
-    },
-
-    {
-      ariaLabel: "discounts",
-      children: [
-        {
-          ariaLabel: "sales",
-          label: intl.formatMessage(sectionNames.sales),
-          testingContextId: "sales",
-          url: saleListUrl()
-        },
-        {
-          ariaLabel: "vouchers",
-          label: intl.formatMessage(sectionNames.vouchers),
-          testingContextId: "vouchers",
-          url: voucherListUrl()
-        }
-      ],
-      icon: discountsIcon,
-      label: intl.formatMessage(commonMessages.discounts),
-      permission: PermissionEnum.MANAGE_DISCOUNTS,
-      testingContextId: "discounts"
-    },
-    {
-      ariaLabel: "apps",
-      icon: appsIcon,
-      label: intl.formatMessage(sectionNames.apps),
-      permission: PermissionEnum.MANAGE_APPS,
-      testingContextId: "apps",
-      url: appsListPath
-    },
-    {
-      ariaLabel: "translations",
-      icon: translationIcon,
-      label: intl.formatMessage(sectionNames.translations),
-      permission: PermissionEnum.MANAGE_TRANSLATIONS,
-      testingContextId: "translations",
-      url: languageListUrl
     }
+    // {
+    //   ariaLabel: "collections",
+    //   icon: catalogIcon,
+    //   label: intl.formatMessage(sectionNames.collections),
+    //   permission: PermissionEnum.MANAGE_PRODUCTS,
+    //   testingContextId: "collections",
+    //   url: collectionListUrl()
+    // },
+
+    // {
+    //   ariaLabel: "orders",
+    //   children: [
+    //     {
+    //       ariaLabel: "orders",
+    //       label: intl.formatMessage(sectionNames.orders),
+    //       permission: PermissionEnum.MANAGE_ORDERS,
+    //       testingContextId: "orders",
+    //       url: orderListUrl()
+    //     },
+    //     {
+    //       ariaLabel: "order drafts",
+    //       label: intl.formatMessage(commonMessages.drafts),
+    //       permission: PermissionEnum.MANAGE_ORDERS,
+    //       testingContextId: "order drafts",
+    //       url: orderDraftListUrl()
+    //     }
+    //   ],
+    //   icon: ordersIcon,
+    //   label: intl.formatMessage(sectionNames.orders),
+    //   permission: PermissionEnum.MANAGE_ORDERS,
+    //   testingContextId: "orders"
+    // },
+    // {
+    //   ariaLabel: "customers",
+    //   icon: customerIcon,
+    //   label: intl.formatMessage(sectionNames.customers),
+    //   permission: PermissionEnum.MANAGE_USERS,
+    //   testingContextId: "customers",
+    //   url: customerListUrl()
+    // },
+
+    // {
+    //   ariaLabel: "discounts",
+    //   children: [
+    //     {
+    //       ariaLabel: "sales",
+    //       label: intl.formatMessage(sectionNames.sales),
+    //       testingContextId: "sales",
+    //       url: saleListUrl()
+    //     },
+    //     {
+    //       ariaLabel: "vouchers",
+    //       label: intl.formatMessage(sectionNames.vouchers),
+    //       testingContextId: "vouchers",
+    //       url: voucherListUrl()
+    //     }
+    //   ],
+    //   icon: discountsIcon,
+    //   label: intl.formatMessage(commonMessages.discounts),
+    //   permission: PermissionEnum.MANAGE_DISCOUNTS,
+    //   testingContextId: "discounts"
+    // },
+    // {
+    //   ariaLabel: "apps",
+    //   icon: appsIcon,
+    //   label: intl.formatMessage(sectionNames.apps),
+    //   permission: PermissionEnum.MANAGE_APPS,
+    //   testingContextId: "apps",
+    //   url: appsListPath
+    // },
+    // {
+    //   ariaLabel: "translations",
+    //   icon: translationIcon,
+    //   label: intl.formatMessage(sectionNames.translations),
+    //   permission: PermissionEnum.MANAGE_TRANSLATIONS,
+    //   testingContextId: "translations",
+    //   url: languageListUrl
+    // }
   ];
 }
 
