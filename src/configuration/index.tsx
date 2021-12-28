@@ -64,23 +64,23 @@ export function createConfigurationMenu(intl: IntlShape): MenuSection[] {
         }
       ]
     },
-    {
-      label: intl.formatMessage({
-        defaultMessage: "Product Settings"
-      }),
-      menuItems: [
-        {
-          description: intl.formatMessage({
-            defaultMessage: "Manage how your store charges tax",
-            id: "configurationMenuTaxes"
-          }),
-          icon: <Taxes fontSize="inherit" viewBox="0 0 44 44" />,
-          permission: PermissionEnum.MANAGE_SETTINGS,
-          title: intl.formatMessage(sectionNames.taxes),
-          url: taxSection
-        }
-      ]
-    },
+    // {
+    //   label: intl.formatMessage({
+    //     defaultMessage: "Product Settings"
+    //   }),
+    //   menuItems: [
+    //     {
+    //       description: intl.formatMessage({
+    //         defaultMessage: "Manage how your store charges tax",
+    //         id: "configurationMenuTaxes"
+    //       }),
+    //       icon: <Taxes fontSize="inherit" viewBox="0 0 44 44" />,
+    //       permission: PermissionEnum.MANAGE_SETTINGS,
+    //       title: intl.formatMessage(sectionNames.taxes),
+    //       url: taxSection
+    //     }
+    //   ]
+    // },
     {
       label: intl.formatMessage({
         defaultMessage: "Staff Settings"
@@ -109,33 +109,33 @@ export function createConfigurationMenu(intl: IntlShape): MenuSection[] {
         }
       ]
     },
-    {
-      label: intl.formatMessage({
-        defaultMessage: "Shipping Settings"
-      }),
-      menuItems: [
-        {
-          description: intl.formatMessage({
-            defaultMessage: "Manage how you ship out orders",
-            id: "configurationMenuShipping"
-          }),
-          icon: <ShippingMethods fontSize="inherit" viewBox="0 0 44 44" />,
-          permission: PermissionEnum.MANAGE_SHIPPING,
-          title: intl.formatMessage(sectionNames.shipping),
-          url: shippingZonesListUrl()
-        },
-        {
-          description: intl.formatMessage({
-            defaultMessage: "Manage and update your warehouse information",
-            id: "configurationMenuWarehouses"
-          }),
-          icon: <Warehouses fontSize="inherit" viewBox="0 0 44 44" />,
-          permission: PermissionEnum.MANAGE_PRODUCTS,
-          title: intl.formatMessage(sectionNames.warehouses),
-          url: warehouseSection
-        }
-      ]
-    },
+    // {
+    //   label: intl.formatMessage({
+    //     defaultMessage: "Shipping Settings"
+    //   }),
+    //   menuItems: [
+    //     {
+    //       description: intl.formatMessage({
+    //         defaultMessage: "Manage how you ship out orders",
+    //         id: "configurationMenuShipping"
+    //       }),
+    //       icon: <ShippingMethods fontSize="inherit" viewBox="0 0 44 44" />,
+    //       permission: PermissionEnum.MANAGE_SHIPPING,
+    //       title: intl.formatMessage(sectionNames.shipping),
+    //       url: shippingZonesListUrl()
+    //     },
+    //     {
+    //       description: intl.formatMessage({
+    //         defaultMessage: "Manage and update your warehouse information",
+    //         id: "configurationMenuWarehouses"
+    //       }),
+    //       icon: <Warehouses fontSize="inherit" viewBox="0 0 44 44" />,
+    //       permission: PermissionEnum.MANAGE_PRODUCTS,
+    //       title: intl.formatMessage(sectionNames.warehouses),
+    //       url: warehouseSection
+    //     }
+    //   ]
+    // },
     {
       label: intl.formatMessage({
         defaultMessage: "Multichannel"
@@ -185,16 +185,16 @@ export function createConfigurationMenu(intl: IntlShape): MenuSection[] {
         defaultMessage: "Miscellaneous"
       }),
       menuItems: [
-        {
-          description: intl.formatMessage({
-            defaultMessage: "Define how users can navigate through your store",
-            id: "configurationMenuNavigation"
-          }),
-          icon: <Navigation fontSize="inherit" viewBox="0 0 44 44" />,
-          permission: PermissionEnum.MANAGE_MENUS,
-          title: intl.formatMessage(sectionNames.navigation),
-          url: menuListUrl()
-        },
+        // {
+        //   description: intl.formatMessage({
+        //     defaultMessage: "Define how users can navigate through your store",
+        //     id: "configurationMenuNavigation"
+        //   }),
+        //   icon: <Navigation fontSize="inherit" viewBox="0 0 44 44" />,
+        //   permission: PermissionEnum.MANAGE_MENUS,
+        //   title: intl.formatMessage(sectionNames.navigation),
+        //   url: menuListUrl()
+        // },
         {
           description: intl.formatMessage({
             defaultMessage: "View and update your site settings",
@@ -204,23 +204,23 @@ export function createConfigurationMenu(intl: IntlShape): MenuSection[] {
           permission: PermissionEnum.MANAGE_SETTINGS,
           title: intl.formatMessage(sectionNames.siteSettings),
           url: siteSettingsUrl()
-        },
-        {
-          description: intl.formatMessage({
-            defaultMessage: "View and update your plugins and their settings.",
-            id: "configurationPluginsPages"
-          }),
-          icon: (
-            <Plugins
-              fontSize="inherit"
-              viewBox="-8 -5 44 44"
-              preserveAspectRatio="xMinYMin meet"
-            />
-          ),
-          permission: PermissionEnum.MANAGE_PLUGINS,
-          title: intl.formatMessage(sectionNames.plugins),
-          url: pluginListUrl()
         }
+        // {
+        //   description: intl.formatMessage({
+        //     defaultMessage: "View and update your plugins and their settings.",
+        //     id: "configurationPluginsPages"
+        //   }),
+        //   icon: (
+        //     <Plugins
+        //       fontSize="inherit"
+        //       viewBox="-8 -5 44 44"
+        //       preserveAspectRatio="xMinYMin meet"
+        //     />
+        //   ),
+        //   permission: PermissionEnum.MANAGE_PLUGINS,
+        //   title: intl.formatMessage(sectionNames.plugins),
+        //   url: pluginListUrl()
+        // }
       ]
     }
   ];

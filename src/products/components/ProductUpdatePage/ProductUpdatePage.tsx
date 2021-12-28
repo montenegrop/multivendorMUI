@@ -305,6 +305,7 @@ export const ProductUpdatePage: React.FC<ProductUpdatePageProps> = ({
               </div>
               <div>
                 <ProductOrganization
+                  top100films={null}
                   canChangeType={false}
                   categories={categories}
                   categoryInputDisplayValue={selectedCategory}

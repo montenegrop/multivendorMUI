@@ -1,7 +1,9 @@
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import CardSpacer from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
 import { FormSpacer } from "@saleor/components/FormSpacer";
@@ -17,7 +19,7 @@ import { ChangeEvent } from "@saleor/hooks/useForm";
 import { maybe } from "@saleor/misc";
 import { FetchMoreProps } from "@saleor/types";
 import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
-import React from "react";
+import React, { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 interface ProductType {
@@ -43,6 +45,7 @@ const useStyles = makeStyles(
 );
 
 interface ProductOrganizationProps {
+  top100films: any;
   canChangeType: boolean;
   categories?: SingleAutocompleteChoiceType[];
   categoryInputDisplayValue: string;
@@ -71,6 +74,7 @@ interface ProductOrganizationProps {
 
 const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
   const {
+    top100films,
     canChangeType,
     categories,
     categoryInputDisplayValue,
@@ -101,6 +105,8 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
     errors
   );
 
+  const [film, setFilm] = useState("hola");
+
   return (
     <Card className={classes.card}>
       <CardTitle
@@ -110,94 +116,116 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
         })}
       />
       <CardContent>
-        {canChangeType ? (
+        <>
+          <Autocomplete
+            freeSolo
+            autoSelect
+            id="combo-box-demo"
+            options={top100films}
+            renderInput={params => <TextField {...params} label="Movie" />}
+            getOptionLabel={option => (option as any).label || ""}
+            onChange={(event, value) => {
+              console.log(value, "change");
+            }}
+            onInputChange={(event, value) => {
+              setFilm(value);
+              console.log(value, "inputChange");
+            }}
+          />
+          {canChangeType ? (
+            <>
+              <SingleAutocompleteSelectField
+                displayValue={productTypeInputDisplayValue}
+                error={!!formErrors.productType}
+                helperText={getProductErrorMessage(
+                  formErrors.productType,
+                  intl
+                )}
+                name="productType"
+                disabled={disabled}
+                label={intl.formatMessage({
+                  defaultMessage: "Product Type"
+                })}
+                choices={productTypes}
+                value={data.productType?.id}
+                onChange={onProductTypeChange}
+                fetchChoices={fetchProductTypes}
+                data-test="product-type"
+                {...fetchMoreProductTypes}
+              />
+            </>
+          ) : (
+            <>
+              <Typography className={classes.label} variant="caption">
+                <FormattedMessage defaultMessage="Product Type" />
+              </Typography>
+              <Typography>{maybe(() => productType.name, "...")}</Typography>
+              <CardSpacer />
+              <Typography className={classes.label} variant="caption">
+                <FormattedMessage defaultMessage="Product Type" />
+              </Typography>
+              <Typography>
+                {maybe(
+                  () =>
+                    productType.hasVariants
+                      ? intl.formatMessage({
+                          defaultMessage: "Configurable",
+                          description: "product is configurable"
+                        })
+                      : intl.formatMessage({
+                          defaultMessage: "Simple",
+                          description: "product is not configurable"
+                        }),
+                  "..."
+                )}
+              </Typography>
+            </>
+          )}
+          <FormSpacer />
+          <Hr />
+          <FormSpacer />
           <SingleAutocompleteSelectField
-            displayValue={productTypeInputDisplayValue}
-            error={!!formErrors.productType}
-            helperText={getProductErrorMessage(formErrors.productType, intl)}
-            name="productType"
+            displayValue={categoryInputDisplayValue}
+            error={!!formErrors.category}
+            helperText={getProductErrorMessage(formErrors.category, intl)}
             disabled={disabled}
             label={intl.formatMessage({
-              defaultMessage: "Product Type"
+              defaultMessage: "Category"
             })}
-            choices={productTypes}
-            value={data.productType?.id}
-            onChange={onProductTypeChange}
-            fetchChoices={fetchProductTypes}
-            data-test="product-type"
-            {...fetchMoreProductTypes}
+            choices={disabled ? [] : categories}
+            name="category"
+            value={data.category}
+            onChange={onCategoryChange}
+            fetchChoices={fetchCategories}
+            data-test="category"
+            {...fetchMoreCategories}
           />
-        ) : (
-          <>
-            <Typography className={classes.label} variant="caption">
-              <FormattedMessage defaultMessage="Product Type" />
-            </Typography>
-            <Typography>{maybe(() => productType.name, "...")}</Typography>
-            <CardSpacer />
-            <Typography className={classes.label} variant="caption">
-              <FormattedMessage defaultMessage="Product Type" />
-            </Typography>
-            <Typography>
-              {maybe(
-                () =>
-                  productType.hasVariants
-                    ? intl.formatMessage({
-                        defaultMessage: "Configurable",
-                        description: "product is configurable"
-                      })
-                    : intl.formatMessage({
-                        defaultMessage: "Simple",
-                        description: "product is not configurable"
-                      }),
-                "..."
-              )}
-            </Typography>
-          </>
-        )}
-        <FormSpacer />
-        <Hr />
-        <FormSpacer />
-        <SingleAutocompleteSelectField
-          displayValue={categoryInputDisplayValue}
-          error={!!formErrors.category}
-          helperText={getProductErrorMessage(formErrors.category, intl)}
-          disabled={disabled}
-          label={intl.formatMessage({
-            defaultMessage: "Category"
-          })}
-          choices={disabled ? [] : categories}
-          name="category"
-          value={data.category}
-          onChange={onCategoryChange}
-          fetchChoices={fetchCategories}
-          data-test="category"
-          {...fetchMoreCategories}
-        />
-        <FormSpacer />
-        <Hr />
-        <FormSpacer />
-        <MultiAutocompleteSelectField
-          displayValues={collectionsInputDisplayValue}
-          error={!!formErrors.collections}
-          label={intl.formatMessage({
-            defaultMessage: "Collections"
-          })}
-          choices={disabled ? [] : collections}
-          name="collections"
-          value={data.collections}
-          helperText={
-            getProductErrorMessage(formErrors.collections, intl) ||
-            intl.formatMessage({
-              defaultMessage:
-                "*Optional. Adding product to collection helps users find it.",
-              description: "field is optional"
-            })
-          }
-          onChange={onCollectionChange}
-          fetchChoices={fetchCollections}
-          data-test="collections"
-          {...fetchMoreCollections}
-        />
+          <FormSpacer />
+          <Hr />
+          <FormSpacer />
+          <MultiAutocompleteSelectField
+            displayValues={collectionsInputDisplayValue}
+            error={!!formErrors.collections}
+            label={intl.formatMessage({
+              defaultMessage: "Collections"
+            })}
+            choices={disabled ? [] : collections}
+            name="collections"
+            value={data.collections}
+            helperText={
+              getProductErrorMessage(formErrors.collections, intl) ||
+              intl.formatMessage({
+                defaultMessage:
+                  "*Optional. Adding product to collection helps users find it.",
+                description: "field is optional"
+              })
+            }
+            onChange={onCollectionChange}
+            fetchChoices={fetchCollections}
+            data-test="collections"
+            {...fetchMoreCollections}
+          />
+        </>
       </CardContent>
     </Card>
   );
