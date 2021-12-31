@@ -125,11 +125,10 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
             renderInput={params => <TextField {...params} label="Movie" />}
             getOptionLabel={option => (option as any).label || ""}
             onChange={(event, value) => {
-              console.log(value, "change");
+              alert(value);
             }}
             onInputChange={(event, value) => {
               setFilm(value);
-              console.log(value, "inputChange");
             }}
           />
           {canChangeType ? (
