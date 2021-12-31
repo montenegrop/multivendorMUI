@@ -43,6 +43,23 @@ import {
   ProductVariantDetailsVariables
 } from "./types/ProductVariantDetails";
 
+const baseProductDataQuery = gql`
+  query selectBaseProduct($first: Int) {
+    baseProducts(first: $first) {
+      edges {
+        cursor
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+export const useBaseProductDataQuery = makeQuery<any, any>(
+  baseProductDataQuery
+);
+
 const initialProductFilterDataQuery = gql`
   query InitialProductFilterData(
     $categories: [ID!]

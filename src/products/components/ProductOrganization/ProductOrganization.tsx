@@ -45,7 +45,7 @@ const useStyles = makeStyles(
 );
 
 interface ProductOrganizationProps {
-  top100films: any;
+  baseProducts: any;
   canChangeType: boolean;
   categories?: SingleAutocompleteChoiceType[];
   categoryInputDisplayValue: string;
@@ -74,7 +74,7 @@ interface ProductOrganizationProps {
 
 const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
   const {
-    top100films,
+    baseProducts,
     canChangeType,
     categories,
     categoryInputDisplayValue,
@@ -117,20 +117,23 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
       />
       <CardContent>
         <>
-          <Autocomplete
-            freeSolo
-            autoSelect
-            id="combo-box-demo"
-            options={top100films}
-            renderInput={params => <TextField {...params} label="Movie" />}
-            getOptionLabel={option => (option as any).label || ""}
-            onChange={(event, value) => {
-              alert(value);
-            }}
-            onInputChange={(event, value) => {
-              setFilm(value);
-            }}
-          />
+          {baseProducts && (
+            <Autocomplete
+              disabled={false}
+              freeSolo
+              autoSelect
+              id="combo-box-demo"
+              options={baseProducts?.map(node => node.node)}
+              renderInput={params => <TextField {...params} label="Movie" />}
+              getOptionLabel={option => (option as any).name || ""}
+              onChange={(event, value) => {
+                alert(value);
+              }}
+              onInputChange={(event, value) => {
+                setFilm(value);
+              }}
+            />
+          )}
           {canChangeType ? (
             <>
               <SingleAutocompleteSelectField

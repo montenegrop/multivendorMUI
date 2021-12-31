@@ -42,6 +42,7 @@ import React from "react";
 import { ProductStockInput } from "../ProductStocks";
 
 export interface ProductCreateFormData extends MetadataFormData {
+  baseProduct: string;
   category: string;
   changeTaxCode: boolean;
   channelListings: ChannelData[];
@@ -103,7 +104,7 @@ export interface UseProductCreateFormResult {
 
 export interface UseProductCreateFormOpts
   extends Record<
-    "categories" | "collections" | "taxTypes",
+    "categories" | "collections" | "taxTypes" | "baseProducts",
     SingleAutocompleteChoiceType[]
   > {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
@@ -132,6 +133,7 @@ function useProductCreateForm(
 ): UseProductCreateFormResult {
   const defaultInitialFormData: ProductCreateFormData &
     Record<"productType", string> = {
+    baseProduct: "",
     category: "",
     changeTaxCode: false,
     channelListings: opts.currentChannels,

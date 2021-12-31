@@ -17,6 +17,7 @@ import {
   useVariantCreateMutation
 } from "@saleor/products/mutations";
 import { useProductCreateMutation } from "@saleor/products/mutations";
+import { useBaseProductDataQuery } from "@saleor/products/queries";
 import {
   productAddUrl,
   ProductCreateUrlQueryParams,
@@ -58,6 +59,12 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
     ChannelsAction,
     ProductCreateUrlQueryParams
   >(navigate, params => productAddUrl(params), params);
+
+  const { data: baseProductsdata } = useBaseProductDataQuery({
+    variables: {
+      first: 1
+    }
+  });
 
   const {
     loadMore: loadMoreCategories,
@@ -210,6 +217,7 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
         />
       )}
       <ProductCreatePage
+        baseProducts={baseProductsdata}
         allChannelsCount={allChannels?.length}
         currentChannels={currentChannels}
         categories={(searchCategoryOpts?.data?.search?.edges || []).map(

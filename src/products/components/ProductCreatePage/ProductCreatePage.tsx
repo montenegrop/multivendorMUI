@@ -37,6 +37,7 @@ import ProductCreateForm, {
 } from "./form";
 
 interface ProductCreatePageProps {
+  baseProducts: any;
   errors: ProductErrorWithAttributesFragment[];
   channelsErrors: ProductChannelListingErrorFragment[];
   allChannelsCount: number;
@@ -65,6 +66,7 @@ interface ProductCreatePageProps {
 }
 
 export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
+  baseProducts,
   allChannelsCount,
   channelsErrors,
   currentChannels,
@@ -117,6 +119,7 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
 
   return (
     <ProductCreateForm
+      baseProducts={baseProducts?.baseProducts}
       onSubmit={onSubmit}
       initial={initial}
       categories={categories}
@@ -224,11 +227,7 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
               </div>
               <div>
                 <ProductOrganization
-                  top100films={[
-                    { label: "The Shawshank Redemption", year: 1994 },
-                    { label: "The Godfather", year: 1972 },
-                    { label: "The Godfather: Part II", year: 1974 }
-                  ]}
+                  baseProducts={baseProducts?.baseProducts.edges}
                   canChangeType={true}
                   categories={categories}
                   categoryInputDisplayValue={selectedCategory}

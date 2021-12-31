@@ -86,7 +86,8 @@ storiesOf("Views / Products / Create product", module)
         "name",
         "productType",
         "category",
-        "sku"
+        "sku",
+        "baseProduct"
       ] as Array<keyof ProductCreateFormData | "attributes">).map(field => ({
         __typename: "ProductError",
         attributes:
