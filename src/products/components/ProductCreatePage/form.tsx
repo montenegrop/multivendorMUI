@@ -74,7 +74,8 @@ interface ProductCreateHandlers
       | "selectCategory"
       | "selectCollection"
       | "selectProductType"
-      | "selectTaxRate",
+      | "selectTaxRate"
+      | "selectBaseProduct",
       FormChange
     >,
     Record<
@@ -104,7 +105,7 @@ export interface UseProductCreateFormResult {
 
 export interface UseProductCreateFormOpts
   extends Record<
-    "categories" | "collections" | "taxTypes" | "baseProducts",
+    "categories" | "collections" | "taxTypes",
     SingleAutocompleteChoiceType[]
   > {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
@@ -178,6 +179,7 @@ function useProductCreateForm(
   const [productType, setProductType] = useStateFromProps<ProductType>(
     initialProductType || null
   );
+  const [baseProduct, setBaseProduct] = useStateFromProps("");
   const [description, changeDescription] = useRichText({
     initial: null,
     triggerChange
@@ -224,6 +226,13 @@ function useProductCreateForm(
     opts.productTypes,
     triggerChange
   );
+
+  const handleBaseProductSelect = value => {
+    setBaseProduct(value.id);
+  };
+
+  const handleNewBaseProductSelect = value => 8;
+
   const handleStockChange: FormsetChange<string> = (id, value) => {
     triggerChange();
     stocks.change(id, value);
@@ -267,6 +276,7 @@ function useProductCreateForm(
     attributesWithNewFileValue: attributesWithNewFileValue.data,
     description: description.current,
     productType,
+    baseProduct,
     stocks: stocks.data
   });
   const data = getData();
@@ -302,7 +312,9 @@ function useProductCreateForm(
       selectCategory: handleCategorySelect,
       selectCollection: handleCollectionSelect,
       selectProductType: handleProductTypeSelect,
-      selectTaxRate: handleTaxTypeSelect
+      selectTaxRate: handleTaxTypeSelect,
+      selectBaseProduct: handleBaseProductSelect
+      // selectNewBaseProduct: handleNewBaseProductSelect,
     },
     hasChanged: changed,
     submit
