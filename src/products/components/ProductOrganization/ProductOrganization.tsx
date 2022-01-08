@@ -150,7 +150,7 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
           <TextField
             value={newBaseProduct}
             onInput={event => {
-              setNewBaseProduct(event.target.value);
+              setNewBaseProduct((event.target as any).value);
             }}
             id="new-base-product"
             label="Nuevo Producto Base"
