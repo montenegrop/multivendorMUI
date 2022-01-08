@@ -88,7 +88,7 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
 
   const { data: baseProductsdata } = useBaseProductDataQuery({
     variables: {
-      first: 1
+      first: 100
     }
   });
 

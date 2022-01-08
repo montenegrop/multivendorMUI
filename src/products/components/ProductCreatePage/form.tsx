@@ -38,6 +38,7 @@ import createMultiAutocompleteSelectHandler from "@saleor/utils/handlers/multiAu
 import createSingleAutocompleteSelectHandler from "@saleor/utils/handlers/singleAutocompleteSelectChangeHandler";
 import useMetadataChangeTrigger from "@saleor/utils/metadata/useMetadataChangeTrigger";
 import useRichText from "@saleor/utils/richText/useRichText";
+import { valueFromAST } from "graphql";
 import React from "react";
 
 import { ProductStockInput } from "../ProductStocks";
@@ -238,8 +239,8 @@ function useProductCreateForm(
     potentialNewBaseProductOps
   ] = usepotentialNewBaseProductCreateMutation({});
 
-  const handleNewBaseProductSelect = value => {
-    potentialNewBaseProduct({
+  const handleNewBaseProductSelect = async value => {
+    await potentialNewBaseProduct({
       variables: {
         id: value.id,
         name: value.name,
@@ -247,6 +248,7 @@ function useProductCreateForm(
         productType: value.productType
       }
     });
+    setBaseProduct(value.id);
   };
 
   const handleStockChange: FormsetChange<string> = (id, value) => {
