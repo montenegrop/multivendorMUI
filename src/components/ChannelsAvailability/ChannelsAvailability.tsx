@@ -114,8 +114,8 @@ const Channel: React.FC<ChannelProps> = ({
   const [isPublicationDate, setPublicationDate] = useState(
     publicationDate === null ? true : false
   );
-  const [isAvailableDate, setAvailableDate] = useState(false);
-  const [isOpen, setOpen] = useState(false);
+  const [isAvailableDate, setAvailableDate] = useState(true);
+  const [isOpen, setOpen] = useState(true);
   const intl = useIntl();
   const classes = useStyles({});
 
@@ -146,7 +146,7 @@ const Channel: React.FC<ChannelProps> = ({
           className={classes.channelBtn}
           onClick={() => setOpen(open => !open)}
         >
-          <div className={classes.channelName}>
+          {/* <div className={classes.channelName}>
             <Typography>{name}</Typography>
             <ArrowDropdown
               className={classNames(classes.arrow, {
@@ -154,10 +154,10 @@ const Channel: React.FC<ChannelProps> = ({
               })}
               color="primary"
             />
-          </div>
-          <Typography variant="caption">
+          </div> */}
+          {/* <Typography variant="caption">
             {messages.availableDateText}
-          </Typography>
+          </Typography> */}
         </div>
         {isOpen && (
           <>
@@ -245,7 +245,7 @@ const Channel: React.FC<ChannelProps> = ({
                 )}
               </>
             )}
-            {hasAvailableProps && (
+            {/* {hasAvailableProps && (
               <>
                 <Hr />
                 <RadioSwitchField
@@ -330,8 +330,8 @@ const Channel: React.FC<ChannelProps> = ({
                   </>
                 )}
               </>
-            )}
-            {visibleInListings !== undefined && (
+            )} */}
+            {/* {visibleInListings !== undefined && (
               <>
                 <Hr />
                 <ControlledCheckbox
@@ -368,7 +368,7 @@ const Channel: React.FC<ChannelProps> = ({
                   }
                 />
               </>
-            )}
+            )} */}
           </>
         )}
       </div>
@@ -417,22 +417,22 @@ export const ChannelsAvailability: React.FC<ChannelsAvailabilityProps> = props =
               userPermissions={user?.userPermissions || []}
               requiredPermissions={[PermissionEnum.MANAGE_CHANNELS]}
             >
-              <Button color="primary" onClick={openModal}>
+              {/* <Button color="primary" onClick={openModal}>
                 {intl.formatMessage({
                   defaultMessage: "Manage",
                   description: "section header button"
                 })}
-              </Button>
+              </Button> */}
             </RequirePermissions>
           }
         />
         <CardContent className={classes.card}>
           {!!channelsAvailabilityText && (
             <>
-              <Typography className={classes.channelInfo}>
-                {channelsAvailabilityText}
-              </Typography>
-              <Hr className={classes.hr} />
+              {/* <Typography className={classes.channelInfo}>
+                "{channelsAvailabilityText}"
+              </Typography> */}
+              {/* <Hr className={classes.hr} /> */}
             </>
           )}
           {channels
@@ -455,7 +455,7 @@ export const ChannelsAvailability: React.FC<ChannelsAvailabilityProps> = props =
                 <React.Fragment key={data.id}>
                   <div className={classes.channelItem}>
                     <div className={classes.channelName}>
-                      <Typography>{data.name}</Typography>
+                      <Typography>"data.name"</Typography>
                     </div>
                   </div>
                   <Hr className={classes.hr} />

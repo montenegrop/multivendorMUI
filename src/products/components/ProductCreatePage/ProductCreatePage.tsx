@@ -208,7 +208,7 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                     <CardSpacer />
                   </>
                 )}
-                <SeoForm
+                {/* <SeoForm
                   allowEmptySlug={true}
                   helperText={intl.formatMessage({
                     defaultMessage:
@@ -222,9 +222,9 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                   descriptionPlaceholder={data.seoTitle}
                   loading={loading}
                   onChange={change}
-                />
-                <CardSpacer />
-                <Metadata data={data} onChange={handlers.changeMetadata} />
+                /> */}
+                {/* <CardSpacer />
+                <Metadata data={data} onChange={handlers.changeMetadata} /> */}
               </div>
               <div>
                 <ProductOrganization
