@@ -14,6 +14,7 @@ import useFormset, {
   FormsetData
 } from "@saleor/hooks/useFormset";
 import useStateFromProps from "@saleor/hooks/useStateFromProps";
+import { usepotentialNewBaseProductCreateMutation } from "@saleor/products/mutations";
 import {
   getAttributeInputFromProductType,
   getAttributesDisplayData,
@@ -75,7 +76,8 @@ interface ProductCreateHandlers
       | "selectCollection"
       | "selectProductType"
       | "selectTaxRate"
-      | "selectBaseProduct",
+      | "selectBaseProduct"
+      | "selectNewBaseProduct",
       FormChange
     >,
     Record<
@@ -231,7 +233,21 @@ function useProductCreateForm(
     setBaseProduct(value.id);
   };
 
-  const handleNewBaseProductSelect = value => 8;
+  const [
+    potentialNewBaseProduct,
+    potentialNewBaseProductOps
+  ] = usepotentialNewBaseProductCreateMutation({});
+
+  const handleNewBaseProductSelect = value => {
+    potentialNewBaseProduct({
+      variables: {
+        id: value.id,
+        name: value.name,
+        slug: value.slug,
+        productType: value.productType
+      }
+    });
+  };
 
   const handleStockChange: FormsetChange<string> = (id, value) => {
     triggerChange();
@@ -313,8 +329,8 @@ function useProductCreateForm(
       selectCollection: handleCollectionSelect,
       selectProductType: handleProductTypeSelect,
       selectTaxRate: handleTaxTypeSelect,
-      selectBaseProduct: handleBaseProductSelect
-      // selectNewBaseProduct: handleNewBaseProductSelect,
+      selectBaseProduct: handleBaseProductSelect,
+      selectNewBaseProduct: handleNewBaseProductSelect
     },
     hasChanged: changed,
     submit

@@ -23,6 +23,8 @@ import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
 import React, { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
+import { newBaseProductTypeId } from "../../../../constants";
+
 interface ProductType {
   hasVariants: boolean;
   id: string;
@@ -47,6 +49,7 @@ const useStyles = makeStyles(
 
 interface ProductOrganizationProps {
   baseProducts: any;
+  potentialNewBaseProduct: any;
   canChangeType: boolean;
   categories?: SingleAutocompleteChoiceType[];
   categoryInputDisplayValue: string;
@@ -78,6 +81,7 @@ interface ProductOrganizationProps {
 const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
   const {
     baseProducts,
+    potentialNewBaseProduct,
     onBaseProductChange,
     onNewBaseProductChange,
     canChangeType,
@@ -111,7 +115,7 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
   );
 
   const [existingBaseProduct, setExistingBaseProduct] = useState({});
-  const [newBaseProduct, setNewBaseProduct] = useState("");
+  const [newBaseProduct, setNewBaseProduct] = useState("nuevo");
 
   return (
     <Card className={classes.card}>
@@ -153,7 +157,12 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
             variant="standard"
             InputProps={{ endAdornment: <CancelIcon /> }}
             onBlur={event => {
-              onNewBaseProductChange(event.target.value);
+              onNewBaseProductChange({
+                name: event.target.value,
+                id: potentialNewBaseProduct.id,
+                slug: "nuevo-slug",
+                productType: newBaseProductTypeId
+              });
             }}
             fullWidth
           />

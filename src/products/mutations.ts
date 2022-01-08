@@ -80,12 +80,14 @@ import {
 import { VariantUpdate, VariantUpdateVariables } from "./types/VariantUpdate";
 
 export const potentialNewBaseProductCreateMutation = gql`
-  mutation PotentialNewBaseProductCreate(
+  mutation crearBaseProduct(
     $productType: ID!
     $name: String
     $slug: String
+    $id: ID!
   ) {
     baseProductCreate(
+      id: $id
       input: { productType: $productType, name: $name, slug: $slug }
     ) {
       baseProduct {

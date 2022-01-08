@@ -75,9 +75,10 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
     const promesa = async () => {
       const { data: newBaseProductData } = await potentialNewBaseProduct({
         variables: {
+          id: "",
           productType: newBaseProductTypeId,
-          name: "name",
-          slug: "slig"
+          name: "nuevo",
+          slug: "nuevo-slug"
         }
       });
       setNewBaseProduct(newBaseProductData.baseProductCreate.baseProduct);

@@ -230,7 +230,8 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                 <ProductOrganization
                   baseProducts={baseProducts?.baseProducts.edges}
                   onBaseProductChange={handlers.selectBaseProduct}
-                  onNewBaseProductChange={handlers.selectBaseProduct}
+                  potentialNewBaseProduct={potentialNewBaseProduct}
+                  onNewBaseProductChange={handlers.selectNewBaseProduct}
                   canChangeType={true}
                   categories={categories}
                   categoryInputDisplayValue={selectedCategory}
