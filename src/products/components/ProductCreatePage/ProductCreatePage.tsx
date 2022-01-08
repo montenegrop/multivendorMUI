@@ -274,15 +274,15 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                   onChange={handlers.changeChannels}
                   openModal={openChannelsModal}
                 />
-                <CardSpacer />
-                <ProductTaxes
+                {/* <CardSpacer /> */}
+                {/* <ProductTaxes
                   data={data}
                   disabled={loading}
                   onChange={change}
                   onTaxTypeChange={handlers.selectTaxRate}
                   selectedTaxTypeDisplayName={selectedTaxType}
                   taxTypes={taxTypes}
-                />
+                /> */}
               </div>
             </Grid>
             <SaveButtonBar
