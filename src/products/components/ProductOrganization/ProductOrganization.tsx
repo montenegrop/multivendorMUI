@@ -3,6 +3,7 @@ import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import CancelIcon from "@material-ui/icons/Cancel";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CardSpacer from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
@@ -21,6 +22,8 @@ import { FetchMoreProps } from "@saleor/types";
 import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
 import React, { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
+
+import { newBaseProductTypeId } from "../../../../constants";
 
 interface ProductType {
   hasVariants: boolean;
@@ -46,6 +49,7 @@ const useStyles = makeStyles(
 
 interface ProductOrganizationProps {
   baseProducts: any;
+  potentialNewBaseProduct: any;
   canChangeType: boolean;
   categories?: SingleAutocompleteChoiceType[];
   categoryInputDisplayValue: string;
@@ -70,11 +74,16 @@ interface ProductOrganizationProps {
   onCategoryChange: (event: ChangeEvent) => void;
   onCollectionChange: (event: ChangeEvent) => void;
   onProductTypeChange?: (event: ChangeEvent) => void;
+  onBaseProductChange?: (value: any) => void;
+  onNewBaseProductChange?: (value: any) => void;
 }
 
 const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
   const {
     baseProducts,
+    potentialNewBaseProduct,
+    onBaseProductChange,
+    onNewBaseProductChange,
     canChangeType,
     categories,
     categoryInputDisplayValue,
@@ -105,7 +114,8 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
     errors
   );
 
-  const [film, setFilm] = useState("hola");
+  const [existingBaseProduct, setExistingBaseProduct] = useState({});
+  const [newBaseProduct, setNewBaseProduct] = useState("nuevo");
 
   return (
     <Card className={classes.card}>
@@ -117,23 +127,45 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
       />
       <CardContent>
         <>
-          {baseProducts && (
-            <Autocomplete
-              disabled={false}
-              freeSolo
-              autoSelect
-              id="combo-box-demo"
-              options={baseProducts?.map(node => node.node)}
-              renderInput={params => <TextField {...params} label="Movie" />}
-              getOptionLabel={option => (option as any).name || ""}
-              onChange={(event, value) => {
-                alert(value);
-              }}
-              onInputChange={(event, value) => {
-                setFilm(value);
-              }}
-            />
-          )}
+          <Autocomplete
+            value={existingBaseProduct}
+            disabled={false}
+            autoSelect
+            id="combo-box-demo"
+            options={
+              baseProducts?.map(node => node.node) || [
+                { name: "cargando opciones..." }
+              ]
+            }
+            renderInput={params => (
+              <TextField {...params} label="Seleccionar Producto Base" />
+            )}
+            getOptionLabel={option => (option as any).name || ""}
+            onChange={(event, value) => {
+              setNewBaseProduct("");
+              setExistingBaseProduct(value);
+              onBaseProductChange(value);
+            }}
+          />
+          <TextField
+            value={newBaseProduct}
+            onInput={event => {
+              setNewBaseProduct((event.target as any).value);
+            }}
+            id="new-base-product"
+            label="Nuevo Producto Base"
+            variant="standard"
+            InputProps={{ endAdornment: <CancelIcon /> }}
+            onBlur={event => {
+              onNewBaseProductChange({
+                name: event.target.value,
+                id: potentialNewBaseProduct.id,
+                slug: "nuevo-slug",
+                productType: newBaseProductTypeId
+              });
+            }}
+            fullWidth
+          />
           {canChangeType ? (
             <>
               <SingleAutocompleteSelectField

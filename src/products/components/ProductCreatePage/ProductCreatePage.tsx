@@ -38,6 +38,7 @@ import ProductCreateForm, {
 
 interface ProductCreatePageProps {
   baseProducts: any;
+  potentialNewBaseProduct: any;
   errors: ProductErrorWithAttributesFragment[];
   channelsErrors: ProductChannelListingErrorFragment[];
   allChannelsCount: number;
@@ -67,6 +68,7 @@ interface ProductCreatePageProps {
 
 export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
   baseProducts,
+  potentialNewBaseProduct,
   allChannelsCount,
   channelsErrors,
   currentChannels,
@@ -119,7 +121,6 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
 
   return (
     <ProductCreateForm
-      baseProducts={baseProducts?.baseProducts}
       onSubmit={onSubmit}
       initial={initial}
       categories={categories}
@@ -228,6 +229,9 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
               <div>
                 <ProductOrganization
                   baseProducts={baseProducts?.baseProducts.edges}
+                  onBaseProductChange={handlers.selectBaseProduct}
+                  potentialNewBaseProduct={potentialNewBaseProduct}
+                  onNewBaseProductChange={handlers.selectNewBaseProduct}
                   canChangeType={true}
                   categories={categories}
                   categoryInputDisplayValue={selectedCategory}

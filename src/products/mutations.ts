@@ -79,6 +79,38 @@ import {
 } from "./types/VariantImageUnassign";
 import { VariantUpdate, VariantUpdateVariables } from "./types/VariantUpdate";
 
+export const potentialNewBaseProductCreateMutation = gql`
+  mutation crearBaseProduct(
+    $productType: ID!
+    $name: String
+    $slug: String
+    $id: ID!
+  ) {
+    baseProductCreate(
+      id: $id
+      input: { productType: $productType, name: $name, slug: $slug }
+    ) {
+      baseProduct {
+        id
+        name
+        slug
+        productType {
+          id
+          name
+        }
+        category {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const usepotentialNewBaseProductCreateMutation = makeMutation<any, any>(
+  potentialNewBaseProductCreateMutation
+);
+
 export const productImageCreateMutation = gql`
   ${productErrorFragment}
   ${productFragmentDetails}

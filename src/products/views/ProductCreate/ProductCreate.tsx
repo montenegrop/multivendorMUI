@@ -16,7 +16,10 @@ import {
   useProductVariantChannelListingUpdate,
   useVariantCreateMutation
 } from "@saleor/products/mutations";
-import { useProductCreateMutation } from "@saleor/products/mutations";
+import {
+  usepotentialNewBaseProductCreateMutation,
+  useProductCreateMutation
+} from "@saleor/products/mutations";
 import { useBaseProductDataQuery } from "@saleor/products/queries";
 import {
   productAddUrl,
@@ -37,9 +40,10 @@ import {
 } from "@saleor/utils/metadata/updateMetadata";
 import { useWarehouseList } from "@saleor/warehouses/queries";
 import { warehouseAddPath } from "@saleor/warehouses/urls";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 
+import { newBaseProductTypeId } from "../../../../constants";
 import { createHandler } from "./handlers";
 
 interface ProductCreateProps {
@@ -60,9 +64,31 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
     ProductCreateUrlQueryParams
   >(navigate, params => productAddUrl(params), params);
 
+  const [
+    potentialNewBaseProduct,
+    potentialNewBaseProductOps
+  ] = usepotentialNewBaseProductCreateMutation({});
+
+  const [newBaseProduct, setNewBaseProduct] = useState({});
+
+  useEffect(() => {
+    const promesa = async () => {
+      const { data: newBaseProductData } = await potentialNewBaseProduct({
+        variables: {
+          id: "",
+          productType: newBaseProductTypeId,
+          name: "nuevo",
+          slug: "nuevo-slug"
+        }
+      });
+      setNewBaseProduct(newBaseProductData.baseProductCreate.baseProduct);
+    };
+    promesa();
+  }, []);
+
   const { data: baseProductsdata } = useBaseProductDataQuery({
     variables: {
-      first: 1
+      first: 100
     }
   });
 
@@ -218,6 +244,7 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
       )}
       <ProductCreatePage
         baseProducts={baseProductsdata}
+        potentialNewBaseProduct={newBaseProduct}
         allChannelsCount={allChannels?.length}
         currentChannels={currentChannels}
         categories={(searchCategoryOpts?.data?.search?.edges || []).map(

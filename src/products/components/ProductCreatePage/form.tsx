@@ -14,6 +14,7 @@ import useFormset, {
   FormsetData
 } from "@saleor/hooks/useFormset";
 import useStateFromProps from "@saleor/hooks/useStateFromProps";
+import { usepotentialNewBaseProductCreateMutation } from "@saleor/products/mutations";
 import {
   getAttributeInputFromProductType,
   getAttributesDisplayData,
@@ -37,6 +38,7 @@ import createMultiAutocompleteSelectHandler from "@saleor/utils/handlers/multiAu
 import createSingleAutocompleteSelectHandler from "@saleor/utils/handlers/singleAutocompleteSelectChangeHandler";
 import useMetadataChangeTrigger from "@saleor/utils/metadata/useMetadataChangeTrigger";
 import useRichText from "@saleor/utils/richText/useRichText";
+import { valueFromAST } from "graphql";
 import React from "react";
 
 import { ProductStockInput } from "../ProductStocks";
@@ -74,7 +76,9 @@ interface ProductCreateHandlers
       | "selectCategory"
       | "selectCollection"
       | "selectProductType"
-      | "selectTaxRate",
+      | "selectTaxRate"
+      | "selectBaseProduct"
+      | "selectNewBaseProduct",
       FormChange
     >,
     Record<
@@ -104,7 +108,7 @@ export interface UseProductCreateFormResult {
 
 export interface UseProductCreateFormOpts
   extends Record<
-    "categories" | "collections" | "taxTypes" | "baseProducts",
+    "categories" | "collections" | "taxTypes",
     SingleAutocompleteChoiceType[]
   > {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
@@ -178,6 +182,7 @@ function useProductCreateForm(
   const [productType, setProductType] = useStateFromProps<ProductType>(
     initialProductType || null
   );
+  const [baseProduct, setBaseProduct] = useStateFromProps("");
   const [description, changeDescription] = useRichText({
     initial: null,
     triggerChange
@@ -224,6 +229,28 @@ function useProductCreateForm(
     opts.productTypes,
     triggerChange
   );
+
+  const handleBaseProductSelect = value => {
+    setBaseProduct(value.id);
+  };
+
+  const [
+    potentialNewBaseProduct,
+    potentialNewBaseProductOps
+  ] = usepotentialNewBaseProductCreateMutation({});
+
+  const handleNewBaseProductSelect = async value => {
+    await potentialNewBaseProduct({
+      variables: {
+        id: value.id,
+        name: value.name,
+        slug: value.slug,
+        productType: value.productType
+      }
+    });
+    setBaseProduct(value.id);
+  };
+
   const handleStockChange: FormsetChange<string> = (id, value) => {
     triggerChange();
     stocks.change(id, value);
@@ -267,6 +294,7 @@ function useProductCreateForm(
     attributesWithNewFileValue: attributesWithNewFileValue.data,
     description: description.current,
     productType,
+    baseProduct,
     stocks: stocks.data
   });
   const data = getData();
@@ -302,7 +330,9 @@ function useProductCreateForm(
       selectCategory: handleCategorySelect,
       selectCollection: handleCollectionSelect,
       selectProductType: handleProductTypeSelect,
-      selectTaxRate: handleTaxTypeSelect
+      selectTaxRate: handleTaxTypeSelect,
+      selectBaseProduct: handleBaseProductSelect,
+      selectNewBaseProduct: handleNewBaseProductSelect
     },
     hasChanged: changed,
     submit
