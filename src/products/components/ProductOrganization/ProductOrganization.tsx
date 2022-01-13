@@ -23,7 +23,7 @@ import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
 import React, { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
-import { newBaseProductTypeId } from "../../../../constants";
+import { newBaseProductTypeId, defaultProductTypeId } from "../../../../constants";
 
 interface ProductType {
   hasVariants: boolean;
@@ -51,7 +51,7 @@ interface ProductOrganizationProps {
   baseProducts: any;
   potentialNewBaseProduct: any;
   canChangeType: boolean;
-  categories?: SingleAutocompleteChoiceType[];
+  categories?: any;
   categoryInputDisplayValue: string;
   collections?: MultiAutocompleteChoiceType[];
   collectionsInputDisplayValue: MultiAutocompleteChoiceType[];
@@ -71,9 +71,9 @@ interface ProductOrganizationProps {
   fetchMoreCollections: FetchMoreProps;
   fetchMoreProductTypes?: FetchMoreProps;
   fetchProductTypes?: (data: string) => void;
-  onCategoryChange: (event: ChangeEvent) => void;
+  onCategoryChange: (value: any) => void;
   onCollectionChange: (event: ChangeEvent) => void;
-  onProductTypeChange?: (event: ChangeEvent) => void;
+  onProductTypeChange?: (value: any) => void;
   onBaseProductChange?: (value: any) => void;
   onNewBaseProductChange?: (value: any) => void;
 }
@@ -114,8 +114,22 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
     errors
   );
 
+  const mainCategories = categories.filter((category) =>  category.level == 0).map((cate) => ({label: cate.label, value: cate.value})).concat({ label: "", value: "" })
+
   const [existingBaseProduct, setExistingBaseProduct] = useState({});
   const [newBaseProduct, setNewBaseProduct] = useState("nuevo");
+  const [mainCategoryValue, setMainCategoryValue] = useState("");
+  const [subCategoryValue, setSubCategoryValue] = useState("");
+  const [subCategories, setSubCategories] = useState(null);
+  const [mainCategory, setMainCategory] = useState({ label: "", value: "" })
+
+
+
+  const updateSubcategories = (value) => {
+    setSubCategories(categories.find(category => category.value == value).children.edges.map((element)=>({...element.node})))
+  }
+
+  console.log(subCategories, 'subcategories99')
 
   return (
     <Card className={classes.card}>
@@ -128,10 +142,51 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
       <CardContent>
         <>
           <Autocomplete
-            value={existingBaseProduct}
+            disabled={false}
+            id="main-category"
+            options={
+              mainCategories
+            }
+            renderInput={params => (
+              <TextField {...params} label="Seleccionar categoria principal" />
+            )}
+            loadingText="cargando"
+            getOptionLabel={option => (option as any).label || ""}
+            onChange={(event, value) => {
+              setMainCategoryValue((value as any).value)
+              updateSubcategories((value as any).value)
+            }}
+          />
+          <FormSpacer />
+          <Hr />
+          <FormSpacer />
+          <Autocomplete
             disabled={false}
             autoSelect
-            id="combo-box-demo"
+            id="sub-category"
+            key={mainCategoryValue}
+            options={
+              subCategories
+            }
+            renderInput={params => (
+              <TextField {...params} label="Seleccionar subcatgoria" />
+            )}
+            getOptionLabel={option => (option as any).name || ""}
+            onChange={(event, value) => {
+              console.log(value, 'selectedSubcate');
+              onProductTypeChange({target: {value: defaultProductTypeId}});
+              onCategoryChange({target: {name: "category", value: (value as any).id}});
+              setSubCategoryValue(mainCategoryValue)
+            }}
+          />
+          <FormSpacer />
+          <Hr />
+          <FormSpacer />
+          <Autocomplete
+            value={existingBaseProduct}
+            disabled={subCategoryValue === "" || subCategoryValue === null}
+            autoSelect
+            id="select-base-product"
             options={
               baseProducts?.map(node => node.node) || [
                 { name: "cargando opciones..." }
@@ -147,8 +202,12 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
               onBaseProductChange(value);
             }}
           />
+          <FormSpacer />
+          <Hr />
+          <FormSpacer />
           <TextField
             value={newBaseProduct}
+            disabled={subCategoryValue === "" || subCategoryValue === null}
             onInput={event => {
               setNewBaseProduct((event.target as any).value);
             }}
@@ -163,10 +222,16 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
                 slug: "nuevo-slug",
                 productType: newBaseProductTypeId
               });
+              if (newBaseProduct != null) {
+                setExistingBaseProduct("")
+              }
             }}
             fullWidth
           />
-          {canChangeType ? (
+          {/* <FormSpacer />
+          <Hr />
+          <FormSpacer /> */}
+          {/* {canChangeType ? (
             <>
               <SingleAutocompleteSelectField
                 displayValue={productTypeInputDisplayValue}
@@ -181,7 +246,7 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
                   defaultMessage: "Product Type"
                 })}
                 choices={productTypes}
-                value={data.productType?.id}
+                value={newBaseProductTypeId}
                 onChange={onProductTypeChange}
                 fetchChoices={fetchProductTypes}
                 data-test="product-type"
@@ -214,30 +279,28 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
                 )}
               </Typography>
             </>
-          )}
-          <FormSpacer />
+          )} */}
+          
+          {/* <SingleAutocompleteSelectField
+          displayValue={categoryInputDisplayValue}
+          error={!!formErrors.category}
+          helperText={getProductErrorMessage(formErrors.category, intl)}
+          disabled={disabled}
+          label={intl.formatMessage({
+            defaultMessage: "Category"
+          })}
+          choices={disabled ? [] : categories}
+          name="category"
+          value={data.category}
+          onChange={onCategoryChange}
+          fetchChoices={fetchCategories}
+          data-test="category"
+          {...fetchMoreCategories}
+        /> */}
+          {/* <FormSpacer />
           <Hr />
-          <FormSpacer />
-          <SingleAutocompleteSelectField
-            displayValue={categoryInputDisplayValue}
-            error={!!formErrors.category}
-            helperText={getProductErrorMessage(formErrors.category, intl)}
-            disabled={disabled}
-            label={intl.formatMessage({
-              defaultMessage: "Category"
-            })}
-            choices={disabled ? [] : categories}
-            name="category"
-            value={data.category}
-            onChange={onCategoryChange}
-            fetchChoices={fetchCategories}
-            data-test="category"
-            {...fetchMoreCategories}
-          />
-          <FormSpacer />
-          <Hr />
-          <FormSpacer />
-          <MultiAutocompleteSelectField
+          <FormSpacer /> */}
+          {/* <MultiAutocompleteSelectField
             displayValues={collectionsInputDisplayValue}
             error={!!formErrors.collections}
             label={intl.formatMessage({
@@ -258,7 +321,7 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
             fetchChoices={fetchCollections}
             data-test="collections"
             {...fetchMoreCollections}
-          />
+          /> */}
         </>
       </CardContent>
     </Card>

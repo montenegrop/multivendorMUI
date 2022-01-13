@@ -99,6 +99,7 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
   } = useCategorySearch({
     variables: DEFAULT_INITIAL_SEARCH_DATA
   });
+  console.log(searchCategoryOpts, 'catOps')
   const {
     loadMore: loadMoreCollections,
     search: searchCollection,
