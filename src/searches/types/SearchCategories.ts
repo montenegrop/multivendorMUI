@@ -10,6 +10,8 @@ export interface SearchCategories_search_edges_node {
   __typename: "Category";
   id: string;
   name: string;
+  level: number;
+  children: any;
 }
 
 export interface SearchCategories_search_edges {

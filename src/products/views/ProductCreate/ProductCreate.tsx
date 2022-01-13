@@ -99,6 +99,7 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
   } = useCategorySearch({
     variables: DEFAULT_INITIAL_SEARCH_DATA
   });
+  console.log(searchCategoryOpts, 'catOps')
   const {
     loadMore: loadMoreCollections,
     search: searchCollection,
@@ -129,7 +130,7 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
 
   const { data: channelsData } = useChannelsList({});
   const allChannels: ChannelData[] = createSortedChannelsData(
-    channelsData?.channels
+    channelsData?.channels.filter(channel => channel.currencyCode === "ARS")
   );
 
   const {
@@ -143,10 +144,19 @@ export const ProductCreateView: React.FC<ProductCreateProps> = ({ params }) => {
     isChannelsModalOpen,
     setCurrentChannels,
     toggleAllChannels
-  } = useChannels(allChannels, params?.action, {
-    closeModal,
-    openModal
-  });
+  } = useChannels(
+    allChannels.map(x => ({
+      ...x,
+      isPublished: true,
+      isAvailableForPurchase: true,
+      visibleInListings: true
+    })),
+    params?.action,
+    {
+      closeModal,
+      openModal
+    }
+  );
 
   const handleSuccess = (productId: string) => {
     notify({

@@ -51,6 +51,14 @@ const baseProductDataQuery = gql`
         node {
           id
           name
+          category {
+            id
+            name
+          }
+          productType {
+            id
+            name
+          }
         }
       }
     }

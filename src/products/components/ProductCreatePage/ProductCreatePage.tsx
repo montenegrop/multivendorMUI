@@ -17,7 +17,7 @@ import { TaxTypeFragment } from "@saleor/fragments/types/TaxTypeFragment";
 import useStateFromProps from "@saleor/hooks/useStateFromProps";
 import { sectionNames } from "@saleor/intl";
 import ProductVariantPrice from "@saleor/products/components/ProductVariantPrice";
-import { getChoices } from "@saleor/products/utils/data";
+import { getChoices, getCategoriesChoices } from "@saleor/products/utils/data";
 import { SearchCategories_search_edges_node } from "@saleor/searches/types/SearchCategories";
 import { SearchCollections_search_edges_node } from "@saleor/searches/types/SearchCollections";
 import { SearchProductTypes_search_edges_node } from "@saleor/searches/types/SearchProductTypes";
@@ -110,7 +110,7 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
     initial?.taxCode || null
   );
 
-  const categories = getChoices(categoryChoiceList);
+  const categories = getCategoriesChoices(categoryChoiceList);
   const collections = getChoices(collectionChoiceList);
   const productTypes = getChoices(productTypeChoiceList);
   const taxTypeChoices =
@@ -208,7 +208,7 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                     <CardSpacer />
                   </>
                 )}
-                <SeoForm
+                {/* <SeoForm
                   allowEmptySlug={true}
                   helperText={intl.formatMessage({
                     defaultMessage:
@@ -222,9 +222,9 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                   descriptionPlaceholder={data.seoTitle}
                   loading={loading}
                   onChange={change}
-                />
-                <CardSpacer />
-                <Metadata data={data} onChange={handlers.changeMetadata} />
+                /> */}
+                {/* <CardSpacer />
+                <Metadata data={data} onChange={handlers.changeMetadata} /> */}
               </div>
               <div>
                 <ProductOrganization
@@ -274,15 +274,15 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                   onChange={handlers.changeChannels}
                   openModal={openChannelsModal}
                 />
-                <CardSpacer />
-                <ProductTaxes
+                {/* <CardSpacer /> */}
+                {/* <ProductTaxes
                   data={data}
                   disabled={loading}
                   onChange={change}
                   onTaxTypeChange={handlers.selectTaxRate}
                   selectedTaxTypeDisplayName={selectedTaxType}
                   taxTypes={taxTypes}
-                />
+                /> */}
               </div>
             </Grid>
             <SaveButtonBar
