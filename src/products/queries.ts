@@ -142,6 +142,12 @@ const productListQuery = gql`
       edges {
         node {
           ...ProductFragment
+          category {
+            name
+            parent {
+              name
+            }
+          }
           attributes {
             attribute {
               id
@@ -183,6 +189,14 @@ const productDetailsQuery = gql`
   query ProductDetails($id: ID!, $channel: String) {
     product(id: $id, channel: $channel) {
       ...Product
+      baseProduct {
+        name
+      }
+      category {
+        parent {
+          name
+        }
+      }
     }
     taxTypes {
       ...TaxTypeFragment
