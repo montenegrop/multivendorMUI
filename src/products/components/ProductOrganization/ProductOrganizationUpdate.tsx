@@ -2,31 +2,22 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import CancelIcon from "@material-ui/icons/Cancel";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import CardSpacer from "@saleor/components/CardSpacer";
 import CardTitle from "@saleor/components/CardTitle";
 import { FormSpacer } from "@saleor/components/FormSpacer";
 import Hr from "@saleor/components/Hr";
-import MultiAutocompleteSelectField, {
-  MultiAutocompleteChoiceType
-} from "@saleor/components/MultiAutocompleteSelectField";
-import SingleAutocompleteSelectField, {
-  SingleAutocompleteChoiceType
-} from "@saleor/components/SingleAutocompleteSelectField";
+import { MultiAutocompleteChoiceType } from "@saleor/components/MultiAutocompleteSelectField";
+import { SingleAutocompleteChoiceType } from "@saleor/components/SingleAutocompleteSelectField";
 import { ProductErrorFragment } from "@saleor/fragments/types/ProductErrorFragment";
 import { ChangeEvent } from "@saleor/hooks/useForm";
-import { maybe } from "@saleor/misc";
 import { FetchMoreProps } from "@saleor/types";
-import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
+import { getFormErrors } from "@saleor/utils/errors";
 import React, { useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 
-import {
-  defaultProductTypeId,
-  newBaseProductTypeId
-} from "../../../../constants";
+// import {
+//   defaultProductTypeId,
+//   newBaseProductTypeId
+// } from "../../../../constants";
 
 interface ProductType {
   hasVariants: boolean;
@@ -122,26 +113,6 @@ const ProductOrganizationUpdate: React.FC<ProductOrganizationProps> = props => {
     ["productType", "category", "collections"],
     errors
   );
-
-  const mainCategories = categories
-    .filter(category => category.level === 0)
-    .map(cate => ({ label: cate.label, value: cate.value }))
-    .concat({ label: "", value: "" });
-
-  const [existingBaseProduct, setExistingBaseProduct] = useState({});
-  const [newBaseProduct, setNewBaseProduct] = useState("nuevo");
-  const [mainCategoryValue, setMainCategoryValue] = useState("");
-  const [subCategoryValue, setSubCategoryValue] = useState("");
-  const [subCategories, setSubCategories] = useState(null);
-  const [mainCategory, setMainCategory] = useState({ label: "", value: "" });
-
-  const updateSubcategories = value => {
-    setSubCategories(
-      categories
-        .find(category => category.value === value)
-        .children.edges.map(element => ({ ...element.node }))
-    );
-  };
 
   return (
     <Card className={classes.card}>

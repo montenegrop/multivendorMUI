@@ -40,7 +40,6 @@ interface CategoryNode {
   children: any;
 }
 
-
 export interface ProductType {
   hasVariants: boolean;
   id: string;
@@ -225,8 +224,9 @@ export function getChoices(nodes: Node[]): SingleAutocompleteChoiceType[] {
   );
 }
 
-export function getCategoriesChoices(nodes: CategoryNode[]): SingleAutocompleteChoiceType[] {
-  console.log(nodes, 'nodes')
+export function getCategoriesChoices(
+  nodes: CategoryNode[]
+): SingleAutocompleteChoiceType[] {
   return maybe(
     () =>
       nodes.map(node => ({
