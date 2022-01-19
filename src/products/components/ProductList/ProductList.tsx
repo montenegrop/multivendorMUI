@@ -143,18 +143,18 @@ export const ProductList: React.FC<ProductListProps> = props => {
         <colgroup>
           <col />
           <col className={classes.colName} />
-          <DisplayColumn column="productType" displayColumns={settings.columns}>
+          <DisplayColumn column="categorías" displayColumns={settings.columns}>
             <col className={classes.colType} />
           </DisplayColumn>
-          <DisplayColumn
+          {/* <DisplayColumn
             column="availability"
             displayColumns={settings.columns}
           >
             <col className={classes.colPublished} />
-          </DisplayColumn>
-          {gridAttributesFromSettings.map(gridAttribute => (
+          </DisplayColumn> */}
+          {/* {gridAttributesFromSettings.map(gridAttribute => (
             <col className={classes.colAttribute} key={gridAttribute} />
-          ))}
+          ))} */}
           <DisplayColumn column="price" displayColumns={settings.columns}>
             <col className={classes.colPrice} />
           </DisplayColumn>
@@ -183,7 +183,7 @@ export const ProductList: React.FC<ProductListProps> = props => {
               <FormattedMessage defaultMessage="Name" description="product" />
             </span>
           </TableCellHeader>
-          <DisplayColumn column="productType" displayColumns={settings.columns}>
+          <DisplayColumn column="categorías" displayColumns={settings.columns}>
             <TableCellHeader
               className={classes.colType}
               direction={
@@ -193,13 +193,10 @@ export const ProductList: React.FC<ProductListProps> = props => {
               }
               onClick={() => onSort(ProductListUrlSortField.productType)}
             >
-              <FormattedMessage
-                defaultMessage="Type"
-                description="product type"
-              />
+              Categorías
             </TableCellHeader>
           </DisplayColumn>
-          <DisplayColumn
+          {/* <DisplayColumn
             column="availability"
             displayColumns={settings.columns}
           >
@@ -217,8 +214,8 @@ export const ProductList: React.FC<ProductListProps> = props => {
                 description="product channels"
               />
             </TableCellHeader>
-          </DisplayColumn>
-          {gridAttributesFromSettings.map(gridAttributeFromSettings => {
+          </DisplayColumn> */}
+          {/* {gridAttributesFromSettings.map(gridAttributeFromSettings => {
             const attributeId = getAttributeIdFromColumnValue(
               gridAttributeFromSettings
             );
@@ -246,7 +243,7 @@ export const ProductList: React.FC<ProductListProps> = props => {
                 )}
               </TableCellHeader>
             );
-          })}
+          })} */}
           <DisplayColumn column="price" displayColumns={settings.columns}>
             <TableCellHeader
               className={classes.colPrice}
@@ -336,17 +333,19 @@ export const ProductList: React.FC<ProductListProps> = props => {
                     )}
                   </TableCellAvatar>
                   <DisplayColumn
-                    column="productType"
+                    column="categorías"
                     displayColumns={settings.columns}
                   >
                     <TableCell
                       className={classes.colType}
                       data-test="product-type"
                     >
-                      {product?.productType?.name || <Skeleton />}
+                      {`${product?.category?.parent?.name} / ${product?.category?.name}` || (
+                        <Skeleton />
+                      )}
                     </TableCell>
                   </DisplayColumn>
-                  <DisplayColumn
+                  {/* <DisplayColumn
                     column="availability"
                     displayColumns={settings.columns}
                   >
@@ -369,8 +368,8 @@ export const ProductList: React.FC<ProductListProps> = props => {
                         <Skeleton />
                       )}
                     </TableCell>
-                  </DisplayColumn>
-                  {gridAttributesFromSettings.map(gridAttribute => (
+                  </DisplayColumn> */}
+                  {/* {gridAttributesFromSettings.map(gridAttribute => (
                     <TableCell
                       className={classes.colAttribute}
                       key={gridAttribute}
@@ -393,7 +392,7 @@ export const ProductList: React.FC<ProductListProps> = props => {
                         return "-";
                       }, <Skeleton />)}
                     </TableCell>
-                  ))}
+                  ))} */}
                   <DisplayColumn
                     column="price"
                     displayColumns={settings.columns}

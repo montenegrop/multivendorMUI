@@ -97,6 +97,8 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
       productTypes: params.productTypes
     }
   });
+
+  settings.columns[2] = "categorías";
   const searchCategories = useCategorySearch({
     variables: {
       ...DEFAULT_INITIAL_SEARCH_DATA,
@@ -211,8 +213,8 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
     saveFilterTab(data.name, getActiveFilters(params));
     handleTabChange(tabs.length + 1);
   };
-
-  const handleSort = (field: ProductListUrlSortField, attributeId?: string) =>
+  // corregir: aca para navegar a sort=category
+  const handleSort = (field: ProductListUrlSortField, attributeId?: string) => {
     navigate(
       productListUrl({
         ...params,
@@ -221,6 +223,7 @@ export const ProductList: React.FC<ProductListProps> = ({ params }) => {
         ...DEFAULT_INITIAL_PAGINATION_DATA
       })
     );
+  };
 
   const paginationState = createPaginationState(settings.rowNumber, params);
   const filter = getFilterVariables(params, channel.slug);

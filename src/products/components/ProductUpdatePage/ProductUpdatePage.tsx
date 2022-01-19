@@ -1,4 +1,5 @@
 import { OutputData } from "@editorjs/editorjs";
+import TextField from "@material-ui/core/TextField";
 import { ChannelData } from "@saleor/channels/utils";
 import AppHeader from "@saleor/components/AppHeader";
 import Attributes, { AttributeInput } from "@saleor/components/Attributes";
@@ -6,7 +7,9 @@ import AvailabilityCard from "@saleor/components/AvailabilityCard";
 import CardSpacer from "@saleor/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@saleor/components/ConfirmButton";
 import Container from "@saleor/components/Container";
+import { FormSpacer } from "@saleor/components/FormSpacer";
 import Grid from "@saleor/components/Grid";
+import Hr from "@saleor/components/Hr";
 import Metadata from "@saleor/components/Metadata/Metadata";
 import PageHeader from "@saleor/components/PageHeader";
 import SaveButtonBar from "@saleor/components/SaveButtonBar";
@@ -41,7 +44,7 @@ import {
 import { getChoices, ProductUpdatePageFormData } from "../../utils/data";
 import ProductDetailsForm from "../ProductDetailsForm";
 import ProductImages from "../ProductImages";
-import ProductOrganization from "../ProductOrganization";
+import ProductOrganizationUpdate from "../ProductOrganization/ProductOrganizationUpdate";
 import ProductShipping from "../ProductShipping/ProductShipping";
 import ProductStocks, { ProductStockInput } from "../ProductStocks";
 import ProductTaxes from "../ProductTaxes";
@@ -241,7 +244,7 @@ export const ProductUpdatePage: React.FC<ProductUpdatePageProps> = ({
                     <CardSpacer />
                   </>
                 )}
-                {hasVariants ? (
+                {/* {hasVariants ? (
                   <ProductVariants
                     disabled={disabled}
                     variants={variants}
@@ -282,9 +285,9 @@ export const ProductUpdatePage: React.FC<ProductUpdatePageProps> = ({
                       onWarehouseConfigure={onWarehouseConfigure}
                     />
                   </>
-                )}
+                )} */}
                 <CardSpacer />
-                <SeoForm
+                {/* <SeoForm
                   errors={errors}
                   title={data.seoTitle}
                   titlePlaceholder={data.name}
@@ -299,12 +302,12 @@ export const ProductUpdatePage: React.FC<ProductUpdatePageProps> = ({
                     defaultMessage:
                       "Add search engine title and description to make this product easier to find"
                   })}
-                />
-                <CardSpacer />
-                <Metadata data={data} onChange={handlers.changeMetadata} />
+                /> */}
+                {/* <CardSpacer /> */}
+                {/* <Metadata data={data} onChange={handlers.changeMetadata} /> */}
               </div>
               <div>
-                <ProductOrganization
+                <ProductOrganizationUpdate
                   baseProducts={null}
                   potentialNewBaseProduct={null}
                   canChangeType={false}
@@ -322,6 +325,9 @@ export const ProductUpdatePage: React.FC<ProductUpdatePageProps> = ({
                   productType={product?.productType}
                   onCategoryChange={handlers.selectCategory}
                   onCollectionChange={handlers.selectCollection}
+                  category={product?.category.parent.name}
+                  subcategory={product?.category.name}
+                  baseProduct={product?.baseProduct?.name}
                 />
                 <CardSpacer />
                 <AvailabilityCard
@@ -345,14 +351,14 @@ export const ProductUpdatePage: React.FC<ProductUpdatePageProps> = ({
                   openModal={openChannelsModal}
                 />
                 <CardSpacer />
-                <ProductTaxes
+                {/* <ProductTaxes
                   data={data}
                   disabled={disabled}
                   selectedTaxTypeDisplayName={selectedTaxType}
                   taxTypes={taxTypes}
                   onChange={change}
                   onTaxTypeChange={handlers.selectTaxRate}
-                />
+                /> */}
               </div>
             </Grid>
             <SaveButtonBar

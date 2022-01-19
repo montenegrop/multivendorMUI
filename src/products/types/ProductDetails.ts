@@ -160,6 +160,7 @@ export interface ProductDetails_product_category {
   __typename: "Category";
   id: string;
   name: string;
+  parent? : any;
 }
 
 export interface ProductDetails_product_collections {
@@ -262,6 +263,7 @@ export interface ProductDetails_product {
   variants: (ProductDetails_product_variants | null)[] | null;
   weight: ProductDetails_product_weight | null;
   taxType: ProductDetails_product_taxType | null;
+  baseProduct?: any;
 }
 
 export interface ProductDetails_taxTypes {
