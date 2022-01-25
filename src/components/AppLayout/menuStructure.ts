@@ -92,15 +92,15 @@ function createMenuStructure(intl: IntlShape): IMenuItem[] {
       permission: PermissionEnum.MANAGE_PRODUCTS,
       testingContextId: "servicios",
       url: "/activeServices"
+    },
+    {
+      ariaLabel: "collections",
+      icon: catalogIcon,
+      label: intl.formatMessage(sectionNames.collections),
+      permission: PermissionEnum.MANAGE_PRODUCTS,
+      testingContextId: "collections",
+      url: collectionListUrl()
     }
-    // {
-    //   ariaLabel: "collections",
-    //   icon: catalogIcon,
-    //   label: intl.formatMessage(sectionNames.collections),
-    //   permission: PermissionEnum.MANAGE_PRODUCTS,
-    //   testingContextId: "collections",
-    //   url: collectionListUrl()
-    // },
 
     // {
     //   ariaLabel: "orders",

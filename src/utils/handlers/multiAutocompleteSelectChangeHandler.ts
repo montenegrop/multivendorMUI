@@ -9,9 +9,11 @@ function createMultiAutocompleteSelectHandler(
   change: FormChange,
   setSelected: (choices: MultiAutocompleteChoiceType[]) => void,
   selected: MultiAutocompleteChoiceType[],
-  choices: MultiAutocompleteChoiceType[]
+  choices: MultiAutocompleteChoiceType[],
+  triggerChange?: () => void
 ): FormChange {
   return (event: ChangeEvent) => {
+    triggerChange();
     change(event);
 
     const id = event.target.value;

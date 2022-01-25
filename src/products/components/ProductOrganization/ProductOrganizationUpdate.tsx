@@ -6,11 +6,12 @@ import CardTitle from "@saleor/components/CardTitle";
 import { FormSpacer } from "@saleor/components/FormSpacer";
 import Hr from "@saleor/components/Hr";
 import { MultiAutocompleteChoiceType } from "@saleor/components/MultiAutocompleteSelectField";
+import MultiAutocompleteSelectField from "@saleor/components/MultiAutocompleteSelectField";
 import { SingleAutocompleteChoiceType } from "@saleor/components/SingleAutocompleteSelectField";
 import { ProductErrorFragment } from "@saleor/fragments/types/ProductErrorFragment";
 import { ChangeEvent } from "@saleor/hooks/useForm";
 import { FetchMoreProps } from "@saleor/types";
-import { getFormErrors } from "@saleor/utils/errors";
+import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 
@@ -129,6 +130,7 @@ const ProductOrganizationUpdate: React.FC<ProductOrganizationProps> = props => {
           label="Categoría"
           value={category}
           variant="filled"
+          defaultValue="cargando"
           fullWidth
         />
         <FormSpacer />
@@ -140,6 +142,7 @@ const ProductOrganizationUpdate: React.FC<ProductOrganizationProps> = props => {
           label="Subcategoría"
           value={subcategory}
           variant="filled"
+          defaultValue="cargando"
           fullWidth
         />
         <FormSpacer />
@@ -151,7 +154,33 @@ const ProductOrganizationUpdate: React.FC<ProductOrganizationProps> = props => {
           label="Producto Base"
           value={baseProduct}
           variant="filled"
+          defaultValue="cargando"
           fullWidth
+        />
+        <FormSpacer />
+        <Hr />
+        <FormSpacer />
+        <MultiAutocompleteSelectField
+          displayValues={collectionsInputDisplayValue}
+          error={!!formErrors.collections}
+          label={intl.formatMessage({
+            defaultMessage: "Collections"
+          })}
+          choices={disabled ? [] : collections}
+          name="collections"
+          value={data.collections}
+          helperText={
+            getProductErrorMessage(formErrors.collections, intl) ||
+            intl.formatMessage({
+              defaultMessage:
+                "*Optional. Adding product to collection helps users find it.",
+              description: "field is optional"
+            })
+          }
+          onChange={onCollectionChange}
+          fetchChoices={fetchCollections}
+          data-test="collections"
+          {...fetchMoreCollections}
         />
       </CardContent>
     </Card>

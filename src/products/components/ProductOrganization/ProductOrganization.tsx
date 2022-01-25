@@ -10,12 +10,13 @@ import CardTitle from "@saleor/components/CardTitle";
 import { FormSpacer } from "@saleor/components/FormSpacer";
 import Hr from "@saleor/components/Hr";
 import { MultiAutocompleteChoiceType } from "@saleor/components/MultiAutocompleteSelectField";
+import MultiAutocompleteSelectField from "@saleor/components/MultiAutocompleteSelectField";
 import { SingleAutocompleteChoiceType } from "@saleor/components/SingleAutocompleteSelectField";
 import { ProductErrorFragment } from "@saleor/fragments/types/ProductErrorFragment";
 import { ChangeEvent } from "@saleor/hooks/useForm";
 // import { maybe } from "@saleor/misc";
 import { FetchMoreProps } from "@saleor/types";
-import { getFormErrors } from "@saleor/utils/errors";
+import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
 import React, { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -296,10 +297,10 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
           data-test="category"
           {...fetchMoreCategories}
         /> */}
-          {/* <FormSpacer />
+          <FormSpacer />
           <Hr />
-          <FormSpacer /> */}
-          {/* <MultiAutocompleteSelectField
+          <FormSpacer />
+          <MultiAutocompleteSelectField
             displayValues={collectionsInputDisplayValue}
             error={!!formErrors.collections}
             label={intl.formatMessage({
@@ -320,7 +321,7 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
             fetchChoices={fetchCollections}
             data-test="collections"
             {...fetchMoreCollections}
-          /> */}
+          />
         </>
       </CardContent>
     </Card>

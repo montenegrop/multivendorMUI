@@ -203,7 +203,8 @@ function useProductUpdateForm(
     form.toggleValue,
     opts.setSelectedCollections,
     opts.selectedCollections,
-    opts.collections
+    opts.collections,
+    triggerChange
   );
   const handleCategorySelect = createSingleAutocompleteSelectHandler(
     handleChange,

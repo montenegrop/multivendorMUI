@@ -171,11 +171,11 @@ const Routes: React.FC = () => {
                 component={CategorySection}
               />
               {/* corregir: */}
-              {/* <SectionRoute
+              <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}
                 path="/collections"
                 component={CollectionSection}
-              /> */}
+              />
               {/* <SectionRoute
                 permissions={[PermissionEnum.MANAGE_USERS]}
                 path="/customers"
