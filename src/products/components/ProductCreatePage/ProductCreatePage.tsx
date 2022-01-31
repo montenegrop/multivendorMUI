@@ -23,6 +23,7 @@ import { SearchCollections_search_edges_node } from "@saleor/searches/types/Sear
 import { SearchProductTypes_search_edges_node } from "@saleor/searches/types/SearchProductTypes";
 import { SearchWarehouses_search_edges_node } from "@saleor/searches/types/SearchWarehouses";
 import React from "react";
+import { useEffect } from "react";
 import { useIntl } from "react-intl";
 
 import { FetchMoreProps } from "../../../types";

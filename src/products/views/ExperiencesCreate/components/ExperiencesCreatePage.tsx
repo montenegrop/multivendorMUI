@@ -94,10 +94,6 @@ const ExperiencesCreatePage: React.FC<IProps> = props => {
   const location = props.data.vendor.location;
   const classes = useStyles(props);
 
-  React.useEffect(() => {
-    // console.log()
-  }, []);
-
   return (
     <Container>
       <PageHeader title={"Ingresa aquí tus Trabajos Previos"} />

@@ -30,7 +30,7 @@ import { renderCollection } from "@saleor/misc";
 import { ICONBUTTON_SIZE } from "@saleor/theme";
 import { getFormErrors, getProductErrorMessage } from "@saleor/utils/errors";
 import createNonNegativeValueChangeHandler from "@saleor/utils/handlers/nonNegativeValueChangeHandler";
-import React from "react";
+import React, { useEffect } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 export interface ProductStockFormsetData {
@@ -136,9 +136,16 @@ const ProductStocks: React.FC<ProductStocksProps> = ({
     ) || [];
   const formErrors = getFormErrors(["sku"], errors);
 
+  useEffect(() => {
+    onFormDataChange(
+      { target: { name: "sku", value: "default-sku" } },
+      undefined
+    );
+  }, []);
+
   return (
-    <Card>
-      <CardTitle
+    <Card hidden={true}>
+      {/* <CardTitle
         title={intl.formatMessage({
           defaultMessage: "Inventory",
           description: "product stock, section header",
@@ -351,7 +358,7 @@ const ProductStocks: React.FC<ProductStocksProps> = ({
             )}
           </TableBody>
         </Table>
-      )}
+      )} */}
     </Card>
   );
 };

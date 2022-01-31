@@ -39,6 +39,7 @@ import createSingleAutocompleteSelectHandler from "@saleor/utils/handlers/single
 import useMetadataChangeTrigger from "@saleor/utils/metadata/useMetadataChangeTrigger";
 import useRichText from "@saleor/utils/richText/useRichText";
 import { valueFromAST } from "graphql";
+import { valuesIn } from "lodash";
 import React from "react";
 
 import { ProductStockInput } from "../ProductStocks";
