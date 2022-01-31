@@ -13,7 +13,9 @@ function createMultiAutocompleteSelectHandler(
   triggerChange?: () => void
 ): FormChange {
   return (event: ChangeEvent) => {
-    triggerChange();
+    if (triggerChange) {
+      triggerChange();
+    }
     change(event);
 
     const id = event.target.value;

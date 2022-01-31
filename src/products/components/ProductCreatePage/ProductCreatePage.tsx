@@ -177,13 +177,13 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                 <CardSpacer />
                 {isSimpleProduct && (
                   <>
-                    <ProductShipping
+                    {/* <ProductShipping
                       data={data}
                       disabled={loading}
                       errors={errors}
                       weightUnit={weightUnit}
                       onChange={change}
-                    />
+                    /> */}
                     <CardSpacer />
                     <ProductVariantPrice
                       ProductVariantChannelListings={data.channelListings}

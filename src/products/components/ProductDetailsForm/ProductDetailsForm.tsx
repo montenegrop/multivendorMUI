@@ -71,7 +71,7 @@ export const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({
           name="description"
           onChange={onDescriptionChange}
         />
-        <Hr />
+        {/* <Hr />
         <FormSpacer />
         <Grid variant="uniform">
           <TextField
@@ -87,7 +87,7 @@ export const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({
             value={data.rating || ""}
             onChange={onChange}
           />
-        </Grid>
+        </Grid> */}
       </CardContent>
     </Card>
   );

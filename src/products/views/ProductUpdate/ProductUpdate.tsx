@@ -211,6 +211,7 @@ export const ProductUpdate: React.FC<ProductUpdateProps> = ({ id, params }) => {
   const productChannelsChoices: ChannelData[] = createSortedChannelsDataFromProduct(
     product
   );
+  // corregir: feo
   const {
     channelListElements,
     channelsToggle,
@@ -222,10 +223,14 @@ export const ProductUpdate: React.FC<ProductUpdateProps> = ({ id, params }) => {
     isChannelsModalOpen,
     setCurrentChannels,
     toggleAllChannels
-  } = useChannels(productChannelsChoices, params?.action, {
-    closeModal,
-    openModal
-  });
+  } = useChannels(
+    productChannelsChoices.filter(channel => channel.currency === "ARS"),
+    params?.action,
+    {
+      closeModal,
+      openModal
+    }
+  );
 
   const [updateChannels, updateChannelsOpts] = useProductChannelListingUpdate({
     onCompleted: data => {
