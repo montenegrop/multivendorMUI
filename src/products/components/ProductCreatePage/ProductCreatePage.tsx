@@ -22,6 +22,7 @@ import { SearchCategories_search_edges_node } from "@saleor/searches/types/Searc
 import { SearchCollections_search_edges_node } from "@saleor/searches/types/SearchCollections";
 import { SearchProductTypes_search_edges_node } from "@saleor/searches/types/SearchProductTypes";
 import { SearchWarehouses_search_edges_node } from "@saleor/searches/types/SearchWarehouses";
+import { atributosDeMedidas, paresDeMedida, tiposDeMedida, unidadDeMedida1, unidadDeMedida2 } from "constants2";
 import React from "react";
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -147,6 +148,18 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
       }) => {
         // Comparing explicitly to false because `hasVariants` can be undefined
         const isSimpleProduct = data.productType?.hasVariants === false;
+        console.log(data.attributes);
+        // atributosDeMedidas
+
+        const filterAttrs = (attributes: any) => {
+          attributes.forEach(atr => {
+            if (atr.id in tiposDeMedida && atr.value[0]) {
+              var foundIndex = data.attributes.findIndex(x => x.id == paresDeMedida[1]);
+              data.attributes[foundIndex].data.values.filter(value => value.name in unidadDeMedida1[1])
+            }
+          })
+          return data.attributes
+        }
 
         return (
           <Container>
@@ -166,7 +179,7 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
                 <CardSpacer />
                 {data.attributes.length > 0 && (
                   <Attributes
-                    attributes={data.attributes}
+                    attributes={filterAttrs(data.attributes)}
                     loading={loading}
                     disabled={loading}
                     errors={errors}

@@ -3,8 +3,8 @@
 
 // localhost:
 
-export const newBaseProductTypeId = "QmFzZVByb2R1Y3Q6MQ==";
-export const defaultProductTypeId = "UHJvZHVjdFR5cGU6MQ==";
+// export const newBaseProductTypeId = "QmFzZVByb2R1Y3Q6MQ==";
+// export const defaultProductTypeId = "UHJvZHVjdFR5cGU6MQ==";
 
 export const tiposDeMedida = ["QXR0cmlidXRlOjE="];
 export const paresDeMedida = ["QXR0cmlidXRlOjE=", "QXR0cmlidXRlOjI="];
