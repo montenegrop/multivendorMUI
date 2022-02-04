@@ -162,7 +162,7 @@ const ProductOrganization: React.FC<ProductOrganizationProps> = props => {
           <Hr />
           <FormSpacer />
           <Autocomplete
-            disabled={!subCategories}
+            disabled={!mainCategoryValue}
             autoSelect
             id="sub-category"
             key={mainCategoryValue}
