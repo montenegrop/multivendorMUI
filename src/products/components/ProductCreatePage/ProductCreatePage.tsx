@@ -22,7 +22,14 @@ import { SearchCategories_search_edges_node } from "@saleor/searches/types/Searc
 import { SearchCollections_search_edges_node } from "@saleor/searches/types/SearchCollections";
 import { SearchProductTypes_search_edges_node } from "@saleor/searches/types/SearchProductTypes";
 import { SearchWarehouses_search_edges_node } from "@saleor/searches/types/SearchWarehouses";
-import { atributosDeMedidas, paresDeMedida, tiposDeMedida, unidadDeMedida1, unidadDeMedida2 } from "constants2";
+import {
+  atributosDeMedidas,
+  paresDeMedida,
+  paresDeValores,
+  tiposDeMedida,
+  unidadDeMedida1,
+  unidadDeMedida2
+} from "constants2";
 import React from "react";
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -148,18 +155,28 @@ export const ProductCreatePage: React.FC<ProductCreatePageProps> = ({
       }) => {
         // Comparing explicitly to false because `hasVariants` can be undefined
         const isSimpleProduct = data.productType?.hasVariants === false;
-        console.log(data.attributes);
         // atributosDeMedidas
 
         const filterAttrs = (attributes: any) => {
-          attributes.forEach(atr => {
-            if (atr.id in tiposDeMedida && atr.value[0]) {
-              var foundIndex = data.attributes.findIndex(x => x.id == paresDeMedida[1]);
-              data.attributes[foundIndex].data.values.filter(value => value.name in unidadDeMedida1[1])
+          const clonedAttributes = JSON.parse(JSON.stringify(data.attributes));
+          attributes.forEach((atr, index) => {
+            if (tiposDeMedida.includes(atr.id) && atr.value[0]) {
+              const foundIndex = data.attributes.findIndex(
+                x => x.id === paresDeMedida[atr.id]
+              );
+              const valueId = atr.data.values.find(
+                value => value.name === atr.value[0]
+              ).id;
+              const replaceValues = data.attributes[
+                foundIndex
+              ].data.values.filter(value =>
+                paresDeValores[valueId].includes(value.name)
+              );
+              clonedAttributes[foundIndex].data.values = replaceValues;
             }
-          })
-          return data.attributes
-        }
+          });
+          return clonedAttributes;
+        };
 
         return (
           <Container>
