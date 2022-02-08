@@ -2,6 +2,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import IconButton from "@material-ui/core/IconButton";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import CardTitle from "@saleor/components/CardTitle";
@@ -255,6 +256,9 @@ const Attributes: React.FC<AttributesProps> = ({
               return (
                 <React.Fragment key={attribute.id}>
                   {attributeIndex > 0 && <Hr />}
+                  {attributeIndex === 0 && (
+                    <hr style={{ border: "2px solid green" }} />
+                  )}
                   <Grid className={classes.attributeSection} variant="uniform">
                     <div
                       className={classes.attributeSectionLabel}
@@ -283,6 +287,20 @@ const Attributes: React.FC<AttributesProps> = ({
                           }}
                         />
                       ) : attribute.data.inputType ===
+                          AttributeInputTypeEnum.DROPDOWN &&
+                        (attributeIndex + 1) % 3 === 0 ? (
+                        <TextField
+                          value={attribute.value[0]}
+                          disabled={disabled}
+                          onInput={event => {
+                            onChange(attribute.id, event.target.value);
+                          }}
+                          id={`atr-${attribute.id}`}
+                          label={intl.formatMessage(messages.valueLabel)}
+                          variant="standard"
+                          fullWidth
+                        />
+                      ) : attribute.data.inputType ===
                         AttributeInputTypeEnum.DROPDOWN ? (
                         <SingleAutocompleteSelectField
                           choices={getSingleChoices(attribute.data.values)}
@@ -300,9 +318,9 @@ const Attributes: React.FC<AttributesProps> = ({
                           name={`attribute:${attribute.label}`}
                           label={intl.formatMessage(messages.valueLabel)}
                           value={attribute.value[0]}
-                          onChange={event =>
-                            onChange(attribute.id, event.target.value)
-                          }
+                          onChange={event => {
+                            onChange(attribute.id, event.target.value);
+                          }}
                           allowCustomValues={!attribute.data.isRequired}
                         />
                       ) : (
@@ -325,6 +343,9 @@ const Attributes: React.FC<AttributesProps> = ({
                       )}
                     </div>
                   </Grid>
+                  {(attributeIndex + 1) % 3 === 0 && attributeIndex < 9 && (
+                    <hr style={{ border: "2px solid green" }} />
+                  )}
                 </React.Fragment>
               );
             })}
