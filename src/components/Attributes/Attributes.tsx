@@ -293,7 +293,8 @@ const Attributes: React.FC<AttributesProps> = ({
                           value={attribute.value[0]}
                           disabled={disabled}
                           onInput={event => {
-                            onChange(attribute.id, event.target.value);
+                            const target = event.target as HTMLInputElement;
+                            onChange(attribute.id, target.value);
                           }}
                           id={`atr-${attribute.id}`}
                           label={intl.formatMessage(messages.valueLabel)}
